@@ -2,7 +2,9 @@
 # Date: DATE SUBMITTED
 
 # Use word_tokenize to split raw text into words
+import nltk
 from nltk.tokenize import word_tokenize
+
 
 class LimerickDetector:
 
@@ -36,7 +38,7 @@ class LimerickDetector:
 
         A limerick is defined as a poem with the form AABBA, where the A lines
         rhyme with each other, the B lines rhyme with each other (and not the A
-        lines), and the B lines have fewer syllables than the A lines.
+        lines).
 
         (English professors may disagree with this definition, but that's what
         we're using here.)

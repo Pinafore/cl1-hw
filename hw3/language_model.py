@@ -1,10 +1,19 @@
 import nltk
+from nltk.util import bigrams
+from numpy import mean
+from math import log, exp
 
 kLM_ORDER = 2
 kUNK_CUTOFF = 3
 
 
-class LanguageModel:
+class BigramLanguageModel:
+
+    def __init__(self, unk_cutoff, jm_lambda=0.5):
+        self._unk_cutoff = unk_cutoff
+        self._jm_lambda = 0.5
+        self._vocab_final = False
+
     def train_seen(self, word, count=1):
         """
         Tells the language model that a word has been seen @count times.  This
@@ -13,18 +22,25 @@ class LanguageModel:
         assert not self._vocab_final, \
             "Trying to add new words to finalized vocab"
 
-        raise NotImplementedError
+        None
 
     def vocab_lookup(self, word):
         """
-        Given a word, provides a vocabulary representation.  All words below the
-        cutoff threshold shold have the same value.  All other words should be
-        unique and consistent.
+        Given a word, provides a vocabulary representation.  Words under the
+        cutoff threshold shold have the same value.  All words with counts
+        greater than or equal to the cutoff should be unique and consistent.
         """
         assert self._vocab_final, \
             "Vocab must be finalized before looking up words"
 
-        raise NotImplementedError
+        return -1
+
+    def finalize(self):
+        """
+        Fixes the vocabulary as static, prevents keeping additional vocab from
+        being added
+        """
+        self._vocab_final = True
 
     def censor(self, sentence):
         """
@@ -37,10 +53,45 @@ class LanguageModel:
             yield self.vocab_lookup(ii)
         yield self.vocab_lookup("</s>")
 
-    def
+    def mle(self, context, word):
+        """
+        Return the log MLE estimate of a word given a context.
+        """
+
+        return 0.0
+
+    def laplace(self, context, word):
+        """
+        Return the log MLE estimate of a word given a context.
+        """
+
+        return 0.0
+
+    def jelinek_mercer(self, context, word):
+        """
+        Return the log Jelinek-Mercer estimate of a word given a context;
+        interpolates context probability with the overall corpus probability.
+        """
+
+        return 0.0
+
+    def add_train(self, sentence):
+        """
+        Add the counts associated with a sentence.
+        """
+
+        # You'll need to complete this function, but here's a line of code that
+        # will hopefully get you started.
+        for context, word in bigrams(self.censor(sentence)):
+            None
+
+    def perplexity(self, sentence, method):
+        return exp(mean([method(context, word) for context, word in \
+                             bigrams(self.censor(sentence))]))
+
 
 if __name__ == "__main__":
-    lm = LanguageModel(kLM_ORDER, kUNK_CUTOFF)
+    lm = BigramLanguageModel(kUNK_CUTOFF)
 
     for ii in nltk.corpus.brown.words():
         lm.train_seen(ii)
@@ -48,9 +99,7 @@ if __name__ == "__main__":
     lm.fix_vocab()
 
     for ii in nltk.corpus.brown.sentences():
-        for jj in ii:
-            for kk, ww in lm.generate_contexts(jj):
-                lm.add_context(kk, ww)
+        lm.add_train(ii)
 
     for ii in nltk.corpus.treebank.sentences():
         scores = (lm.perplexity(ii, lm.mle),
