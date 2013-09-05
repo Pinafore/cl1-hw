@@ -2,6 +2,8 @@
 # Date: DATE SUBMITTED
 
 # Use word_tokenize to split raw text into words
+from string import punctuation
+
 import nltk
 from nltk.tokenize import word_tokenize
 
