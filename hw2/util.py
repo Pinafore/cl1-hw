@@ -1,4 +1,5 @@
 import sys
+import inspect
 
 class Counter(dict):
     """
@@ -236,3 +237,12 @@ def normalize(vectorOrCounter):
 def raiseNotDefined():
     print "Method not implemented: %s" % inspect.stack()[1][3]
     sys.exit(1)
+
+def sign( x ):
+    """
+    Returns 1 or -1 depending on the sign of x
+    """
+    if( x >= 0 ):
+        return 1
+    else:
+        return -1
