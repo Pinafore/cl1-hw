@@ -104,5 +104,5 @@ if __name__ == "__main__":
     for ii in nltk.corpus.treebank.sentences():
         scores = (lm.perplexity(ii, lm.mle),
                   lm.perplexity(ii, lm.laplace),
-                  lm.perplexity(ii, lm.katz))
+                  lm.perplexity(ii, lm.dirichlet))
         print(scores, " ".join(ii))
