@@ -1,9 +1,9 @@
 import re
 import os
 
-carmelPath = '~hal/bin/carmel'
+carmelPath = 'carmel'
 
-class FSM:        
+class FSM:
     def __init__(self, isTransducer=False, isProbabilistic=False):
         self.reset(isTransducer, isProbabilistic)
 
@@ -24,7 +24,7 @@ class FSM:
             match = re.match('^"(.+)"$', s)
             if match is None: return None
             return match.group(1)
-    
+
         h = open(filename, 'r')
         finalState = h.readline().strip();
         self.setFinalState(finalState)
@@ -166,7 +166,7 @@ def runFST(fstList, strings, maxNumPaths=1, randomPaths=False, quiet=False):
         cmd = cmd + 'i -G ' + str(maxNumPaths)
     else:
         cmd = cmd + 'b -k ' + str(maxNumPaths)
-        
+
     for i in range(len(fstList)):
         fstList[i].writeToFile(".tmp.fst." + str(i))
         cmd = cmd + ' .tmp.fst.' + str(i)

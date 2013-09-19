@@ -7,8 +7,8 @@ class TestSequenceFunctions(unittest.TestCase):
         self.ld = LimerickDetector()
 
     def test_rhyme(self):
-        self.assertTrue(self.ld.rhymes("dog", "bog"))
-        self.assertFalse(self.ld.rhymes("dog", "cat"))
+        self.assertEqual(self.ld.rhymes("dog", "bog"), True)
+        self.assertEqual(self.ld.rhymes("dog", "cat"), False)
 
     def test_syllables(self):
         self.assertEqual(self.ld.num_syllables("dog"), 1)
@@ -19,8 +19,8 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_examples(self):
 
         a = """
-a bather whose clothing was strewed
-by winds that left her quite nude
+a woman whose friends called a prude
+on a lark when bathing all nude
 saw a man come along
 and unless we are wrong
 you expected this line to be lewd
@@ -40,9 +40,9 @@ nobody will read this
 i'll end this here poem potato
 """
 
-        self.assertTrue(self.ld.is_limerick(a))
-        self.assertFalse(self.ld.is_limerick(b))
-        self.assertFalse(self.ld.is_limerick(c))
+        self.assertEqual(self.ld.is_limerick(a), True)
+        self.assertEqual(self.ld.is_limerick(b), False)
+        self.assertEqual(self.ld.is_limerick(c), False)
 
 if __name__ == '__main__':
     unittest.main()
