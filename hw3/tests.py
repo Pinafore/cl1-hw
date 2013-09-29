@@ -1,15 +1,15 @@
 import unittest
 from math import log
 
-from language_model import BigramLanguageModel, kLM_ORDER, kUNK_CUTOFF
-
-kNEG_INF = float("-inf")
+from language_model import BigramLanguageModel, kLM_ORDER, \
+    kUNK_CUTOFF, kNEG_INF, kSTART, kEND
 
 
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.lm = BigramLanguageModel(kUNK_CUTOFF)
+        self.lm = BigramLanguageModel(kUNK_CUTOFF, jm_lambda=0.5, \
+                                          dirichlet_alpha=0.1)
 
     def test_vocab(self):
         self.lm.train_seen("a", 300)
@@ -59,18 +59,42 @@ class TestSequenceFunctions(unittest.TestCase):
         self.lm.add_train(["a", "a", "b"])
 
         # Test MLE
-        self.assertEqual(self.lm.mle("<s>", "b"), kNEG_INF)
-        self.assertEqual(self.lm.mle("<s>", "a"), log(1.0))
-        self.assertEqual(self.lm.mle("a", "a"), log(0.5))
-        self.assertEqual(self.lm.mle("a", "b"), log(0.5))
-        self.assertEqual(self.lm.mle("a", "c"), log(0.5))
+        word_start = self.lm.vocab_lookup(kSTART)
+        word_end = self.lm.vocab_lookup(kEND)
+        word_a = self.lm.vocab_lookup("a")
+        word_b = self.lm.vocab_lookup("b")
+        word_c = self.lm.vocab_lookup("c")
+
+        self.assertAlmostEqual(self.lm.mle(word_start, word_b), kNEG_INF)
+        self.assertAlmostEqual(self.lm.mle(word_start, word_a), log(1.0))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_a), log(0.5))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_b), log(0.5))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_c), log(0.5))
 
         # Test Add one
-        self.assertEqual(self.lm.laplace("<s>", "b"), log(1.0 / 5.0))
-        self.assertEqual(self.lm.laplace("<s>", "a"), log(2.0 / 5.0))
-        self.assertEqual(self.lm.laplace("a", "a"), log(2.0 / 6.0))
-        self.assertEqual(self.lm.laplace("a", "b"), log(2.0 / 6.0))
-        self.assertEqual(self.lm.laplace("a", "c"), log(2.0 / 6.0))
+        self.assertAlmostEqual(self.lm.laplace(word_start, word_b),
+                               log(1.0 / 5.0))
+        self.assertAlmostEqual(self.lm.laplace(word_start, word_a),
+                               log(2.0 / 5.0))
+        self.assertAlmostEqual(self.lm.laplace(word_a, word_a),
+                               log(2.0 / 6.0))
+        self.assertAlmostEqual(self.lm.laplace(word_a, word_b),
+                               log(2.0 / 6.0))
+        self.assertAlmostEqual(self.lm.laplace(word_a, word_c),
+                               log(2.0 / 6.0))
+
+        # Test Dirichlet
+        self.assertAlmostEqual(self.lm.dirichlet(word_start, word_b),
+                               log(0.1 / 1.4))
+        self.assertAlmostEqual(self.lm.dirichlet(word_start, word_a),
+                               log(1.1 / 1.4))
+        self.assertAlmostEqual(self.lm.dirichlet(word_a, word_a),
+                               log(1.1 / 2.4))
+        self.assertAlmostEqual(self.lm.dirichlet(word_a, word_b),
+                               log(1.1 / 2.4))
+        self.assertAlmostEqual(self.lm.dirichlet(word_a, word_c),
+                               log(1.1 / 2.4))
+
 
 if __name__ == '__main__':
     unittest.main()

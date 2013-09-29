@@ -1,15 +1,25 @@
-import nltk
-from nltk.util import bigrams
-from numpy import mean
 from math import log, exp
+from collections import defaultdict
+
+from numpy import mean
+
+import nltk
+from nltk import FreqDist
+from nltk.util import bigrams
 
 kLM_ORDER = 2
 kUNK_CUTOFF = 3
+kNEG_INF = -1e6
+
+kSTART = "<s>"
+kEND = "</s>"
+
 
 
 class BigramLanguageModel:
 
-    def __init__(self, unk_cutoff, jm_lambda=0.5):
+    def __init__(self, unk_cutoff, jm_lambda=0.5, dirichlet_alpha=0.1,
+                 katz_cutoff=5, kn_discount=0.1, py_a=0.1, py_b=0.1):
         self._unk_cutoff = unk_cutoff
         self._jm_lambda = 0.5
         self._vocab_final = False
@@ -48,10 +58,10 @@ class BigramLanguageModel:
         Prefix the sentence with <s>, replace words not in the vocabulary with
         <UNK>, and end the sentence with </s>.
         """
-        yield self.vocab_lookup("<s>")
+        yield self.vocab_lookup(kSTART)
         for ii in sentence:
             yield self.vocab_lookup(ii)
-        yield self.vocab_lookup("</s>")
+        yield self.vocab_lookup(kEND)
 
     def mle(self, context, word):
         """
@@ -63,6 +73,14 @@ class BigramLanguageModel:
     def laplace(self, context, word):
         """
         Return the log MLE estimate of a word given a context.
+        """
+
+        return 0.0
+
+    def dirichlet(self, context, word):
+        """
+        Return the log Jelinek-Mercer estimate of a word given a context;
+        interpolates context probability with the overall corpus probability.
         """
 
         return 0.0
@@ -86,9 +104,8 @@ class BigramLanguageModel:
             None
 
     def perplexity(self, sentence, method):
-        return exp(mean([method(context, word) for context, word in \
-                             bigrams(self.censor(sentence))]))
-
+        return exp(-1.0 * mean([method(context, word) for context, word in \
+                                    bigrams(self.censor(sentence))]))
 
 if __name__ == "__main__":
     lm = BigramLanguageModel(kUNK_CUTOFF)
