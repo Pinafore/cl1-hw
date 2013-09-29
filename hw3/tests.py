@@ -50,7 +50,7 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(censored_a[-1], censored_b[-1])
         self.assertEqual(censored_a[1], censored_b[3])
         self.assertEqual(censored_a[2], censored_b[2])
-        self.assertEqual(censored_a[3], censored_b[3])
+        self.assertEqual(censored_a[3], censored_c[3])
 
     def test_lm(self):
         self.lm.train_seen("a", 300)
