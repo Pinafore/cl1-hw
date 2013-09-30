@@ -104,8 +104,11 @@ class BigramLanguageModel:
             None
 
     def perplexity(self, sentence, method):
-        return exp(-1.0 * mean([method(context, word) for context, word in \
-                                    bigrams(self.censor(sentence))]))
+        try:
+            return exp(-1.0 * mean([method(context, word) for context, word \
+                                        in bigrams(self.censor(sentence))]))
+        except OverflowError:
+            return kNEG_INF
 
 if __name__ == "__main__":
     lm = BigramLanguageModel(kUNK_CUTOFF)
@@ -113,12 +116,12 @@ if __name__ == "__main__":
     for ii in nltk.corpus.brown.words():
         lm.train_seen(ii)
 
-    lm.fix_vocab()
+    lm.finalize()
 
     for ii in nltk.corpus.brown.sentences():
         lm.add_train(ii)
 
-    for ii in nltk.corpus.treebank.sentences():
+    for ii in nltk.corpus.treebank.sents():
         scores = (lm.perplexity(ii, lm.mle),
                   lm.perplexity(ii, lm.laplace),
                   lm.perplexity(ii, lm.dirichlet))
