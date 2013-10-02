@@ -110,6 +110,14 @@ class BigramLanguageModel:
         except OverflowError:
             return kNEG_INF
 
+    def sample(self, samples=25):
+        """
+        Sample words from the language model.
+
+        @arg samples The number of samples to return.
+        """
+        return
+
 if __name__ == "__main__":
     lm = BigramLanguageModel(kUNK_CUTOFF)
 
