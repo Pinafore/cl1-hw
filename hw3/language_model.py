@@ -126,7 +126,7 @@ if __name__ == "__main__":
 
     lm.finalize()
 
-    for ii in nltk.corpus.brown.sentences():
+    for ii in nltk.corpus.brown.sents():
         lm.add_train(ii)
 
     for ii in nltk.corpus.treebank.sents():
