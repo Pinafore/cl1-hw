@@ -9,7 +9,7 @@ class StubScoreFunction(BigramInterpScoreFunction):
 
     def __init__(self):
         self._word_scores = {}
-        self._pos_scores = {}
+        self._tag_scores = {}
         self._poisson = poisson(0.0001)
 
         for aa, bb, ss in [(kROOT, "sat", 10),
