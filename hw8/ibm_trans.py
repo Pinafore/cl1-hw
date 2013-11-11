@@ -150,6 +150,15 @@ class ModelOne:
         """
         Marginalizing over all alignments, generate an iterator over expected
         counts of translations.
+
+        Every time word e_i is aligned with f_j in alignment a, that should be
+        weighted be the probability of p(a | E, F), where E and F are the whole
+        sentences given as input.  You should yield
+
+        e_i, f_j, p(a | E, F)
+
+        For all word pairs.  It is efficient to marginalize over alignments
+        mathematically than to try to generate them all.
         """
 
         # Fill this in!  You should have a big for loop that surrounds
