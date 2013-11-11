@@ -172,7 +172,7 @@ class ModelOne:
             if sentence_count % 100 == 0:
                 print("Sentence %i" % sentence_count)
 
-            f_sent = [None] + f_sent
+            e_sent = [None] + e_sent
             for e_ii, f_jj, cc in self.sentence_counts(e_sent, f_sent,
                                                        translation):
                 new_trans.collect_count(cc, e_ii, f_jj)
