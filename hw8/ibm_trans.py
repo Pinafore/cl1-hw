@@ -238,8 +238,6 @@ class ModelOne:
         assert sentence_e[0] != None, \
             "Score function adds None so you don't have to"
 
-        sentence_e = [None] + sentence_e
-
         # Fill this in!  Compute the noisy channel score of this translation!
 
         return 0.0
@@ -255,7 +253,7 @@ class ModelOne:
             sentence_count = 0
             for e_sent, f_sent in corpus:
                 if sentence_count % 100 == 0:
-                    print("EM Sentence %i" % sentence_count)
+                    print("LM Sentence %i" % sentence_count)
                     sentence_count += 1
 
                 # Each sentence starts with an empty string
