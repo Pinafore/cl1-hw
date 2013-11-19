@@ -3,12 +3,16 @@ from string import lower
 import gzip
 import itertools
 from collections import defaultdict
+from math import log
 
 from nltk.probability import FreqDist
 from nltk.model.ngram import NgramModel
 from nltk.util import ingrams
 from nltk.probability import LidstoneProbDist
 
+class StubLanguageModel:
+    def logprob(self, context, word):
+        return 0.0
 
 class BiCorpus:
     """
@@ -26,14 +30,20 @@ class GzipAlignedCorpus(BiCorpus):
     assignment)
     """
 
-    def __init__(self, base, langs):
+    def __init__(self, base, langs, limit):
         self._base = base
         self._langs = langs
+        self._limit = limit
 
     def raw_sentences(self):
+        sentence_count = 0
         for langs in zip(gzip.open("%s.%s.gz" % (self._base, self._langs[0])),
                          gzip.open("%s.%s.gz" % (self._base, self._langs[1]))):
+            sentence_count += 1
             yield [x.split() for x in langs]
+
+            if limit > 0 and sentence_count >= limit:
+                break
 
 
 class ToyCorpus(BiCorpus):
@@ -61,8 +71,8 @@ class ToyCorpus(BiCorpus):
                  "my bike is not pink"),
                 ("du bist nicht blind",
                  "you are not blind"),
-                ("bleibe ruhig, mein Kind",
-                 "stay quiet, my child")]
+                ("bleibe ruhig mein Kind",
+                 "stay quiet my child")]
 
         for ii, jj in [map(lower, x) for x in data]:
             yield jj.lower().split(), ii.lower().split()
@@ -83,7 +93,7 @@ class Translation:
         Returns the MLE probability of an English word given of foreign word
         """
 
-        return self._counts[word_f].freq(word_e)
+        return self._counts[word_e].freq(word_f)
 
     def get_count(self, word_e, word_f):
         """
@@ -91,7 +101,7 @@ class Translation:
         word
         """
 
-        return self._counts[word_f][word_e]
+        return self._counts[word_e][word_f]
 
     def collect_count(self, count, word_e, word_f):
         """
@@ -99,11 +109,11 @@ class Translation:
         into an English word.
         """
 
-        self._counts[word_f].inc(word_e, count)
+        self._counts[word_e].inc(word_f, count)
 
     def vocab(self):
         """
-        Return all foreign words
+        Return all english words
         """
 
         return self._counts.keys()
@@ -115,11 +125,11 @@ class Translation:
 
         keys = self._counts.keys()[:5]
         s = ""
-        for ff in keys:
-            s += "%s:%s\n" % (ff, "\t".join("%s:%f" % \
-                                                (ee, self.score(ee, ff)) \
-                                                for ee in \
-                                                self._counts[ff].keys()[:10]))
+        for ee in keys:
+            s += "%s:%s\n" % (ee, "\t".join("%s:%f" % \
+                                                (ff, self.score(ee, ff)) \
+                                                for ff in \
+                                                self._counts[ee].keys()[:10]))
         return s
 
 
@@ -138,6 +148,7 @@ class ModelOne:
         # The language model is initially undefined
         self._lm = None
         self._lm_order = -1
+        self._trans = UniformTranslation()
 
     def initial_translation(self, corpus):
         """
@@ -179,7 +190,7 @@ class ModelOne:
 
         for e_sent, f_sent in corpora:
             if sentence_count % 100 == 0:
-                print("Sentence %i" % sentence_count)
+                print("LM Sentence %i" % sentence_count)
 
             e_sent = [None] + e_sent
             for e_ii, f_jj, cc in self.sentence_counts(e_sent, f_sent,
@@ -215,30 +226,48 @@ class ModelOne:
 
     def translate_score(self, sentence_e, sentence_f):
         """
-        Return the noisy channel probability of this score using a language
+        Return the noisy channel *log* probability of this score using a
+        language model.  Computes p(e) using the logprob method of the language
         model.
+
+        Caution: the nltk logprob function returns the negative logprob, so
+        you'll need to negate at some point.
         """
 
         assert self._lm, "Language model must be loaded"
+        assert sentence_e[0] != None, \
+            "Score function adds None so you don't have to"
+
+        sentence_e = [None] + sentence_e
 
         # Fill this in!  Compute the noisy channel score of this translation!
 
-        return 1.0
+        return 0.0
 
     def build_lm(self, corpus, order=2):
         """
         Create a reasonable English language model on your training data.
         """
 
-        tokens = []
-        for e_sent, f_sent in corpus:
-            # Each sentence starts with an empty string
-            tokens += [''] + e_sent
-
-        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
-        self._lm = NgramModel(order, tokens, pad_left=False, pad_right=False,
-                              estimator=estimator)
         self._lm_order = order
+        if order > 0:
+            tokens = []
+            sentence_count = 0
+            for e_sent, f_sent in corpus:
+                if sentence_count % 100 == 0:
+                    print("EM Sentence %i" % sentence_count)
+                    sentence_count += 1
+
+                # Each sentence starts with an empty string
+                tokens += [''] + e_sent
+
+                estimator = lambda fdist, bins: \
+                    LidstoneProbDist(fdist, 0.1)
+                self._lm = NgramModel(order, tokens, pad_left=False,
+                                      pad_right=False,
+                                      estimator=estimator)
+        else:
+            self._lm = StubLanguageModel()
 
     def em(self, corpus, iters):
         """
@@ -264,10 +293,17 @@ if __name__ == "__main__":
 MODEL1_ITERATIONS -> number of iterations to run Model 1
 CORPUS            -> gzipped file or "toy"
 TEST              -> corpus of words you want to run on
+LIMIT             -> how many sentences to read [default=all]
 """)
     else:
 
-        model1_iters, corpus, test = sys.argv[1:]
+
+        if len(sys.argv) == 5:
+            model1_iters, corpus, test, limit = sys.argv[1:]
+            limit = int(limit)
+        else:
+            model1_iters, corpus, test = sys.argv[1:]
+            limit = -1
         model1_iters = int(model1_iters)
 
         # Load the corpus
@@ -275,12 +311,12 @@ TEST              -> corpus of words you want to run on
         if corpus == "toy":
             corpus = ToyCorpus()
             tests.append(("my bike cries 99 fighter jets".split(),
-                          "mein Fahrrad weint 99 dusenjaeger".split()))
+                          "mein fahrrad weint 99 dusenjaeger".split()))
             tests.append(("the heaven is pink about now".split(),
-                          "von hier an bleibe der Himmel rosa".split()))
+                          "von hier an bleibe der himmel rosa".split()))
 
         else:
-            corpus = GzipAlignedCorpus("corpus", ['en', 'de'])
+            corpus = GzipAlignedCorpus("corpus", ['en', 'de'], limit)
             tests.append(("i cannot say anything at this stage".split(),
                           "das kann ich so aus dem stand nicht sagen".split()))
             tests.append(("i can say anything at this stage".split(),
