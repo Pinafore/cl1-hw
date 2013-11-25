@@ -80,7 +80,7 @@ class ToyCorpus(BiCorpus):
 
 class Translation:
     """
-    A class that provides translation probabilities from foreign to English
+    A class that provides translation probabilities from English to foreign
     words.
     """
 
@@ -90,14 +90,14 @@ class Translation:
 
     def score(self, word_e, word_f):
         """
-        Returns the MLE probability of an English word given of foreign word
+        Returns the MLE probability of an foreign word given English word
         """
 
         return self._counts[word_e].freq(word_f)
 
     def get_count(self, word_e, word_f):
         """
-        Return the number of times a foreign word was translated into an English
+        Return the number of times an English word was translated into a foreign
         word
         """
 
