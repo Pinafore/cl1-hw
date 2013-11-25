@@ -91,7 +91,7 @@ class TestModelOne(unittest.TestCase):
         self.assertAlmostEqual(\
             mo.translate_score("the house is small".split(), \
                                    "das haus ist klein".split()), \
-                -1.0 * log(625.))
+                -1.0 * log(625., 2))
 
 
 
