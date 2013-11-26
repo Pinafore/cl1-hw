@@ -82,10 +82,12 @@ class TestModelOne(unittest.TestCase):
         # (as above).  So the overall translation probability is
         #
         # p(f|e) = 1 / (l_e + 1) ^ l_f *
-        #               \prod_j^l_f \sum_i^l_f t(f_j | e_i)
+        #               \prod_j^l_f \sum_i^l_e t(f_j | e_i)
         #
         #        = 1 / (4 + 1) ^ 4 (5 * .2) ^ 4
         #        = 1 / 625
+        #
+        # There are 5 English words counting the "NULL"
 
         mo.build_lm([], 0)
         self.assertAlmostEqual(\
