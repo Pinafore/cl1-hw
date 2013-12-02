@@ -259,11 +259,11 @@ class ModelOne:
                 # Each sentence starts with an empty string
                 tokens += [''] + e_sent
 
-                estimator = lambda fdist, bins: \
-                    LidstoneProbDist(fdist, 0.1)
-                self._lm = NgramModel(order, tokens, pad_left=False,
-                                      pad_right=False,
-                                      estimator=estimator)
+            estimator = lambda fdist, bins: \
+                LidstoneProbDist(fdist, 0.1)
+            self._lm = NgramModel(order, tokens, pad_left=False,
+                                  pad_right=False,
+                                  estimator=estimator)
         else:
             self._lm = StubLanguageModel()
 
