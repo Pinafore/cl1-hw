@@ -47,3 +47,13 @@ class LimerickDetector:
         """
 
         return False
+
+if __name__ == "__main__":
+    buffer = ""
+    inline = " "
+    while inline != "":
+        buffer += "%s\n" % inline
+        inline = raw_input()
+
+    ld = LimerickDetector()
+    print("%s\n-----------\n%s" % (buffer.strip(), ld.is_limerick(buffer)))
