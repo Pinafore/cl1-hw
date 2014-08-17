@@ -1,0 +1,402 @@
+\def\DevnagVersion{2.13}% Assignment 2 for CMSC723
+% Finite State Machines
+
+\documentclass[11pt]{article}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+\usepackage{url}
+
+
+%@modernhindi
+
+% \date{}
+\begin{document}
+\begin{center}
+{\Large{\textbf{ Natural Language Processing:  }}}\\
+\mbox{}\\
+{\Large{Assignment 2: Finite State Adventures\\Census Nomenclature \& Number Translation}}\\
+% \mbox{}\\
+% (\textsc{Not For Credit})\\
+\mbox{}\\
+{\large{Jordan Boyd-Graber}}\\
+\mbox{}\\
+{\large{Out: \textbf{25. August 2014}\\Due: \textbf{19. September 2014}}}\\
+\end{center}
+
+
+% \maketitle
+\lstset{stringstyle=\ttfamily,language=Python,showstringspaces=False,tabsize=8,frameround=tttt,
+		,keywordstyle=\color{Orange}\bfseries, stringstyle=\ttfamily\color{Green}
+		,columns=fullflexible,identifierstyle=\ttfamily
+		% , commentstyle=\itshape\color{Red}
+}
+
+\section*{Introduction} % (fold)
+\label{sec:introduction}
+
+This assignment is on finite state automata and will require you to
+create automata in python. There are a total of two problems, and we
+have provided some code to get you started, as well as a few utilities
+that will make it easier for you to debug and test your code.  \\
+
+We've provided an a \textsc{fst} implementation from \textsc{nltk}.
+However, the documentation is less than perfect. Therefore, in this
+section, we will give you a brief introduction to everything that you
+will need to understand how to build finite state transducers in Python.
+\\
+
+To start building \textsc{fst}s, you need to first import the
+\texttt{fst} module into your program's namespace. Then, you need to
+instantiate an \texttt{FST} object. Once you have such an object, you
+can start adding states and arcs to it. Listing~\ref{example} shows
+how to build a very simple finite state transducer---one that removes
+all vowels from any given word.
+
+\begin{lstlisting}[float, label=example,caption=A 1-state transducer that deletes vowels, frame=trBL,escapechar=*, numbers=left, numberstyle=\tiny, numberblanklines=false]
+# import the fst module
+import fst
+
+# import the string module
+import string
+
+# Define a list of all vowels for convenience
+vowels = *\texttt{[}*'a', 'e', 'i', 'o', 'u'*\texttt{]}*
+
+# Instantiate an FST object with some name
+f = fst.FST('devowelizer')
+
+# All we need is a single state ...
+f.add_state('1')
+
+# and this same state is the initial and the final state
+f.initial_state = '1'
+f.set_final('1')
+
+# Now, we need to add an arc for each letter; if the letter is a vowel
+# then then transition outputs nothing but otherwise it outputs the same
+# letter that it consumed.
+for letter in string.ascii_lowercase:
+*\qquad*if letter in vowels:
+*\qquad**\qquad*f.add_arc('1', '1', (letter), ())
+*\qquad*else:
+*\qquad**\qquad*f.add_arc('1', '1', (letter), (letter))
+
+# Evaluate it on some example words
+print ''.join(f.transduce(*\texttt{[}*'v', 'o', 'w', 'e', 'l'*\texttt{]}*))
+print ''.join(f.transduce('e x c e p t i o n'.split()))
+print ''.join(f.transduce('c o n s o n a n t'.split()))
+
+\end{lstlisting}
+\mbox{}\\
+ Feel free to try out the example to see how it works on some of your
+ own input. There are a few points worth mentioning:
+\begin{enumerate}
+	\item The Python \texttt{string} module comes with a few
+          built-in strings that you might be able to use in this
+          assignment for purposes of iteration as used in the example
+          on line $23$. These are:
+	\begin{itemize}
+		\item \texttt{string.letters} : All letters, upppercased and lowercased
+		\item \texttt{string.ascii\_lowercase} : All lowercased letters
+		\item \texttt{string.ascii\_uppercase} : All uppercased letters
+	\end{itemize}
+	\item States can be added to an FST object by using its
+          \texttt{add\_state()} method. This method takes a single
+          argument: a unique string identifier for the state. Our
+          example has only one state (line $13$). Furthermore, there
+          can only be \textbf{one} initial state and this is indicated
+          by assigning the state identifier to the FST object's
+          \texttt{initial\_state} field (line $17$). However, there
+          may be multiple final states in an FST. In fact, it is
+          almost always necessary to have multiple final states when
+          working with transducers. All final states may be so
+          indicated by using the FST object's \texttt{set\_final()}
+          method (line $18$).
+	\item Arcs can be added between the states of an FST object by
+          using its \texttt{add\_arc()} method. This method takes the
+          following arguments (in order): the starting state, the
+          ending state, the input symbol and, finally, the output
+          symbol. If you wish to use single characters as input or
+          output symbols, you must enclose them in parentheses (lines
+          $25$ and $27$).  \\
+
+	 However, if you wish to use entire words as input or output
+         symbols, you must enclose the word in \textbf{square
+           brackets} (not in parentheses). For example, if you wish to
+         add an arc that takes the string \emph{ten} as input and
+         returns the number string \emph{10} when going from state 1
+         to 2, you should use:
+	\begin{lstlisting}[label=foo1, frame=trBL,escapechar=*]
+	f.add_arc('1', '2', *\texttt{[}*'ten'*\texttt{]}*, *\texttt{[}*'10'*\texttt{]}*)
+	\end{lstlisting}
+	 $\epsilon$'s may be indicated by an empty set of parentheses
+         or square brackets, depending on the context. (line $25$).
+	 \item An FST object can be evaluated against any input string
+           by using its \texttt{transduce()} method. Here's how:
+	\begin{enumerate}
+		\item If your transducer uses \textbf{characters} as
+                  input/output symbols, then the input to
+                  \texttt{transduce()} must be a \textbf{list of
+                    characters}. You may either directly input a list
+                  of characters (line $30$) or you may convert a
+                  string to a list of characters by spacing out its
+                  characters and calling its \texttt{split()} method
+                  (lines $31$ and $32$).
+		\item If your transducer uses \textbf{words} as
+                  input/output symbols, then the input to
+                  \texttt{transduce()} should be a \textbf{list of
+                    words}. Again, you can either explicitly use a
+                  list of words or call the split method on a string
+                  of words separated by whitespace. For example, say
+                  your FST maps from strings like \emph{ten} and
+                  \emph{twenty} to number strings \emph{10} and
+                  \emph{20}, then to evaluate it on the input string
+                  \emph{ten twenty}, you should use either:
+		\begin{lstlisting}[label=foo2, frame=trBL,escapechar=*]
+		f.transduce('ten twenty'.split())
+		\end{lstlisting}
+		\begin{center}{OR}\end{center}
+		\begin{lstlisting}[label=foo3, frame=trBL,escapechar=*]
+		f.transduce(*\texttt{[}*'ten', 'twenty'*\texttt{]}*)
+		\end{lstlisting}
+	\end{enumerate}
+\end{enumerate}
+% section introduction (end)
+
+\section*{Provided Utilities}
+To make it easier for you to solve the two programming problems below,
+we have provided $3$ handy utilities in the included python file
+\texttt{fsmutils.py}. These utility functions will help you to test
+each transducer that you build and compose multiple transducers
+together.  \\
+
+ The first is \texttt{composechars()}, which allows you to compose any
+ number of transducers (that use single characters as input strings)
+ and evaluate it on any input string\footnote{Note that this function
+   only performs composition in a practical sense and does not
+   actually create a single composed transducer. However, for this
+   assignment, the former is more than sufficient.}. For example, if
+ you have created three transducers \texttt{f1}, \texttt{f2} and
+ \texttt{f3} and you wish to evaluate their composition on the input
+ string \texttt{S}, then you should use the following code:
+	\begin{lstlisting}[label=composechars, frame=trBL,escapechar=*]
+	from fsmutils import composechars
+	output = composechars(S, f1, f2, f3)
+	\end{lstlisting}
+	The above function call computes (\texttt{f3} $\circ$
+        \texttt{f2} $\circ$ \texttt{f1})(\texttt{S}). i.e., it will
+        first apply transducer \texttt{f1} to the given input
+        \texttt{S}, use the output of this transduction as input to
+        transducer \texttt{f2} and so on and so forth. It will raise a
+        generic exception if one or more input transducers do not work
+        correctly. Note that since all transducers for this function
+        use single characters as the input symbols, \texttt{S} must be
+        a list of characters. \\
+
+ The second utility function is \texttt{composewords()} which allows
+ you to compose transducers that use words as input symbols, instead
+ of single characters. The usage is similar to \texttt{composechars()}
+ but the input string \texttt{S} must be a list of words in order to
+ be used with this function. \\
+
+ The final utility function is \texttt{trace()}. Given any single
+ transducer \texttt{f} and a string \texttt{S}, this function will
+ print the entire path taken through \texttt{f} when using \texttt{S}
+ as the input. This can prove extremely invaluable for debugging any
+ transducer. It may be used as follows:
+	\begin{lstlisting}[label=trace, frame=trBL,escapechar=*]
+	from fsmutils import trace
+	trace(f, S)
+	\end{lstlisting}
+
+\section*{Problem 1: Soundex (35 points)} % (fold)
+\label{sec:problem_2}
+\textbf{Background}: The Soundex algorithm is a phonetic algorithm
+commonly used by libraries and the Census Bureau to represent people's
+names as they are pronounced in English. It has the advantage that
+name variations with minor spelling differences will map to the same
+representation, as long as they have the same pronunciation in
+English. Here is how the algorithm works:
+\begin{description}
+	\item[Step 1:] Retain the first letter of the name. This may
+          be uppercased or lowercased.
+	\item[Step 2:] Remove all \textbf{non-initial} occurrences of
+          the following letters: \texttt{a, e, h, i, o, u, w, y}. (To
+          clarify, this step removes all occurrences of the given
+          characters \emph{except} when they occur in the first
+          position.)
+	\item[Step 3:] Replace the remaining letters (except the
+          first) with numbers:
+	\begin{itemize}
+		\item \texttt{b, f, p, v} $\rightarrow 1$
+		\item \texttt{c, g, j, k, q, s, x, z} $\rightarrow 2$
+		\item \texttt{d, t} $\rightarrow 3$
+		\item \texttt{l} $\rightarrow 4$
+		\item \texttt{m, n} $\rightarrow 5$
+		\item \texttt{r} $\rightarrow 6$
+	\end{itemize}
+ 	If two or more letters from the same number group were
+        adjacent in the \emph{original} name, then \emph{only} replace
+        the first of those letters with the corresponding number and
+        ignore the others.
+ 	\item[Step 4:] If there are more than $3$ digits in the
+          resulting output, then drop the extra ones.
+ 	\item[Step 5:] If there are less than $3$ digits, then pad at
+          the end with the required number of trailing zeros.
+\end{description}
+
+
+ The final output of applying Soundex algorithm to any input string
+ should be of the form \texttt{Letter Digit Digit
+   Digit}. Table~\ref{tbl:soundex} shows the output of the Soundex
+ algorithm for some example names.  \\
+
+\begin{table}[htbp]
+	\begin{center}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Input} & \textbf{Output} \\ \hline \hline
+			Jurafsky & J$612$ \\ \hline
+			Jarovski & J$612$ \\ \hline
+			Resnik & R$252$ \\ \hline
+			Reznick & R$252$ \\ \hline
+			Euler & E$460$ \\ \hline
+			Peterson & P$362$ \\ \hline
+			\end{tabular}
+		\caption{Example outputs for the Soundex algorithm.}\label{tbl:soundex}
+\end{center}
+\end{table}
+
+ Construct an \textsc{fst} that implements the Soundex
+ algorithm. Obviously, it is non-trivial to implement a single
+ transducer for the entire algorithm. Therefore, the strategy we will
+ adopt is a bottom-up one: implement multiple transducers, each
+ performing a simpler task, and then compose them together to get the
+ final output. One possibility is to partition the algorithm across
+ three transducers:
+\begin{enumerate}
+	\item \textbf{Transducer 1}: Performs steps $1$-$3$ of the
+          algorithm, i.e, retaining the first letter, removing letters
+          and replacing letters with numbers.
+	\item \textbf{Transducer 2}: Performs step $4$ of the
+          algorithm, i.e., truncating extra digits.
+	\item \textbf{Transducer 3}: Performs step $5$ of the
+          algorithm, i.e., padding with zeros if required. \\
+\end{enumerate}
+
+ Note that each of these three transducers will have characters as
+ input/output symbols.  \\
+
+ To make things easier for you, we have provided the file
+ \texttt{soundex.py} which is where you will write your code. It
+ already imports all needed modules and functions (including
+ \texttt{fsmutils.py}). It also creates three transducer objects---as
+ dictated by the bottom-up strategy outlined above---such that all you
+ should have to do is to figure out the states and arcs required by
+ each transducer. It also contains code that allows you to input a
+ single name on the command line to get the output.
+
+ It is very important to note, however, that this code \textbf{does
+   not produce} the output for each input name. You are required to
+ write that code inside the given \texttt{for} loop, as indicated in
+ the file. We will use this hook to evaluate your code on a list of
+ names.  \\
+
+\noindent \textbf{Notes}:
+\begin{enumerate}
+	\item[(i)] Your grade will only be evaluated on the command
+          line.  You do not have to factor the code in the same way as
+          the unit tests; however, the unit tests will no longer
+          work.
+
+          \item[(ii)] While we have provided you with sample unit
+          tests containing some names, it might be very useful to test
+          your code on other names. For comparison purposes, you may
+          use one of the many Soundex calculators available online.
+\end{enumerate}
+% section problem_2 (end)
+
+\section*{Problem 2 (55 points)} % (fold)
+\label{sec:problem_3}
+\textbf{Background}: In the French language, Arabic numerals that we
+use in everyday can be spelled out just like they can in English. For
+example, the numeral 175 is written as \texttt{one hundred seventy
+  five} in English and \textit{cent soixante quinze} in French.
+
+French is interesting becuase they have a mixture of a deximal (base
+10) and vegesimal (base 20) system, created by committee to placate
+two different regions of Franch that used different systems.  Thus,
+for example, you have: \\
+\begin{tabular}{|l|l|l|}
+\hline
+Arabic & French & English Gloss \\
+\hline
+4 & quatre & four \\
+6 & six & six \\
+16 & seize & sixteen \\
+20 & vingt & twenty \\
+26 & vingt six & twenty six \\
+56 & cinquante six & fifty six \\
+66 & soixante six & sixty six \\
+76 & soixante seize & sixty sixteen  \\
+80 & quatre vingt & four twenty \\
+86 & quatre vingt six & four twenty six \\
+96 & quatre ving seize & four twenty sixteen \\
+996 & neuf cent quatre ving seize & nine hundred four twenty sixteen
+\\
+\hline
+\end{tabular}
+
+\noindent To summarize:
+\begin{itemize}
+\item Between 70--79 and 90--99, French numbers use a
+vegesimal base system.  For everything else, it is base 10.
+\item Numbers congruent to 1 mod 10 have an ``and''.  For example, 21
+  is \textit{vingt et un} (``twenty and one'')
+\item Numbers larger than 100 are written as $x$ hundred.  For
+  example, 600 becomes \textit{six cent} (``six hundred'').
+\end{itemize}
+
+You may want to consult an online reference, such as \url{https://www.udemy.com/blog/french-numbers-1-1000/}.
+
+Construct an \textsc{fst} in \textsc{nltk} that can translate any
+given Arabic numeral into its corresponding French string. For the
+sake of convenience, you will only be given integer input less than
+1000.
+
+
+\noindent \textbf{Notes}:
+\begin{itemize}
+	\item[(i)]  Just like for the Soundex problem, we have provided a file
+          called \texttt{french\_count.py} with boilerplate code. You
+          should add your code to this file, having the
+          \texttt{french\_count} function return a transducer that
+          produces the correct output.
+	\item[(ii)] You should not type any French string into this
+          file.  All necessary French strings are in a dictionary
+          called \texttt{kFRENCH\_TRANS}.  Adding additional French
+          strings will cause you to lose points.
+\end{itemize}
+% section problem_3 (end)
+
+\section*{English Morphology (10 points)}
+
+English is one of the least interesting languages morphologically, but
+it's a good warm up (Chinese, Vietnamese are even less
+interesting). If you take a look at \texttt{tests.py}, you can see
+some of the words we're going to working with: pack, ice, frolic,
+pace, ace, traffic, lilac, lick.  Our goal is to be able to generate
+things like "spruced" (from "spruce+d") and "picnicking" (from
+"picnic+ed") using regular expressions (which are magically tranformed
+into finite state machines\footnote{How this happens is outside the
+  scope of the course.}).
+
+The shell for this part of the assignment is in
+\texttt{morphology.py}. Essentially all you need to do is implement an
+additional regular expression rule that will correctly handle c/ck
+alternations. Before doing this, you should be able to execute
+\texttt{tests.py} to see the tests failing.
+
+\end{document}
