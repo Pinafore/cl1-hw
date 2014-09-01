@@ -2,7 +2,7 @@ import unittest
 from math import log
 
 from language_model import BigramLanguageModel, kLM_ORDER, \
-    kUNK_CUTOFF, kNEG_INF, kSTART, kEND
+    kUNK_CUTOFF, kNEG_INF, kSTART, kEND, lg
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -38,25 +38,28 @@ class TestSequenceFunctions(unittest.TestCase):
         self.lm.train_seen("c")
         self.lm.finalize()
 
-        censored_a = list(self.lm.censor(["a", "b", "d"]))
-        censored_b = list(self.lm.censor(["d", "b", "a"]))
-        censored_c = list(self.lm.censor(["a", "d", "b"]))
+        censored_a = list(self.lm.tokenize_and_censor("a b d"))
+        censored_b = list(self.lm.tokenize_and_censor("d b a"))
+        censored_c = list(self.lm.tokenize_and_censor("a b d"))
+        censored_d = list(self.lm.tokenize_and_censor("b d a"))
 
         self.assertEqual(censored_a, censored_c)
+        self.assertEqual(censored_b, censored_d)
 
         # Should add start and end tag
+        print("#".join(self.lm.tokenize("a b d")))
+        print(censored_a)
         self.assertEqual(len(censored_a), 5)
         self.assertEqual(censored_a[0], censored_b[0])
         self.assertEqual(censored_a[-1], censored_b[-1])
         self.assertEqual(censored_a[1], censored_b[3])
-        self.assertEqual(censored_a[2], censored_b[2])
-        self.assertEqual(censored_a[3], censored_c[3])
+        self.assertEqual(censored_a[2], censored_b[1])
 
     def test_lm(self):
         self.lm.train_seen("a", 300)
         self.lm.finalize()
 
-        self.lm.add_train(["a", "a", "b"])
+        self.lm.add_train("a a b")
 
         # Test MLE
         word_start = self.lm.vocab_lookup(kSTART)
@@ -66,35 +69,48 @@ class TestSequenceFunctions(unittest.TestCase):
         word_c = self.lm.vocab_lookup("c")
 
         self.assertAlmostEqual(self.lm.mle(word_start, word_b), kNEG_INF)
-        self.assertAlmostEqual(self.lm.mle(word_start, word_a), log(1.0))
-        self.assertAlmostEqual(self.lm.mle(word_a, word_a), log(0.5))
-        self.assertAlmostEqual(self.lm.mle(word_a, word_b), log(0.5))
-        self.assertAlmostEqual(self.lm.mle(word_a, word_c), log(0.5))
+        self.assertAlmostEqual(self.lm.mle(word_start, word_a), lg(1.0))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_a), lg(0.5))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_b), lg(0.5))
+        self.assertAlmostEqual(self.lm.mle(word_a, word_c), lg(0.5))
 
         # Test Add one
         self.assertAlmostEqual(self.lm.laplace(word_start, word_b),
-                               log(1.0 / 5.0))
+                               lg(1.0 / 5.0))
         self.assertAlmostEqual(self.lm.laplace(word_start, word_a),
-                               log(2.0 / 5.0))
+                               lg(2.0 / 5.0))
         self.assertAlmostEqual(self.lm.laplace(word_a, word_a),
-                               log(2.0 / 6.0))
+                               lg(2.0 / 6.0))
         self.assertAlmostEqual(self.lm.laplace(word_a, word_b),
-                               log(2.0 / 6.0))
+                               lg(2.0 / 6.0))
         self.assertAlmostEqual(self.lm.laplace(word_a, word_c),
-                               log(2.0 / 6.0))
+                               lg(2.0 / 6.0))
 
         # Test Dirichlet
         self.assertAlmostEqual(self.lm.dirichlet(word_start, word_b),
-                               log(0.1 / 1.4))
+                               lg(0.1 / 1.4))
         self.assertAlmostEqual(self.lm.dirichlet(word_start, word_a),
-                               log(1.1 / 1.4))
+                               lg(1.1 / 1.4))
         self.assertAlmostEqual(self.lm.dirichlet(word_a, word_a),
-                               log(1.1 / 2.4))
+                               lg(1.1 / 2.4))
         self.assertAlmostEqual(self.lm.dirichlet(word_a, word_b),
-                               log(1.1 / 2.4))
+                               lg(1.1 / 2.4))
         self.assertAlmostEqual(self.lm.dirichlet(word_a, word_c),
-                               log(1.1 / 2.4))
+                               lg(1.1 / 2.4))
 
+        # Test Kneser-Ney
+        self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_a),
+                               lg(0.95))
+        self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_b),
+                               lg(0.025))
+        self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_end),
+                               lg(0.025))
 
+        # Test Jelinek Mercer
+        self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_end),
+                               lg(0.1))
+        self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_a),
+                               lg(0.8))
+        
 if __name__ == '__main__':
     unittest.main()
