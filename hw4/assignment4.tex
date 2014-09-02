@@ -1,0 +1,90 @@
+\def\DevnagVersion{2.13}% Assignment 2 for CMSC723
+% Finite State Machines
+
+\documentclass[11pt]{article}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+
+
+%@modernhindi
+
+\hypersetup{colorlinks=true,linkcolor=blue}
+
+% \date{}
+\begin{document}
+\begin{center}
+{\Large{\textbf{ Natural Language Processing:  }}}\\
+\mbox{}\\
+{\Large{Assignment 4: What are you asking median}}\\
+% \mbox{}\\
+% (\textsc{Not For Credit})\\
+\mbox{}\\
+{\large{Jordan Boyd-Graber}}\\
+\mbox{}\\
+{\large{Out: \textbf{2. September 2014}\\Due: \textbf{3. October 2014}}}\\
+\end{center}
+
+
+% \maketitle
+\lstset{stringstyle=\ttfamily,language=Python,showstringspaces=False,tabsize=8,frameround=tttt,
+		,keywordstyle=\color{Orange}\bfseries, stringstyle=\ttfamily\color{Green}
+		,columns=fullflexible,identifierstyle=\ttfamily
+		% , commentstyle=\itshape\color{Red}
+}
+
+\section*{Introduction} % (fold)
+\label{sec:introduction}
+As always, check out the Github repository with the course homework templates:
+
+\url{git://github.com/ezubaric/cl1-hw.git}
+
+The code for this homework is in the \texttt{hw4} directory.
+
+The aim of this assignment is to do text classification on trivia questions, sorting them into their appropriate category.  We'll be using the Na\"ive Bayes classifier provided by \textsc{nltk}.
+
+Unlike previous assignments, the code provided with this assignment has all of the functionality required.  Your job is to make the functionality better by improving the features the code uses for text classification.  
+
+{\bf NOTE}: Because the goal of this assignment is feature engineering, not classification algorithms, you \emph{may not} change the underlying algorithm.  
+
+\section*{About the Data}
+
+First, visit the Kaggle site and download \href{https://inclass.kaggle.com/c/digging-into-data-hw2-predict-2013-home-prices/data}{the two csv files} with the training and test data and place them in your \texttt{hw4} directory.
+
+Quiz bowl is an academic competition between schools in English-speaking countries; hundreds of teams compete in dozens of tournaments each year. Quiz bowl is different from Jeopardy, a recent application area. While Jeopardy also uses signaling devices, these are only usable after a question is completed (interrupting Jeopardy's questions would make for bad television). Thus, Jeopardy is rapacious classification followed by a race---among those who know the answer---to punch a button first.
+
+Here's an example of a quiz bowl question:
+
+\begin{quote}
+Expanding on a 1908 paper by Smoluchowski, he derived a formula for the intensity of scattered light in media fluctuating densities that reduces to Rayleigh's law for ideal gases in The Theory of the Opalescence of Homogenous Fluids and Liquid Mixtures near the Critical State. That research supported his theories of matter first developed when he calculated the diffusion constant in terms of fundamental parameters of the particles of a gas undergoing Brownian Motion. In that same year, 1905, he also published On a Heuristic Point of View Concerning the Production and Transformation of Light. That explication of the photoelectric effect won him 1921 Nobel in Physics. For ten points, name this German physicist best known for his theory of Relativity.
+
+\textsc{answer}: {\bf Albert Einstein}
+\end{quote}
+
+Two teams listen to the same question. Teams interrupt the question at any point by ``buzzing in''; if the answer is correct, the team gets points and the next question is read. Otherwise, the team loses points and the other team can answer.
+
+\section*{Classifying Category}
+
+There are many kinds of questions asked in these tournaments: science (as above), literature, history, etc.  The goal of this project is to create an automated system that predicts the category of a question as accurately as possible.
+
+These data will be the subject of the final project (you'll help to answer the questions), so this will be a useful warmup to help you get to know these data a little bit better.
+
+\section*{Submission}
+
+In addition to turning in your code on Moodle, you'll also need to submit your predictions on \href{https://inclass.kaggle.com/c/digging-into-data-hw2-predict-2013-home-prices}{Kaggle}, an online tournament site for machine learning competitions.  
+
+In addition, please turn in a file called \texttt{explanation.txt} explaining your process of creating additional features.
+
+\section*{How this Assignment is Graded (35+ points)}
+
+You'll get full credit on this assignment (35 points) if you can significantly improve on the baseline system (as reported by the Kaggle system).  If you can do much better than your peers, you can earn extra credit (up to 15 points).
+
+\section*{Questions / Hints}
+
+\begin{itemize}
+	\item Don't use all the data until you're ready.  Use the \texttt{--subsample} option to use a subset of the data to see how you're doing on smaller datasets.
+\end{itemize}
+
+\end{document}
