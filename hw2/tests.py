@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import unittest
 from soundex import letters_to_numbers, truncate_to_three_digits, add_zero_padding
 from french_count import french_count, prepare_input
