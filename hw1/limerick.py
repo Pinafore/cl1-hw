@@ -3,6 +3,7 @@
 
 # Use word_tokenize to split raw text into words
 from string import punctuation
+import sys
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -22,8 +23,25 @@ class LimerickDetector:
         pronunciation, take the shorter one.  If there is no entry in the
         dictionary, return 1.
         """
+        phones = None
+        if word in self._pronunciations:
+            phones = self._pronunciations[word]
+        else:
+            return 1
 
-        return 1
+        shortest_num_phone = sys.maxint
+        shortest_index = 0
+        for index, item in enumerate(phones):
+            if len(item) < shortest_num_phone:
+                shortest_num_phone = len(item)
+                shortest_index = index
+
+        phone_count = 0
+        for phone in phones[shortest_index]:
+            if phone[-1].isdigit():
+                phone_count += 1
+
+        return phone_count
 
     def rhymes(self, a, b):
         """
