@@ -17,17 +17,12 @@ class LimerickDetector:
         """
         self._pronunciations = nltk.corpus.cmudict.dict()
 
-    def num_syllables(self, word):
-        """
-        Returns the number of syllables in a word.  If there's more than one
-        pronunciation, take the shorter one.  If there is no entry in the
-        dictionary, return 1.
-        """
+    def shortest_phones(self, word):
         phones = None
         if word in self._pronunciations:
             phones = self._pronunciations[word]
         else:
-            return 1
+            return None
 
         shortest_num_phone = sys.maxint
         shortest_index = 0
@@ -36,8 +31,20 @@ class LimerickDetector:
                 shortest_num_phone = len(item)
                 shortest_index = index
 
+        return phones[shortest_index]
+
+    def num_syllables(self, word):
+        """
+        Returns the number of syllables in a word.  If there's more than one
+        pronunciation, take the shorter one.  If there is no entry in the
+        dictionary, return 1.
+        """
+        phones = self.shortest_phones(word)
+        if phones is None:
+            return 1
+
         phone_count = 0
-        for phone in phones[shortest_index]:
+        for phone in phones:
             if phone[-1].isdigit():
                 phone_count += 1
 
@@ -48,6 +55,7 @@ class LimerickDetector:
         Returns True if two words (represented as lower-case strings) rhyme,
         False otherwise.
         """
+        
 
         return False
 
