@@ -27,7 +27,7 @@ class LimerickDetector:
         shortest_num_phone = sys.maxint
         shortest_index = 0
         for index, item in enumerate(phones):
-            if len(item) < shortest_num_phone:
+            if len(item) <= shortest_num_phone:
                 shortest_num_phone = len(item)
                 shortest_index = index
 
@@ -50,14 +50,32 @@ class LimerickDetector:
 
         return phone_count
 
+    def rhyme(self, word):
+        phones = self.shortest_phones(word)
+        for index, phone in enumerate(phones):
+            if phone[-1].isdigit():
+                result = "".join(phones[index:])
+                return ''.join([i for i in result if not i.isdigit()])
+
     def rhymes(self, a, b):
         """
         Returns True if two words (represented as lower-case strings) rhyme,
         False otherwise.
         """
-        
+        rhyme_a = self.rhyme(a)
+        rhyme_b = self.rhyme(b)
+        if len(rhyme_a) == len(rhyme_b):
+            if rhyme_a == rhyme_b:
+                return True
+        elif len(rhyme_a) < len(rhyme_b):
+            if rhyme_a == rhyme_b[-len(rhyme_a):]:
+                return True
+        else:
+            if rhyme_b == rhyme_a[-len(rhyme_b):]:
+                return True
 
         return False
+
 
     def is_limerick(self, text):
         """
