@@ -50,7 +50,7 @@ class LimerickDetector:
 
         return phone_count
 
-    def num_my_syllables(self, word):
+    def guess_syllables(self, word):
         vowels = 'aeiouy'
         count = 0
         if word[0] in vowels:
