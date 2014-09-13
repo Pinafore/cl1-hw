@@ -1,5 +1,5 @@
-# Author: YOUR NAME HERE
-# Date: DATE SUBMITTED
+# Author: Sanghee Kim
+# Date: September 14, 2014
 
 # Use word_tokenize to split raw text into words
 from string import punctuation
