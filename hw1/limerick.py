@@ -93,9 +93,12 @@ class LimerickDetector:
                     return True
         return False
 
-    def remove_punctuation(self, text):
+    def apostrophe_tokenize(self, text):
         exclude = set(punctuation)
-        return ''.join(ch for ch in text if ch not in exclude)
+        exclude.remove(r"'")
+        text = ''.join(ch for ch in text if ch not in exclude)
+        tokenizer = nltk.RegexpTokenizer('\s+', gaps=True)
+        return tokenizer.tokenize(text)
 
     def is_limerick(self, text):
         """
@@ -109,11 +112,11 @@ class LimerickDetector:
         (English professors may disagree with this definition, but that's what
         we're using here.)
         """
-        text = self.remove_punctuation(text.strip())
+        text = text.strip()
         lines = text.split('\n')
         last_words = []
         for line in lines:
-            last_words.append(nltk.word_tokenize(line)[-1])
+            last_words.append(self.apostrophe_tokenize(line)[-1])
 
         if len(last_words) == 5:
             if self.rhymes(last_words[0], last_words[1]) and \
