@@ -51,19 +51,23 @@ class LimerickDetector:
         return phone_count
 
     def rhyme(self, word):
-        phones = self.shortest_phones(word)
-        for index, phone in enumerate(phones):
-            if phone[-1].isdigit():
-                result = "".join(phones[index:])
-                return ''.join([i for i in result if not i.isdigit()])
+        if word in self._pronunciations:
+            phones_list = self._pronunciations[word]
+        else:
+            return None
 
-    def rhymes(self, a, b):
-        """
-        Returns True if two words (represented as lower-case strings) rhyme,
-        False otherwise.
-        """
-        rhyme_a = self.rhyme(a)
-        rhyme_b = self.rhyme(b)
+        rhyme_list = []
+        for phones in phones_list:
+            result = ""
+            for index, phone in enumerate(phones):
+                if phone[-1].isdigit():
+                    result = "".join(phones[index:])
+                    break
+            rhyme_list.append(''.join([i for i in result if not i.isdigit()]))
+
+        return rhyme_list
+
+    def compare_rhymes(self, rhyme_a, rhyme_b):
         if len(rhyme_a) == len(rhyme_b):
             if rhyme_a == rhyme_b:
                 return True
@@ -76,6 +80,22 @@ class LimerickDetector:
 
         return False
 
+    def rhymes(self, a, b):
+        """
+        Returns True if two words (represented as lower-case strings) rhyme,
+        False otherwise.
+        """
+        rhyme_a = self.rhyme(a)
+        rhyme_b = self.rhyme(b)
+        for r_a in rhyme_a:
+            for r_b in rhyme_b:
+                if self.compare_rhymes(r_a, r_b):
+                    return True
+        return False
+
+    def remove_punctuation(self, text):
+        exclude = set(punctuation)
+        return ''.join(ch for ch in text if ch not in exclude)
 
     def is_limerick(self, text):
         """
@@ -89,7 +109,18 @@ class LimerickDetector:
         (English professors may disagree with this definition, but that's what
         we're using here.)
         """
+        text = self.remove_punctuation(text.strip())
+        lines = text.split('\n')
+        last_words = []
+        for line in lines:
+            last_words.append(nltk.word_tokenize(line)[-1])
 
+        if len(last_words) == 5:
+            if self.rhymes(last_words[0], last_words[1]) and \
+               self.rhymes(last_words[1], last_words[4]):
+                   if self.rhymes(last_words[2], last_words[3]) and \
+                      not self.rhymes(last_words[0], last_words[2]):
+                          return True
         return False
 
 if __name__ == "__main__":
