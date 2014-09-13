@@ -1,4 +1,4 @@
-import sys, re
+import sys
 from fst import FST
 from fsmutils import composewords
 

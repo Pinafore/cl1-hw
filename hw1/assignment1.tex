@@ -70,6 +70,18 @@ More requirements / information appear in the source files.
 
 \noindent \textbf{Notes}:
 \begin{itemize}
+\item {\bf What does it mean for two words to rhyme?}
+
+They should share the same sounds in their pronunciation except for their first consonant sound(s).  (This is a very strict definition of rhyming.  This makes the assignment easier.)  If one word is longer than the other, then the sounds of shorter word (except for its first consonant) should be a suffix of the sounds of the longer.
+
+\item {\bf How do I know if my code is working?}
+
+Run the provided unit tests:
+
+\texttt{python tests.py}
+
+in the homework directory.  Initially, many of them will fail.  If your program is working correctly, all of them will pass.  However, the converse is not true: passing all the tests is not sufficient to demonstrate that your code is working.  \emph{This is strongly encouraged, as it will be similar to how your code is graded.}
+
 \item {\bf How do I separate words from a string of text?}
 
 Use the \texttt{word\_tokenize} function.
@@ -91,21 +103,36 @@ that it rhymes with another word if any of the pronunciations rhymes.
 
 Then it has no initial consonant, and then the entire word should be a
 suffix of the other word.
+
+% Note for the future: change this to clarify that end rhymes are not rhymes
+% also check the unit tests to make sure this is not allowed
+
+\item {\bf What about end rhymes?}
+
+End rhymes are indeed a rhyme, but they make for less interesting
+limericks.  So ``conspire'' and ``fire'' do rhyme.
+
+\item {\bf What about stress?}
+
+The stresses of rhymes should be consistent.
+
 \end{itemize}
 % section problem_3 (end)
 
 \section*{Extra Credit}
 
 Extra Credit (create new functions for these features; don’t put them
-in the required code that will be run by the autograder):
+in the required functions that will be run by the autograder):
 \begin{itemize}
 \item[(up to 2 points)] Create a new function called
   \texttt{apostrophe\_tokenize} that handles apostrophes in words correctly so
-  that ``can’t'' would rhyme with ``pant''.
+  that ``can’t'' would rhyme with ``pant'' if the \texttt{is\_limerick} function used \texttt{apostrophe\_tokenize} instead of \texttt{word\_tokenize}.
 \item[(up to 5 points)] Make reasonable guesses about the number of syllables in unknown words in a function called \texttt{guess\_syllables}.
 \item[(up to 5 points)] Compose a funny original limerick about
   computational linguistics, natural language processing, or machine
   learning (add it to your submission as \texttt{limerick.txt}).
 \end{itemize}
+Add extra credit code as functions to the \texttt{LimerickDetector}
+class, but don't interfere with required functionality.
 
 \end{document}
