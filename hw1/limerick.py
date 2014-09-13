@@ -50,6 +50,22 @@ class LimerickDetector:
 
         return phone_count
 
+    def num_my_syllables(self, word):
+        vowels = 'aeiouy'
+        count = 0
+        if word[0] in vowels:
+            count += 1
+        for index in range(1,len(word)):
+            if (word[index] in vowels) and (word[index-1] not in vowels):
+                count += 1
+        if word.endswith('e'):
+            count -= 1
+        if word.endswith('le'):
+            count += 1
+        if count == 0:
+            count += 1
+        return count
+
     def rhyme(self, word):
         if word in self._pronunciations:
             phones_list = self._pronunciations[word]
