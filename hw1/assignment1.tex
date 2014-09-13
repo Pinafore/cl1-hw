@@ -103,6 +103,19 @@ that it rhymes with another word if any of the pronunciations rhymes.
 
 Then it has no initial consonant, and then the entire word should be a
 suffix of the other word.
+
+% Note for the future: change this to clarify that end rhymes are not rhymes
+% also check the unit tests to make sure this is not allowed
+
+\item {\bf What about end rhymes?}
+
+End rhymes are indeed a rhyme, but they make for less interesting
+limericks.  So ``conspire'' and ``fire'' do rhyme.
+
+\item {\bf What about stress?}
+
+The stresses of rhymes should be consistent.
+
 \end{itemize}
 % section problem_3 (end)
 
@@ -113,7 +126,7 @@ in the required functions that will be run by the autograder):
 \begin{itemize}
 \item[(up to 2 points)] Create a new function called
   \texttt{apostrophe\_tokenize} that handles apostrophes in words correctly so
-  that ``can’t'' would rhyme with ``pant''.
+  that ``can’t'' would rhyme with ``pant'' if the \texttt{is\_limerick} function used \texttt{apostrophe\_tokenize} instead of \texttt{word\_tokenize}.
 \item[(up to 5 points)] Make reasonable guesses about the number of syllables in unknown words in a function called \texttt{guess\_syllables}.
 \item[(up to 5 points)] Compose a funny original limerick about
   computational linguistics, natural language processing, or machine
