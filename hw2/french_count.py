@@ -29,9 +29,12 @@ def french_count():
 
     return f
 
+
 if __name__ == '__main__':
-    user_input = int(raw_input())
+    string_input = raw_input()
+    user_input = int(string_input)
     f = french_count()
-    if user_input:
+    if string_input:
         print user_input, '-->',
         print " ".join(f.transduce(prepare_input(user_input)))
+
