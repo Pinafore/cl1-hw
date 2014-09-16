@@ -1,0 +1,204 @@
+\def\DevnagVersion{2.13}% Assignment 2 for CMSC723
+% Finite State Machines
+
+\documentclass[11pt]{article}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+
+
+%@modernhindi
+
+\hypersetup{colorlinks=true,linkcolor=blue}
+
+% \date{}
+\begin{document}
+\begin{center}
+{\Large{\textbf{ Natural Language Processing:  }}}\\
+\mbox{}\\
+{\Large{Assignment 5: Qu' bopbe' paqvam}}\\
+% \mbox{}\\
+% (\textsc{Not For Credit})\\
+\mbox{}\\
+{\large{Jordan Boyd-Graber}}\\
+\mbox{}\\
+{\large{Out: \textbf{16. September 2014}\\Due: \textbf{10. October 2014}}}\\
+\end{center}
+
+
+% \maketitle
+\lstset{stringstyle=\ttfamily,language=Python,showstringspaces=False,tabsize=8,frameround=tttt,
+		,keywordstyle=\color{Orange}\bfseries, stringstyle=\ttfamily\color{Green}
+		,columns=fullflexible,identifierstyle=\ttfamily
+		% , commentstyle=\itshape\color{Red}
+}
+
+\section*{Introduction} % (fold)
+\label{sec:introduction}
+As always, check out the Github repository with the course homework templates:
+
+\url{git://github.com/ezubaric/cl1-hw.git}
+
+The code for this homework is in the \texttt{hw5} directory.
+
+\section{Tagging and Tag Sets (10 points)}
+
+\subsection{When taggers go bad (5 points)}
+
+Consider the following sentences:
+\begin{enumerate}
+\item British Left Waffles on Falkland Islands
+\item Teacher Strikes Idle Kids
+\item Clinton Wins Budget; More Lies Ahead
+\item Juvenile Court to Try Shooting Defendant
+\end{enumerate}
+
+Choose one of these sentences and tag it in
+two different (but plausible) ways.
+
+
+\subsection{Exploring the tag set (5 points)}
+There are 265 distinct words in the Brown Corpus having exactly four possible tags (assuming nothing is done to normalize the word forms).
+\begin{enumerate}
+\item Create a table with the integers 1\dots 10 in one column, and the number of distinct
+words in the corpus having $\{1, \dots, 10\}$ distinct tags.
+\item For the word with the greatest number of distinct tags, print out sentences from
+the corpus containing the word, one for each possible tag.
+
+\end{enumerate}
+
+\section{Viterbi Algorithm (30 Points)}
+
+Consider the following sentences written in Klingon.  For each
+sentence, the part of speech of each ``word'' has been given (for ease
+of translation, some prefixes/suffixes have been treated as words),
+along with a translation.  Using these training sentences, we're going
+to build a hidden Markov model to predict the part of speech of an
+unknown sentence using the Viterbi algorithm.  Do not use log probabilities (you can later, though).
+
+\begin{tabular}{llllll}
+  N  & PRO  & V   & N         & PRO  \\
+pa'Daq   & ghah & taH & tera'ngan & 'e   \\
+room (inside)    & he   & is  & human     & of   \\
+\multicolumn{6}{c}{{\em The human is in the room}} \\
+\end{tabular}
+
+\begin{tabular}{llll}
+V   & N      & V    & N              \\
+ja'chuqmeH & rojHom & neH  & tera'ngan        \\
+in order to parley  & truce  & want & human \\
+\multicolumn{4}{c}{{\em The enemy commander wants a truce in order to parley}}
+\end{tabular}
+
+\begin{tabular}{lllllll}
+N         & V      & N     & CONJ & N         & V    & N \\
+tera'ngan & qIp   & puq   & 'eg  & puq & qIp  & tera'ngan \\
+human     & bit  & child & and  & child & bit & child \\
+\multicolumn{7}{c}{{\em The child bit the human, and the human bit the child}}
+\end{tabular}
+
+\subsection{Emission Probability (10 points)}
+
+Compute the frequencies of each part of speech in the table below for
+nouns and verbs.  We'll use a smoothing factor of 0.1 (as discussed in
+class) to make sure that no event is impossible; add this number to
+all of your observations.  Two parts of speech have already been
+done for you.  After you've done this, compute the emission probabilities in a similar table.
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+   & NOUN & VERB & CONJ & PRO \\
+\hline
+'e &   &   &  0.1    &  1.1   \\
+\hline
+'eg &     &     &  1.1    &  0.1 \\
+\hline
+ghaH &     &    &  0.1    &  1.1  \\
+\hline
+ja'chuqmeH &     &     &  0.1    &  0.1   \\
+\hline
+legh &     &     &  0.1    &  0.1 \\
+\hline
+neH &     &     &  0.1    &  0.1   \\
+\hline
+pa'Daq &     &     &  0.1    &  0.1 \\
+\hline
+puq &     &     &  0.1    &  0.1 \\
+\hline
+qIp &     &     &  0.1    &  0.1 \\
+\hline
+rojHom &     &     &  0.1    &  0.1\\
+\hline
+taH &     &     &  0.1    &  0.1 \\
+\hline
+tera'ngan &     &     &  0.1    &  0.1 \\
+\hline
+yaS &     &     &  0.1    &  0.1   \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Start and Transition Probability (5 points)}
+
+Now, for each part of speech, total the number of times it
+transitioned to each other part of speech.  Again, use a smoothing
+factor of 0.1.  After you've done this, compute the start and transition probabilities.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+      & NOUN & VERB & CONJ & PRO \\
+\hline
+START &  &   &  &   \\
+\hline
+N     &   &   & 1.1  & 2.1  \\
+\hline
+V     &   &   & 0.1  & 0.1  \\
+\hline
+CONJ  &   &   &  0.1 & 0.1 \\
+\hline
+PRO   &  &   &  0.1 & 0.1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Viterbi Decoding (15 points)}
+
+Now consider the following sentence: ``tera'ngan legh yaS''.
+
+\begin{enumerate}
+
+\item Compute the probability of the sequence \textsc{noun}, \textsc{verb}, \textsc{noun}.  
+
+\item Create the decoding matrix of this sentence $\ln \delta_{n}(z)$ (word positions are columns, rows are parts of speech).  Only provide log probabilities, and only use base 2.
+
+\begin{center}
+\begin{tabular}{l|ccc}
+	POS & $n=1$ & $n=2$ & $n=3$ \\
+	\hline
+	$z=$\textsc{n} & & & \\
+	$z=$\textsc{v} & & & \\
+	$z=$\textsc{conj} & & & \\	
+	$z=$\textsc{pro} & & & \\	
+	\hline
+\end{tabular}
+\end{center}
+
+\item What is the most likely sequence of parts of speech?
+
+\item Let's compare this to the probability of your previous answer.
+	\begin{enumerate}
+		\item How does this compare to the sequence \textsc{noun}, \textsc{verb}, \textsc{noun}?
+		\item Which is more plausible linguistically?
+		\item Does an \textsc{hmm} model encode the intuition that you used to answer the previous question?
+	\end{enumerate}
+\item (For fun, not for credit) What do you think this sentence means?  What word is the subject of the sentence?
+
+\end{enumerate}
+
+
+
+\end{document}
