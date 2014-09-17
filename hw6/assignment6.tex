@@ -1,0 +1,179 @@
+\def\DevnagVersion{2.13}% Assignment 2 for CMSC723
+% Finite State Machines
+
+\documentclass[11pt]{article}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdftex]{graphicx}
+
+
+%@modernhindi
+
+\hypersetup{colorlinks=true,linkcolor=blue}
+
+% \date{}
+\begin{document}
+\begin{center}
+{\Large{\textbf{ Natural Language Processing:  }}}\\
+\mbox{}\\
+{\Large{Assignment 6: Hooking up words and phrases and clauses}}\\
+% \mbox{}\\
+% (\textsc{Not For Credit})\\
+\mbox{}\\
+{\large{Jordan Boyd-Graber}}\\
+\mbox{}\\
+{\large{Out: \textbf{16. September 2014}\\Due: \textbf{17. October 2014}}}\\
+\end{center}
+
+
+% \maketitle
+\lstset{stringstyle=\ttfamily,language=Python,showstringspaces=False,tabsize=8,frameround=tttt,
+		,keywordstyle=\color{Orange}\bfseries, stringstyle=\ttfamily\color{Green}
+		,columns=fullflexible,identifierstyle=\ttfamily
+		% , commentstyle=\itshape\color{Red}
+}
+
+\section*{Introduction} % (fold)
+\label{sec:introduction}
+As always, check out the Github repository with the course homework templates:
+
+\url{git://github.com/ezubaric/cl1-hw.git}
+
+The code for this homework is in the \texttt{hw6} directory.
+
+\section*{Problem 1: Treebank Probabilities (5 points)}
+
+To warm up, you'll first compute \textsc{pcfg} probabilities from
+data.  You'll create a class that can read in sentences (through the
+\texttt{add\_sentence} function and then answer queries using the
+\texttt{query} function.
+
+Add the required functionality to the file \texttt{treebank.py}.  You
+can see how the code will be called in Listing~\ref{pcfg}.
+
+\section*{Problem 2: Shift-Reduce Parsers (15 points)}
+
+Next, you'll create sequences of shift-reduce actions that can produce
+dependency parses from a string of words.  You'll implement the
+\texttt{transition\_sequence} function in the \texttt{oracle.py} file.
+Your code will be much simpler if you use
+\href{https://wiki.python.org/moin/Generators}{generators}.
+
+An example of the shift-reduce sequence is given in Listing~\ref{sr}.
+
+\begin{lstlisting}[float, label=pcfg,caption=Estimating production probabilities from Treebank data, frame=trBL,escapechar=*, numbers=left, numberstyle=\tiny, numberblanklines=false]
+>>> tb_probs = PcfgEstimator()
+>>> from nltk.corpus import treebank
+>>> for ii in treebank.parsed_sents():
+...         tb_probs.add_sentence(ii)
+...
+>>> tb_probs.query('NN', 'man')
+0.0009114385538508279
+\end{lstlisting}
+
+\begin{lstlisting}[float, label=sr,caption=Creating a shift-reduce
+sequence from a dependency parse, frame=trBL,escapechar=*,
+numbers=left, numberstyle=\tiny, numberblanklines=false]
+>>> from nltk.corpus import treebank
+>>> print(" ".join(conll2007.sents('esp.train')[1]))
+El Banco_Central_Europeo - BCE - fijo el cambio oficial
+                       del euro en los 0,9355_dolares .
+>>> s = conll2007.parsed_sents('esp.train')[1]
+>>> for x in transition_sequence(s):
+...     print(x.pretty_print(s))
+...
+s
+s
+l	(Banco_Central_Europeo, El)
+s
+s
+l	(BCE, -)
+s
+r	(BCE, -)
+r	(Banco_Central_Europeo, BCE)
+s
+l	(fijo, Banco_Central_Europeo)
+s
+s
+l	(cambio, el)
+s
+r	(cambio, oficial)
+s
+s
+r	(del, euro)
+r	(cambio, del)
+r	(fijo, cambio)
+s
+s
+s
+l	(0,9355_dólares, los)
+r	(en, 0,9355_dolares)
+r	(fijo, en)
+s
+r	(fijo, .)
+r	(None, fijo)
+s
+\end{lstlisting}
+
+\section*{Problem 3: Eisner Algorithm (40 points)}
+
+The goal of this section is for you to build code that can, given a
+parsing score function and a sentence, discovers the best untyped
+dependency tree that explains that sentence.
+
+You’ll also need some data files that are too big to put in Github.
+Please download them here:
+\begin{itemize}
+\item \href{http://terpconnect.umd.edu/~ying/cl1/tb_counts.words}{\texttt{tb\_counts.words}}
+\item
+  \href{http://terpconnect.umd.edu/~ying/cl1/tb_counts.tag}{\texttt{tb\_counts.tag}}
+\end{itemize}
+We’re using a very simple score function built from the
+\href{http://googleresearch.blogspot.com/2013/05/syntactic-ngrams-over-time.html}{Dependencies
+  over Time} corpus. It does not use information about the direction
+or the part of speech of the corpus; it only uses the words involved
+(which is the head and which is the dependent).  You can assume that
+all the values are log probabilities (i.e., less than or equal to
+zero).
+
+You are responsible for completing the following functions in the
+\texttt{EisnerParser} class:
+\begin{itemize}
+\item \texttt{initialize\_chart}: Create a chart that you can fill in later as you parse a sentence.  Start with the base case of dynamic programming, giving single spans a score of 0.0.
+\item \texttt{fill\_chart}: After your chart has been initialized, this function should fill in all the cells in the chart with their appropriate values (this is the hardest part!).
+\item \texttt{reconstruct}: Given the coordinates of a span, return an
+iterator over all of the edges that are part of the best parse of that
+span.  This will require you to store backpointers in your \texttt{fill\_chart}
+function.
+\end{itemize}
+
+\section*{Extra Credit}
+
+Extra credit is available by providing a custom score function with
+the function \texttt{custom\_sf} that performs better than the score function I
+provided.  You can store information (up to 1MB) in the optional
+upload \texttt{sf.dat}, which you can use in the \texttt{custom\_sf}
+function).
+\begin{itemize}
+\item You will get no points if you do not describe how the score function is computed
+\item You will get at most 3 points if you use the Treebank data
+\item You will get at most 10 points if you use data other than the
+  Treebank data
+\end{itemize}
+
+\section*{Turning in Your Assignment}
+
+As usual, submit your completed code to
+\href{https://moodle.cs.colorado.edu/course/view.php?id=161}{Moodle}.
+Make sure:
+\begin{itemize}
+  \item You do not change filenames or function names
+  \item You do not change the \textsc{api} of the functions
+  \item Make sure you pass the included unit tests
+  \item Do not add \texttt{print} statements to the code you turn in
+  \item Add your name as a comment to all files you turn in
+\end{itemize}
+
+\end{document}
