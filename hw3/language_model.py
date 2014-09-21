@@ -27,7 +27,7 @@ class BigramLanguageModel:
                  tokenize_function=TreebankWordTokenizer().tokenize,
                  normalize_function=lower):
         self._unk_cutoff = unk_cutoff
-        self._jm_lambda = 0.6
+        self._jm_lambda = jmv_lambda
         self._dirichlet_alpha = dirichlet_alpha
         self._katz_cutoff = katz_cutoff
         self._kn_concentration = kn_concentration

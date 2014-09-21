@@ -60,7 +60,9 @@ After you've finalized the vocabulary, then you need to add training data to the
 \item[5] \texttt{laplace}: Add one to all counts
 \item[5] \texttt{dirichlet}: Add a specified parameter $> 0$ to all counts
 \item[10] \texttt{Jelinek-Mercer}: Interpolate between probability distributions with parameter $\lambda$
-\item[20] \texttt{Kneser-Ney}: Use discounting and prefixes with discount parameter $\delta$ 
+\item[20] \texttt{Kneser-Ney}: Use discounting and prefixes with
+  discount parameter $\delta$ and concentration parameter $\alpha$ to
+  implement interpolated Kneser-Ney.
 \end{itemize}
 Now if you run the main section of the \texttt{language\_model} file, you'll get per-sentence reports of perplexity.  Take a look at what sentences are particularly hard or easy (you don't need to turn anything in here, however).
 
