@@ -10,6 +10,7 @@ class TestSequenceFunctions(unittest.TestCase):
     def setUp(self):
         self.lm = BigramLanguageModel(kUNK_CUTOFF, jm_lambda=0.6, \
                                       kn_discount = 0.1,
+                                      kn_concentration = 1.0,
                                       dirichlet_alpha=0.1)
 
     def test_vocab(self):
