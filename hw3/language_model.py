@@ -23,13 +23,14 @@ def lg(x):
 class BigramLanguageModel:
 
     def __init__(self, unk_cutoff, jm_lambda=0.6, dirichlet_alpha=0.1,
-                 katz_cutoff=5, kn_discount=0.1, 
+                 katz_cutoff=5, kn_discount=0.1, kn_concentration=1.0,
                  tokenize_function=TreebankWordTokenizer().tokenize,
                  normalize_function=lower):
         self._unk_cutoff = unk_cutoff
         self._jm_lambda = 0.6
         self._dirichlet_alpha = dirichlet_alpha
         self._katz_cutoff = katz_cutoff
+        self._kn_concentration = kn_concentration
         self._kn_discount = kn_discount
         self._vocab_final = False
 
@@ -184,6 +185,8 @@ if __name__ == "__main__":
                            type=int, default=-1, required=False)
     argparser.add_argument("--kn_discount", help="Kneser-Ney discount parameter",
                            type=float, default=0.1, required=False)
+    argparser.add_argument("--kn_concentration", help="Kneser-Ney concentration parameter",
+                           type=float, default=1.0, required=False)
     argparser.add_argument("--method", help="Which LM method we use",
                            type=str, default='laplace', required=False)
     
@@ -191,6 +194,7 @@ if __name__ == "__main__":
     lm = BigramLanguageModel(kUNK_CUTOFF, jm_lambda=args.jm_lambda,
                              dirichlet_alpha=args.dir_alpha,
                              katz_cutoff=args.katz_cutoff,
+                             kn_concentration=args.kn_concentration,
                              kn_discount=args.kn_discount)
 
     for ii in nltk.corpus.brown.sents():
