@@ -213,7 +213,8 @@ if __name__ == "__main__":
             break
 
     print("Trained language model with %i sentences from Brown corpus." % sentence_count)
-    assert args.method in ['kn', 'mle', 'dir', 'jm', 'laplace'], \
+    assert args.method in ['kneser_ney', 'mle', 'dirichlet', \
+                           'jelinek_mercer', 'good_turing', 'laplace'], \
       "Invalid estimation method"
 
     sent = raw_input()
