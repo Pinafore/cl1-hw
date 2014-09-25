@@ -8,8 +8,10 @@ from language_model import BigramLanguageModel, kLM_ORDER, \
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.lm = BigramLanguageModel(kUNK_CUTOFF, jm_lambda=0.5, \
-                                          dirichlet_alpha=0.1)
+        self.lm = BigramLanguageModel(kUNK_CUTOFF, jm_lambda=0.6, \
+                                      kn_discount = 0.1,
+                                      kn_concentration = 1.0,
+                                      dirichlet_alpha=0.1)
 
     def test_vocab(self):
         self.lm.train_seen("a", 300)
@@ -100,11 +102,11 @@ class TestSequenceFunctions(unittest.TestCase):
 
         # Test Kneser-Ney
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_a),
-                               lg(0.95))
+                               lg(0.69475))
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_b),
-                               lg(0.025))
+                               lg(0.13475))
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_end),
-                               lg(0.025))
+                               lg(0.13475))
 
         # Test Jelinek Mercer
         self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_end),
