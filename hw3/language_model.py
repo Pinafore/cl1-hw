@@ -27,7 +27,7 @@ class BigramLanguageModel:
                  tokenize_function=TreebankWordTokenizer().tokenize,
                  normalize_function=lower):
         self._unk_cutoff = unk_cutoff
-        self._jm_lambda = 0.6
+        self._jm_lambda = jm_lambda
         self._dirichlet_alpha = dirichlet_alpha
         self._katz_cutoff = katz_cutoff
         self._kn_concentration = kn_concentration
@@ -213,7 +213,8 @@ if __name__ == "__main__":
             break
 
     print("Trained language model with %i sentences from Brown corpus." % sentence_count)
-    assert args.method in ['kn', 'mle', 'dir', 'jm', 'laplace'], \
+    assert args.method in ['kneser_ney', 'mle', 'dirichlet', \
+                           'jelinek_mercer', 'good_turing', 'laplace'], \
       "Invalid estimation method"
 
     sent = raw_input()
