@@ -67,6 +67,7 @@ class BigramLanguageModel:
         assert self._vocab_final, \
             "Vocab must be finalized before looking up words"
 
+        # Add your code here
         return -1
 
     def finalize(self):
@@ -74,6 +75,8 @@ class BigramLanguageModel:
         Fixes the vocabulary as static, prevents keeping additional vocab from
         being added
         """
+
+        # You probably do not need to modify this code
         self._vocab_final = True
 
     def tokenize_and_censor(self, sentence):
@@ -81,6 +84,8 @@ class BigramLanguageModel:
         Given a sentence, yields a sentence suitable for training or
         testing.  Prefix the sentence with <s>, replace words not in
         the vocabulary with <UNK>, and end the sentence with </s>.
+
+        You should not modify this code.
         """
         yield self.vocab_lookup(kSTART)
         for ii in self._tokenizer(sentence):
@@ -91,6 +96,8 @@ class BigramLanguageModel:
     def normalize(self, word):
         """
         Normalize a word
+
+        You should not modify this code.
         """
         return self._normalizer(word)
 
@@ -101,6 +108,8 @@ class BigramLanguageModel:
         MLE would be negative infinity, use kNEG_INF
         """
 
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def laplace(self, context, word):
@@ -108,12 +117,16 @@ class BigramLanguageModel:
         Return the log MLE estimate of a word given a context.
         """
 
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def good_turing(self, context, word):
         """
         Return the Good Turing probability of a word given a context
         """
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def jelinek_mercer(self, context, word):
@@ -122,6 +135,8 @@ class BigramLanguageModel:
         given a context; interpolates context probability with the
         overall corpus probability.
         """
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def kneser_ney(self, context, word):
@@ -129,6 +144,8 @@ class BigramLanguageModel:
         Return the log probability of a word given a context given
         Kneser Ney backoff
         """
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def dirichlet(self, context, word):
@@ -136,6 +153,8 @@ class BigramLanguageModel:
         Additive smoothing, assuming independent Dirichlets with fixed
         hyperparameter.
         """
+        # This initially return 0.0, ignoring the word and context.
+        # Modify this code to return the correct value.
         return 0.0
 
     def add_train(self, sentence):
@@ -143,27 +162,36 @@ class BigramLanguageModel:
         Add the counts associated with a sentence.
         """
 
-        # You'll need to complete this function, but here's a line of code that
-        # will hopefully get you started.
+        # You'll need to complete this function, but here's a line of
+        # code that will hopefully get you started.
         for context, word in bigrams(self.tokenize_and_censor(sentence)):
             None
 
     def perplexity(self, sentence, method):
         """
         Compute the perplexity of a sentence given a estimation method
+
+        You do not need to modify this code.
         """
         return 2.0 ** (-1.0 * mean([method(context, word) for context, word in \
                                     bigrams(self.tokenize_and_censor(sentence))]))
 
-    def sample(self, samples=25):
+    def sample(self, method, samples=25):
         """
         Sample words from the language model.
         
         @arg samples The number of samples to return.
         """
-        yield ""
+        # Modify this code to get extra credit.  This should be
+        # written as an iterator.  I.e. yield @samples times followed
+        # by a final return, as in the sample code.
+
+        for ii in xrange(samples):
+            yield ""
         return
 
+# You do not need to modify the below code, but you may want to during
+# your "exploration" of high / low probability sentences.
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--jm_lambda", help="Parameter that controls " + \
