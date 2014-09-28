@@ -104,9 +104,9 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_a),
                                lg(0.69475))
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_b),
-                               lg(0.08475))
+                               lg(0.13475))
         self.assertAlmostEqual(self.lm.kneser_ney(word_start, word_end),
-                               lg(0.08475))
+                               lg(0.13475))
 
         # Test Jelinek Mercer
         self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_end),
