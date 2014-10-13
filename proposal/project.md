@@ -4,7 +4,8 @@ problem.  You will have to train effective classification models, but
 the more important (and effective) route for success is to engineer
 features and gather additional data to help your predictions.
 
-=About the Data=
+About the Data
+==============
 
 Quiz bowl is an academic competition between schools in
 English-speaking countries; hundreds of teams compete in dozens of
@@ -15,7 +16,7 @@ questions would make for bad television).  Thus, Jeopardy is rapacious
 classification followed by a race---among those who know the
 answer---to punch a button first.
 
-Here'Äôs an example of a quiz bowl question:
+Here's an example of a quiz bowl question:
 
 Expanding on a 1908 paper by Smoluchowski, he derived a formula for
 the intensity of scattered light in media fluctuating densities that
@@ -33,20 +34,22 @@ of Relativity.
 *ANSWER*: Albert _Einstein_
 
 Two teams listen to the same question. Teams interrupt the question at
-any point by "buzzing in"ù; if the answer is correct, the team gets
+any point by "buzzing in"¬ù; if the answer is correct, the team gets
 points and the next question is read.  Otherwise, the team loses
 points and the other team can answer.
 
-==Why we want to use Quiz Bowl Data for Classification==
+Why we want to use Quiz Bowl Data for Classification
+-----------------------------------------------
 
-It'Äôs very easy to generate guesses (in fact, we could generate every
+It's very easy to generate guesses (in fact, we could generate every
 possible guess).  The challenge is knowing whether any given guess is
 good or not.  We can treat this as a classification problem.  Every
 guess can be described by features that measure how well it matches
 the question.  The classifier tells us whether we got the question
 wrong or right.
 
-=Data Format=
+Data Format
+--------------------
 
 Each line has a guess (page) and a correct answer (answer) given some
 fraction of the question revealed so far (text).  Your goal is to
@@ -56,18 +59,21 @@ page.  To get you started, you have the following columns:
 
 Data for History and Literature questions will be available October 24.  Data for all other categories of questions will be available November 1.  
 
-== Competition ==
+Competition
+==================
 
 We will use Kaggle InClass for this competition.  This will be a competition between students in the Colorado and Maryland graduate courses on natural language processing and computational linguistics.  A large portion of your grade will be how you perform on this Kaggle competition.  
 
-== Proposal == 
+Proposal
+==================
 
 The project proposal is due Nov. 1.  This one page PDF document should describe:
 * Who is on your team
 * What techniques you will explore 
 * Your timeline for completing the project (be realistic!)
 
-== Final Presentation ==
+Final Presentation
+======================
 
 The final presentation will be in class on Dec. 16.  In the final presentation you will:
 * Explain what you did
