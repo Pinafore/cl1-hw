@@ -116,7 +116,7 @@ competition.
 Proposal
 ==================
 
-The project proposal is due 31. October.  This one page PDF document
+The project proposal is due 7. November.  This one page PDF document
 should describe:
 
 * Who is on your team
@@ -124,7 +124,10 @@ should describe:
 * What techniques you will explore 
 
 * Your timeline for completing the project (be realistic; you should
-  have your first Kaggle submission by 14. Nov)
+  have your first Kaggle submission by 14. November)
+
+Designate **one person** from your group to submit the proposal on
+Moodle.  Late days cannot be used on this assignment.
 
 Final Presentation
 ======================
@@ -160,3 +163,40 @@ usual class time).  In the final presentation you will:
 
 * Presumably you did many different things; how did they each
   individually contribute to your final result?
+
+Project Writeup
+======================
+
+By 23:55 16. December, have the person in your group whose last name
+is alphabetically first submit their project writeup explaining what
+you did and what results you achieved on Moodle.  This document should
+make it clear:
+
+* Why this is a good idea
+* What you did
+* Who did what
+* Whether your technique worked or not
+
+Please do not go over 2500 words unless you have a really good reason.
+Images are a much better use of space than words, usually (there’s no
+limit on including images, but use judgement and be selective).
+
+Grade
+======================
+
+The grade will be out of 25 points, broken into five areas:
+
+* _Presentation_: For your oral presentation, do you highlight what
+  you did and make people care?  Did you use time well during the
+  presentation?
+
+* _Writeup_: Does the writeup explain what you did in a way that is
+  clear and effective?
+
+* _Technical Soundness_: Did you use the right tools for the job, and
+  did you use them correctly?  Were the relevant to this class?
+
+* _Effort_: Did you do what you say you would, and was it the right
+  ammount of effort.
+
+* _Performance_: How did your techniques perform?
