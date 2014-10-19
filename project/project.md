@@ -98,8 +98,8 @@ for all other categories of questions will be available 3. November,
 and that's also the date we'll launch the Kaggle site.
 
 You are welcome to use any *automatic* method to choose an answer.  It
-need not be among the sets provided by our two guessers.  You are
-welcome to use any data *except* quiz bowl questions to improve your
+need not be among the sets provided by our two guessers.  In addition to the data we provide, you are
+welcome to use any external data *except* quiz bowl questions to improve your
 methods.  You are welcome (an encouraged) to use any publicly
 available software, but you may want to check on Piazza for
 suggestions as many tools are better (or easier to use) than others.
