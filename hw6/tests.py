@@ -27,7 +27,7 @@ class StubScoreFunction(BigramInterpScoreFunction):
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        sample_sentence = sample_sentence = """economic\tATT\t2
+        sample_sentence = """economic\tATT\t2
 news\tSBJ\t3
 had\tPRED\t0
 little\tATT\t5
@@ -63,7 +63,6 @@ markets\tPC\t6
 
         self.assertEqual(round(chart.get_score(5, 6, True, False)), 2.0)
         self.assertEqual(round(chart.get_score(5, 6, True, True)), 2.0)
-        self.assertEqual(round(chart.get_score(5, 6, True, False)), 2.0)
         self.assertEqual(round(chart.get_score(5, 6, False, True)), 1.0)
         self.assertEqual(round(chart.get_score(5, 6, False, False)), 1.0)
 
