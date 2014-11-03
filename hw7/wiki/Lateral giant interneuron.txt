@@ -1,0 +1,6 @@
+Lateral giant interneuron
+
+The lateral giant interneuron (LG) is an interneuron in the abdominal nerve cord of crayfish. It is part of the system that controls a special kind of escape reflex of crayfish.
+When the sensory hairs of the tail fan of crayfish are stimulated, the LG activates the motor neurons that control flexion movements of the abdomen in the way that propels the crayfish away from the source of the stimulation. The LG bypasses the main neural system that controls locomotion, thus shortening the reaction time. 
+The lateral giant connection to motor giant fast flexor neurons was the first known example of an electrical synapse (Furshpan & Potter, 1957).
+

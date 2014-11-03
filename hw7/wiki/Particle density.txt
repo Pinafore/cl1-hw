@@ -1,0 +1,15 @@
+Particle density
+
+The particle density or true density of a particulate solid or powder, is the density of the particles that make up the powder, in contrast to the bulk density, which measures the average density of a large volume of the powder in a specific medium (usually air).
+The particle density is a relatively well-defined quantity, as it is not dependent on the degree of compaction of the solid, whereas the bulk density has different values depending on whether it is measured in the freely settled or compacted state (tap density). However, a variety of definitions of particle density are available, which differ in terms of whether pores are included in the particle volume, and whether voids are included.
+Measurement.
+The measurement of particle density can be done in a number of ways:
+Archimedes' principle.
+The powder is placed inside of known volume, and weighed. The Pycnometer is then filled with a fluid of known density, in which the powder is not soluble. The volume of the powder is determined by the difference between the volume as shown by the pycnometer, and the volume of liquid added (i.e. the volume of air displaced). A similar method, which does not include pore volume, is to suspend a known mass of particles in molten wax of known density, allow any bubbles to escape, allow the wax to solidify, and then measure the volume and mass of the wax/particulate brick.
+A slurry of the powder in a liquid of known density can also be used with a hydrometer to measure particle density by buoyancy.
+Another method based on buoyancy is to measure the weight of the sample in air, and also in a liquid of known density.
+A column of liquid with a density gradient can also be prepared: The column should contain a liquid of continuously varying composition, so that the maximum density (at the bottom) is higher than that of the solid, and the minimum density is lower. If a small sample of powder is allowed to settle in this column, it will come to rest at the point where the liquid density is equal to the particle density.
+Volumetric measurement.
+A gas pycnometer can be used to measure the volume of a powder sample. A sample of known mass is loaded into a chamber of known volume that is connected by a closed valve to a gas reservoir, also of known volume, at a higher pressure than the chamber. After the valve is opened, the final pressure in the system allows the total gas volume to be determined by application of Boyle's law.
+A mercury porosimeter is an instrument that allows the total volume of a powder to be determined, as well as the volume of pores of different sizes: A known mass of powder is submerged in mercury. At ambient pressure, the mercury does not invade the interparticle spaces or the pores of the sample. At increasing pressure, the mercury invades smaller and smaller pores, with the relationship between pore diameter and pressure being known. A continuous trace of pressure versus volume can then be generated, which allows for a complete characterization of the sample's porosity.
+

@@ -1,0 +1,5 @@
+Thermithiobacillus tepidarius
+
+T.tepidarius (from the Latin "tepidarium"; a warm bath fed by natural thermal water) is a proteobacteria species isolated from the hot springs at Bath, Avon. It was previously in the genus "Thiobacillus".
+The organism is a moderate thermophile (43-45°C) and an obligate aerobic chemolithotrophic autotroph. Despite having an optimum pH of 6.0–7.5, growth can continue to an acid minimum of pH 4.8. Growth can only occur on reduced inorganic sulfur compounds, and unlike species in the related genus "Acidithiobacillus", "T.tepidarius" is unable to oxidise ferrous iron.
+

@@ -1,0 +1,4 @@
+Robert E. Pardo
+
+Robert Pardo (born 26 April 1951) is an American investor and author. He received his B.A. in History, Philosophy, and Sociology from Northwestern University. Pardo is a recognized expert in the design and testing of trading strategies and computerized trading applications. He began his career developing systematic trading software in the early 1980s. He wrote the first edition of Design, Testing, and Optimization of Trading in 1991 and released the second edition in 2008 published by Wiley Trading. He had originally discussed the concept of Walk Forward Optimization which is an important aspect in present trading markets.
+

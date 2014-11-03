@@ -1,0 +1,9 @@
+Pilot (operating system)
+
+Pilot was a single-user, multitasking operating system designed by Xerox PARC in early 1977. Pilot was written in the Mesa programming language, totalling about 24,000 lines of code.
+Pilot was designed as a single user system in a highly networked environment of other Pilot systems, with interfaces designed for inter-process communication (IPC) across the network via the Pilot stream interface. Pilot combined virtual memory and file storage into one subsystem, and used the manager/kernel architecture for managing the system and its resources. Its designers considered a non-preemptive multitasking model, but later chose a preemptive (run until blocked) system based on monitors. Pilot included a debugger, Co-Pilot, that 
+could debug a frozen snapshot of the operating system, written to disk. 
+A typical Pilot workstation ran 3 operating systems at once on 3 different disk volumes : Co-Co-Pilot (a backup debugger in case the main operating system crashed), Co-Pilot (the main operating system, running under Co-Co-Pilot and used to compile and bind programs) and an inferior copy of Pilot running in a 3rd disk volume, that could be booted to run test programs (that might crash the main development environment). The debugger was written to read and write variables for a program stored on a separate disk volume.
+This architecture was unique because it allowed the developer to single-step even operating system code with semaphore locks, stored on an inferior disk volume. However, as the memory and source code of the D-series Xerox processors grew, the time to checkpoint and restore the operating system (known as a "world swap") grew very high. It could take 60-120 seconds to run just one line of code in the inferior operating system environment. Eventually, a co-resident debugger was developed to take the place of Co-Pilot.
+Pilot was used as the operating system for the Xerox Star workstation.
+

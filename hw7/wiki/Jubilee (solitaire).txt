@@ -1,0 +1,19 @@
+Jubilee (solitaire)
+
+Jubilee is the name given to two solitaire card games, both played with two decks of playing cards. Both games are so-called because they were created during the time of the Golden Jubilee of Queen Victoria in 1887. One of the games has an ornate layout, while the other is simpler and it belongs to the family of games which include Sir Tommy, Strategy, and Calculation.
+Jubilee 1.
+This game's instructions come from "Card Games Made Easy" by Arnold Marks and Jacqueline Harrod and is included in the computer solitaire package Solsuite.
+First the eight kings are separated and placed in a row. These form the foundations. The rest of the cards are then shuffled.
+The aim of the game is to build each of the eight foundations in suit in this order: K-A-J-2-10-3-9-4-8-5-7-6-Q.
+The rest of the cards, after being shuffled, are dealt one card at a time, onto the foundations or on one of four waste piles. The top card of each waste pile is available only for play on the foundations.
+When all of the cards have been dealt, the waste piles are gathered up, starting the fourth pile, and without shuffling, the cards are dealt again. This can be done twice.
+The game ends after the cards have been redealt the second time. The game is won when all of the cards are built onto the foundations, with the queens on top.
+Like many of the games in the same family, it is always a good idea to set aside one of the waste piles for the queens, since they would be the last card on each foundation.
+Jubilee 2.
+This one has an ornate ending layout of a large heart surrounding one Queen of Hearts to represent Queen Victoria. Lady Adelaide Cadogan is said to have invented this game as a patriotic gesture.
+One of the two Queens of Hearts is placed on the center of the layout. Then, the rest of the decks are shuffled and six cards are played on the tableau. 
+All hearts should be placed around "Queen Victoria" (the first Queen of Hearts) with nines and tens of hearts forming a cross around the queen, while all others form a heart. The six other aces are placed at the sides of the heart; they form the secondary foundations, built up in suit up to tens, then queens. Jacks are discarded while Kings are placed on a column. When the other Queen of Hearts appears, it is placed over the first one.
+In the tableau, cards are built downward regardless of suit. Spaces can be filled with any available card. Only one card can be moved at a time. But in every space in the tableau that becomes open, two cards in sequence can be moved at once. As Jacks are immediately discarded from the game, a ten can be placed on top of a queen.
+Cards from the stock are dealt one at a time on a waste pile, the top card of which is available for play on the tableau and on the foundations. There is no redeal.
+The game is won when the above ornate layout is formed (heart around the queen) and all other cards are placed in their appropriate positions.
+

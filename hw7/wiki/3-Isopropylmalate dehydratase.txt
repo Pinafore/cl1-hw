@@ -1,0 +1,4 @@
+3-Isopropylmalate dehydratase
+
+3-Isopropylmalate dehydratase (E.C.4.2.1.33) is an aconitase homologue, which catalyses the isomerisation of 2-isopropylmalate to 3-isopropylmalate, via dehydration, in the biosynthesis of leucine.
+

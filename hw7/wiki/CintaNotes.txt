@@ -1,0 +1,5 @@
+CintaNotes
+
+CintaNotes is a freemium Microsoft Windows notetaking program. It provides a way to store and retrieve text collected from other documents or websites. It does not support the collection of images.
+CintaNotes supports clipping text from any application via a hotkey and also captures the web or local file link. The program allows tags and has instant search based on tags, text, links or date. The entire database or individually selected notes can be exported into either Unicode text or XML format.
+

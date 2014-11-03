@@ -1,0 +1,6 @@
+Scriptlet
+
+In JavaServer Pages (JSP) technology, a scriptlet is a piece of Java-code embedded in the HTML-like JSP code. The scriptlet is everything inside the <% %> tags. Between these the user can add any valid Scriplet i.e. any valid Java Code.
+In AppleScript, a scriptlet is a small script.
+In Windows, a scriptlet is COM component including a HTML code and a script which may be written in a variety of scripting languages.
+

@@ -1,0 +1,12 @@
+Layer 8
+
+Layer 8 is humorous Internet jargon used to refer to a nonexistent "user" or "political" layer on top of the OSI model of computer networking.
+The OSI model is a 7-layer abstract model that describes an architecture of data communications for networked computers. The layers build upon each other, allowing for abstraction of specific functions in each one. The top (7th) layer is the Application Layer describing methods and protocols of software applications. It is then held that the user is the 8th layer.
+According to Bruce Schneier and RSA:
+Since the OSI layer numbers are commonly used to discuss networking topics, a troubleshooter may describe an issue caused by a user to be a "layer 8" issue, similar to the PEBKAC acronym, the ID-Ten-T Error and also PICNIC.
+Political economic theory holds that the 8th layer is important to understanding the OSI Model. Political policies such as network neutrality, spectrum management, and digital inclusion all shape the technologies comprising layers 1-7 of the OSI Model.
+An 8th layer has also been referenced to physical (real-world) controllers containing an external hardware device which interacts with an OSI model network. An example of this is ALI in Profibus.
+A network guru t-shirt from the 1980s shows Layer 8 as the "financial" layer, and Layer 9 as the "political" layer.
+Similar pseudo-layers in the TCP/IP model.
+In the TCP/IP model, the 4-layer model of the Internet, the 5th layer is analogously sometimes described as the "political layer" (and the 6th as the "religious layer"). This appears in RFC 2321, which is a humorous April Fools' Day RFC published in 1998.
+

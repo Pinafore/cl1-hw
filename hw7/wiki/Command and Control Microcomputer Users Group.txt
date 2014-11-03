@@ -1,0 +1,12 @@
+Command and Control Microcomputer Users Group
+
+The Command and Control Microcomputer Users Group, mostly known by its acronym C2MUG, provided a forum dedicated to the exchange of ideas and free or public domain software between microcomputer users, keying on military command and control applications in the early 1990s. C2MUG provided a focal point for microcomputer users throughout the US Army, and it was sponsored by the Communications-Electronics Command (CECOM). The staff of C2MUG was located at the CECOM Maneuver Control Directorate, Building 138, at Fort Leavenworth, Kansas, but later other systems eventually located in Colorado and Virginia.
+C2MUG provided assistance to its users through a full-time staff. The staff assisted with software problems either directly, by referral to another user with the desired background/expertise, or through Requests for Assistance in the monthly newsletter and/or on the Electronic Bulletin Board.
+They included software of over 500 programs, primarily for use with the Apple II Plus/IIe/IIc and IBM PC and compatibles. Some programs were also available for the Kaypro 2, Zenith Z-100/Z-120,
+and Wang.
+C2MUG offered its services to all echelons within the US Army community, the sister military services, and elements of the Federal Government. There was no cost or obligation associated with joining C2MUG, and the services (including the newsletter, catalog, and public domain software copying) were free.
+Newsletter.
+The C2MUG Bulletin was a bimonthly newsletter publication of the organization.
+Bulletin Board Service.
+The C2MUG Bulletin Board Service (BBS) located at Ft Leavenworth, KS was avaialble through AUTOVON at AV 552-7510 and the commercial number of (913) 684-7675. In 1991 the C2MUG BBS was on a RBBS platform at speeds up to 2400bit/s and the SysOp was David Bledsoe.
+
