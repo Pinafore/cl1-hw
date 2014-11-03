@@ -94,7 +94,7 @@ def form_dict(vals):
 
 Data for History and Literature questions are [available
 now](https://github.com/ezubaric/cl1-hw/tree/master/project).  Data
-for all other categories of questions will be available 3. November,
+for all other categories of questions will be available 10. November,
 and that's also the date we'll launch the Kaggle site.
 
 You are welcome to use any *automatic* method to choose an answer.  It
