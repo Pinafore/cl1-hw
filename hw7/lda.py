@@ -470,5 +470,6 @@ if __name__ == "__main__":
     for ii in files:
         lda.add_doc(tokenize_file(ii), vocab)
 
-    lda.report_topics(vocab, args.output)
     lda.run_sampler(args.num_iterations)
+    lda.report_topics(vocab, args.output)
+
