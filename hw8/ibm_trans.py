@@ -11,6 +11,10 @@ from nltk.util import ingrams
 from nltk.probability import LidstoneProbDist
 
 class StubLanguageModel:
+    """
+    A stupid language model that likes everything
+    """
+
     def logprob(self, context, word):
         return 0.0
 
@@ -85,7 +89,10 @@ class Translation:
     """
 
     def __init__(self):
-        # Initialize the data structure
+        """
+        Initialize the data structure
+        """
+
         self._counts = defaultdict(FreqDist)
 
     def score(self, word_e, word_f):
@@ -172,7 +179,7 @@ class ModelOne:
         mathematically than to try to generate them all.
         """
 
-        # Fill this in!  You should have a big for loop that surrounds
+        # TODO: Fill this in!  You should have a big for loop that surrounds
         # something that looks like:
         #
         # yield english_word, foreign_word, expected_count
