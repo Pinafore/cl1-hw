@@ -62,6 +62,8 @@ page.  To get you started, you have the following columns:
 
 * _Question ID_: An ID for the question.
 
+* _Answer_: The actual answer of the question (not always one of the guesses)
+
 * _Sentence Position_: The index of the last question seen.  Smaller
   numbers are harder.  Together with the _Question ID_, this forms a
   unique identifier for the instance.
