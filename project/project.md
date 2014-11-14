@@ -1,8 +1,6 @@
 The goal of this project is to predict whether the answer to a trivia
-question is correct or not (these are the same questions you classified in an earlier homework).  Thus, it is a binary classification
-problem.  You will have to train effective classification models, but
-the more important (and effective) route for success is to engineer
-features and gather additional data to help your predictions.
+question is correct or not (these are the same questions you classified in an earlier homework).  The most important (and effective) route for success is to engineer
+features and gather additional data to help your predictions of the right answer.
 
 About the Data
 ==============
@@ -62,6 +60,8 @@ page.  To get you started, you have the following columns:
 
 * _Question ID_: An ID for the question.
 
+* _Answer_: The actual answer of the question (not always one of the guesses)
+
 * _Sentence Position_: The index of the last question seen.  Smaller
   numbers are harder.  Together with the _Question ID_, this forms a
   unique identifier for the instance.
@@ -92,10 +92,7 @@ def form_dict(vals):
     return d
 </pre>
 
-Data for History and Literature questions are [available
-now](https://github.com/ezubaric/cl1-hw/tree/master/project).  Data
-for all other categories of questions will be available 10. November,
-and that's also the date we'll launch the Kaggle site.
+Data are [available](https://github.com/ezubaric/cl1-hw/tree/master/project).  
 
 You are welcome to use any *automatic* method to choose an answer.  It
 need not be among the sets provided by our two guessers.  In addition to the data we provide, you are
@@ -107,11 +104,11 @@ suggestions as many tools are better (or easier to use) than others.
 Competition
 ==================
 
-We will use Kaggle InClass for this competition.  This will be a
+We will use [Kaggle InClass for this competition](https://inclass.kaggle.com/c/when-to-buzz).  This will be a
 competition between students in the Colorado and Maryland graduate
 courses on natural language processing and computational linguistics.
 A large portion of your grade will be how you perform on this Kaggle
-competition.
+competition.  You must register with a UMD or Colorado address.  Please identify which school you're associated with when you register.
 
 Proposal
 ==================

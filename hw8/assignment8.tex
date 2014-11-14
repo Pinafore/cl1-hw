@@ -51,13 +51,13 @@ Also in the directory are two text files with lists of words.  These can help yo
 
 \section*{What to Do}
 
-You have been given a partial EM implementation of IBM Model 1 translating foreign (f) from english (e).  The maximization function is complete, but the expectation is not, nor is the function to score a complete translation pair.  You need to fill in two functions.
+You have been given a partial EM implementation of IBM Model 1 translating foreign (f) from English (e).\footnote{This is {\bf different} from what we initially discussed in class; we're applying the noisy-channel model here: $p(f|e) p(e)$, which translates into translating from English to foreign mathematically, even if the system is to translate from foreign to English.}  The maximization function is complete, but the expectation is not, nor is the function to score a complete translation pair.  You need to fill in two functions.
 
 \subsection*{Generating Counts (20 points)}
 
 The first function you need to fill in is \texttt{sentence\_counts}, which should return an iterator over english and foreign words pairs along with their expected count.  The expected count is the expected number of times that word pair was translated in the sentence, given by the equation
 \begin{equation}
-c(f|e;e, f) = ap(a|e, f) j=1lf(f, fj)(e, ea(j)).
+c(f|e;\vec{e}, \vec{f}) = \sum_{a} p(a|\vec{e}, \vec{f}) \sum_{j=1}^{l_f} \delta(f, f_j)(e, e_{a(j)}).
 \end{equation}
 
 \subsection*{Scoring (10 points)}
@@ -126,7 +126,7 @@ If you would like extra credit, add an additional function that computes the bes
 
 Yes, but if your numbers look too far off from what is expected, you may lose points.
 
-\item \item \textit{I'm getting probabilities greater than 1.0!}
+\item \textit{I'm getting probabilities greater than 1.0!}
 
 The logprob function of \texttt{nltk}'s language model returns the negative log probability.
 
