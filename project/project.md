@@ -1,8 +1,6 @@
 The goal of this project is to predict whether the answer to a trivia
-question is correct or not (these are the same questions you classified in an earlier homework).  Thus, it is a binary classification
-problem.  You will have to train effective classification models, but
-the more important (and effective) route for success is to engineer
-features and gather additional data to help your predictions.
+question is correct or not (these are the same questions you classified in an earlier homework).  The most important (and effective) route for success is to engineer
+features and gather additional data to help your predictions of the right answer.
 
 About the Data
 ==============
