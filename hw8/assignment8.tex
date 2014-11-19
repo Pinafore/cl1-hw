@@ -133,7 +133,10 @@ The logprob function of \texttt{nltk}'s language model returns the negative log 
 \item \textit{I can't get my translation probabilities to match.}
 
 \begin{itemize}
-\item One little thing that may cause a slight difference in computing the translation probability: I add 0.001 to each of the inputs (to guard against zeros) while summing up across the foreign string.
+\item One little thing that may cause a slight difference in computing
+  the translation probability of sentences in the
+  \texttt{translate\_score}: I add 0.001 to each of the inputs (to
+  guard against zeros) while summing up across the foreign string.
 
 \item You will need to add a \texttt{None} to the English sentence in the \texttt{translate\_score} function.  The assert is there to make sure it hasn't happened outside of the function.
  
