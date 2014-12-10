@@ -161,6 +161,8 @@ usual class time).  In the final presentation you will:
 * Presumably you did many different things; how did they each
   individually contribute to your final result?
 
+Each group has 12 minutes to deliver their presentation, plus a few minutes for questions and swapping.  It is okay to go under time, but _do not_ go over time.  It will negatively impact your grade; I will cut you off if necessary.  (Sorry to be a jerk about this, but we have enough groups that we cannot have much give on time.)
+
 Project Writeup
 ======================
 
