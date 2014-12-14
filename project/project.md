@@ -175,7 +175,7 @@ make it clear:
 * Whether your technique worked or not
 
 Please do not go over 2500 words unless you have a really good reason.
-Images are a much better use of space than words, usually (thereâ€™s no
+Images are a much better use of space than words, usually (there'€™s no
 limit on including images, but use judgement and be selective).
 
 Grade
