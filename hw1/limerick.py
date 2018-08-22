@@ -53,7 +53,7 @@ if __name__ == "__main__":
     inline = " "
     while inline != "":
         buffer += "%s\n" % inline
-        inline = raw_input()
+        inline = input()
 
     ld = LimerickDetector()
     print("%s\n-----------\n%s" % (buffer.strip(), ld.is_limerick(buffer)))
