@@ -2,7 +2,7 @@
 
 First, check out the Github repository with the course homework templates:
 
-[http://github.com/ezubaric/cl1-hw.git](git://github.com/ezubaric/cl1-hw.git)
+[https://github.com/Pinafore/cl1-hw](https://github.com/Pinafore/cl1-hw)
 
 The goal of this assignment is to create a piece of code that will
 determine whether a poem is a
