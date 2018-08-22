@@ -27,7 +27,7 @@ More requirements / information appear in the source files.
 
 *What does it mean for two words to rhyme?*  They should share the same sounds in their pronunciation except for their first consonant sound(s) and anything before their first consonant sounds.  (This is a very strict definition of rhyming.  This makes the assignment easier.)  If one word is longer than the other, then the sounds of shorter word (except for its first consonant and anything before the first consonant) should be a suffix of the sounds of the longer.
 
-*How do I know if my code is working?*  Run the provided unit tests (python tests.py) in the homework directory.  Initially, many of them will fail.  If your program is working correctly, all of them will pass.  However, the converse is not true: passing all the tests is not sufficient to demonstrate that your code is working.  ~This is strongly encouraged, as it will be similar to how your code is graded.~
+*How do I know if my code is working?*  Run the provided unit tests (python tests.py) in the homework directory.  Initially, many of them will fail.  If your program is working correctly, all of them will pass.  However, the converse is not true: passing all the tests is not sufficient to demonstrate that your code is working.  `This is strongly encouraged, as it will be similar to how your code is graded.`
 
 *How do I separate words from a string of text?*  Use the word\_tokenize function.
 
@@ -47,16 +47,16 @@ limericks.  So "conspire" and "fire" do rhyme.
 *What about stress?*  The stresses of rhymes should be consistent.
 
 
-=== Extra Credit ===
+## Extra Credit
 
 Extra Credit (create new functions for these features; don’t put them
 in the required functions that will be run by the autograder):
 * Create a new function called
  `apostrophe_tokenize` that handles apostrophes in words correctly so
-  that "can’t" would rhyme with "pant" if the `is_limerick` function used ~apostrophe\_tokenize~ instead of ~word\_tokenize~.
-* Make reasonable guesses about the number of syllables in unknown words in a function called ~guess\_syllables~.
+  that "can’t" would rhyme with "pant" if the `is_limerick` function used `apostrophe\_tokenize` instead of `word\_tokenize`.
+* Make reasonable guesses about the number of syllables in unknown words in a function called `guess\_syllables`.
 * Compose a funny original limerick about
   computational linguistics, natural language processing, or machine
-  learning (add it to your submission as \texttt{limerick.txt}).
-Add extra credit code as functions to the \texttt{LimerickDetector}
+  learning (add it to your submission as `limerick.txt`).
+Add extra credit code as functions to the `LimerickDetector`
 class, but don't interfere with required functionality.
