@@ -42,7 +42,7 @@ that it rhymes with another word if any of the pronunciations rhymes.
 suffix of the other word.
 
 *What about end rhymes?*  End rhymes are indeed a rhyme, but they make for less interesting
-limericks.  So ``conspire'' and ``fire'' do rhyme.
+limericks.  So "conspire" and "fire" do rhyme.
 
 *What about stress?*  The stresses of rhymes should be consistent.
 
@@ -52,7 +52,7 @@ limericks.  So ``conspire'' and ``fire'' do rhyme.
 Extra Credit (create new functions for these features; don’t put them
 in the required functions that will be run by the autograder):
 * Create a new function called
- ~apostrophe\_tokenize~ that handles apostrophes in words correctly so
+ `apostrophe\_tokenize` that handles apostrophes in words correctly so
   that "can’t" would rhyme with "pant" if the ~is\_limerick~ function used ~apostrophe\_tokenize~ instead of ~word\_tokenize~.
 * Make reasonable guesses about the number of syllables in unknown words in a function called ~guess\_syllables~.
 * Compose a funny original limerick about
