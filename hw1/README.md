@@ -1,15 +1,14 @@
-== Assignment 1: There once was a Python warmup from ... ==
+# Assignment 1: There once was a Python warmup from ...
 
 First, check out the Github repository with the course homework templates:
 
-\url{git://github.com/ezubaric/cl1-hw.git}
+[git://github.com/ezubaric/cl1-hw.git](git://github.com/ezubaric/cl1-hw.git)
 
 The goal of this assignment is to create a piece of code that will
 determine whether a poem is a
-\href{http://en.wikipedia.org/wiki/Limerick_(poetry)}{limerick} or
+[limerick](http://en.wikipedia.org/wiki/Limerick\_(poetry)) or
 not.  To do this, we will be using the
-\href{http://www.speech.cs.cmu.edu/cgi-bin/cmudict}{CMU pronunciation
-  dictionary} (which is covered in the \href{http://www.nltk.org/book/ch02.html}{second chapter of the NLTK book}).
+[CMU pronunciation dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict) (which is covered in the [second chapter of the NLTK book](http://www.nltk.org/book/ch02.html)).
 
 A limerick is defined as a poem with the form AABBA, where the A lines
 rhyme with each other, the B lines rhyme with each other (and not the
@@ -17,7 +16,7 @@ A lines).  (English professors may disagree with this definition, but
 that's what we're using here to keep it simple.  There are also
 constraints on how many syllables can be in a line.)
 
-=== Programming ===
+## Programming
 
 Look at the file limerick.py in the hw1 folder.  Your job is to fill
 in the missing functions in that file so that it does what it’s
@@ -30,7 +29,7 @@ More requirements / information appear in the source files.
 
 *How do I know if my code is working?*  Run the provided unit tests (python tests.py) in the homework directory.  Initially, many of them will fail.  If your program is working correctly, all of them will pass.  However, the converse is not true: passing all the tests is not sufficient to demonstrate that your code is working.  ~This is strongly encouraged, as it will be similar to how your code is graded.~
 
-*How do I separate words from a string of text?*  Use the \texttt{word\_tokenize} function.
+*How do I separate words from a string of text?*  Use the word\_tokenize function.
 
 *What if a word isn’t in the pronouncing dictionary?* Assume it doesn’t rhyme with anything and only has one syllable.
 
@@ -53,9 +52,9 @@ limericks.  So ``conspire'' and ``fire'' do rhyme.
 Extra Credit (create new functions for these features; don’t put them
 in the required functions that will be run by the autograder):
 * Create a new function called
- ~\texttt{apostrophe_tokenize~ that handles apostrophes in words correctly so
-  that "can’t" would rhyme with "pant" if the ~is_limerick~ function used ~apostrophe_tokenize~ instead of ~word_tokenize~.
-* Make reasonable guesses about the number of syllables in unknown words in a function called ~guess_syllables~.
+ ~apostrophe\_tokenize~ that handles apostrophes in words correctly so
+  that "can’t" would rhyme with "pant" if the ~is\_limerick~ function used ~apostrophe\_tokenize~ instead of ~word\_tokenize~.
+* Make reasonable guesses about the number of syllables in unknown words in a function called ~guess\_syllables~.
 * Compose a funny original limerick about
   computational linguistics, natural language processing, or machine
   learning (add it to your submission as \texttt{limerick.txt}).
