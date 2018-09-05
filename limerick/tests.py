@@ -17,13 +17,13 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(self.ld.rhymes("tree", "debris"), True)
         self.assertEqual(self.ld.rhymes("niece", "peace"), True)
         self.assertEqual(self.ld.rhymes("read", "need"), True)
-        
+
         self.assertEqual(self.ld.rhymes("dog", "cat"), False)
         self.assertEqual(self.ld.rhymes("bagel", "sail"), False)
         self.assertEqual(self.ld.rhymes("wine", "rind"), False)
-        self.assertEqual(self.ld.rhymes("failure", "savior"), False)        
+        self.assertEqual(self.ld.rhymes("failure", "savior"), False)
         self.assertEqual(self.ld.rhymes("cup", "duck"), False)
-                        
+
     def test_syllables(self):
         self.assertEqual(self.ld.num_syllables("dog"), 1)
         self.assertEqual(self.ld.num_syllables("asdf"), 1)
@@ -68,7 +68,7 @@ it faded away"""
 
         e = """An exceedingly fat friend of mine,
 When asked at what hour he'd dine,
-Replied, "At eleven,     
+Replied, "At eleven,
 At three, five, and seven,
 And eight and a quarter past nine"""
 
@@ -83,8 +83,6 @@ The dress caught fire
 And burned her entire
 Front page, sporting section and all."""
 
-        h = "dog\ndog\ndog\ndog\ndog"
-
         self.assertEqual(self.ld.is_limerick(a), True)
         self.assertEqual(self.ld.is_limerick(b), False)
         self.assertEqual(self.ld.is_limerick(c), False)
@@ -92,6 +90,6 @@ Front page, sporting section and all."""
         self.assertEqual(self.ld.is_limerick(f), False)
         self.assertEqual(self.ld.is_limerick(e), True)
         self.assertEqual(self.ld.is_limerick(g), True)
-        
+
 if __name__ == '__main__':
     unittest.main()
