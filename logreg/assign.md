@@ -1,7 +1,7 @@
 Logistic Regression
 =
 
-Due: 11. September (23:55)
+Due: 21. September (23:55)
 
 Overview
 --------
