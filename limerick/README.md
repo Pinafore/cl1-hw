@@ -25,7 +25,7 @@ supposed to do.
 * `limerick`: given a candidate limerick, return whether it meets the constraint or not.
 More requirements / information appear in the source files.
 
-**What does it mean for two words to rhyme?**  They should share the same sounds in their pronunciation except for their first consonant sound(s) and anything before their first consonant sounds.  (This is a very strict definition of rhyming.  This makes the assignment easier.)  If one word is longer than the other, then the sounds of shorter word (except for its first consonant and anything before the first consonant) should be a suffix of the sounds of the longer.
+**What does it mean for two words to rhyme?**  They should share the same sounds in their pronunciation except for their initial consonant sound(s).  (This is a very strict definition of rhyming.  This makes the assignment easier.)  If one word is longer than the other, then the sounds of shorter word (except for its initial consonant cluster) should be a suffix of the sounds of the longer.
 
 **How do I know if my code is working?**  Run the provided unit tests (python tests.py) in the homework directory.  Initially, many of them will fail.  If your program is working correctly, all of them will pass.  However, the converse is not true: passing all the tests is not sufficient to demonstrate that your code is working.  *This is strongly encouraged, as it will be similar to how your code is graded.*
 
@@ -45,6 +45,8 @@ suffix of the other word.
 limericks.  So "conspire" and "fire" do rhyme.
 
 **What about stress?**  The stresses of rhymes should be consistent.
+
+**What if a word has no vowels?** Then it doesn't rhyme with anything.
 
 
 ## Extra Credit
