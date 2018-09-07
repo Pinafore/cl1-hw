@@ -15,12 +15,11 @@ whether documents are talking about hockey or baseball.
 This will be slightly more difficult than the last homework (the
 difficulty will slowly ramp upward).  You should not use any libraries
 that implement any of the functionality of logistic regression for
-this assignment; logistic regression is implemented in scikit learn,
+this assignment; logistic regression is implemented in scikit learn and many other places,
 but you should do everything by hand now.  You'll be able to use
-library implementations of logistic regression in the future (the next
-homework, even).
+library implementations of logistic regression in the future.
 
-You'll turn in your code on ELMS.  This assignment is worth 30
+You'll turn in your code on the submit server.  This assignment is worth 30
 points.
 
 What you have to do
@@ -32,7 +31,6 @@ Coding (25 points):
 2. (Optional) Store necessary data in the constructor so you can do classification later.  
 3. You'll likely need to write some code to get the best/worst features (see below).
 3. Modify the _sg update_ function to perform non-regularized updates.
-4. Modify the _sg update_ function so that it finds regularized updates.
 
 Analysis (5 points):
 
@@ -51,7 +49,7 @@ Extra credit:
     - Modify the Example to store the df vector
     - With the appropriate flag, use the *df* vector rather than *x* in the update
     - Show the effect in your analysis document
-3.  Implement lazy updating
+3.  Modify the _sg update_ function to perform lazy regularized updates.
 
 Caution: When implementing extra credit, make sure your implementation of the
 regular algorithms doesn't change.
