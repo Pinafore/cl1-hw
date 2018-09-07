@@ -1,3 +1,4 @@
+
 import random
 import numpy
 from numpy import zeros, sign
@@ -50,12 +51,12 @@ class Example:
 
 
 class LogReg:
-    def __init__(self, num_features, mu, step=lambda x: 0.05):
+    def __init__(self, num_features, mu=0, step=lambda x: 0.05):
         """
         Create a logistic regression classifier
 
         :param num_features: The number of features (including bias)
-        :param mu: Regularization parameter
+        :param mu: Regularization parameter (for extra credit)
         :param step: A function that takes the iteration as an argument (the default is a constant value)
         """
 
@@ -104,23 +105,6 @@ class LogReg:
 
         :return: Return the new value of the regression coefficients
         """
-
-        elif self.mu > 0:
-
-
-
-
-
-
-        # if debug:
-        #     print("X")
-        #     print(train_example.x)
-
-        #     print("Delta")
-        #     print(delta)
-
-        #     print("Beta")
-        #     print(self.beta)
 
         return self.beta
 
