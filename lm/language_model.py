@@ -1,6 +1,5 @@
 from math import log, exp
 from collections import defaultdict
-from string import lower
 import argparse
 
 from numpy import mean
@@ -25,7 +24,7 @@ class BigramLanguageModel:
     def __init__(self, unk_cutoff, jm_lambda=0.6, dirichlet_alpha=0.1,
                  katz_cutoff=5, kn_discount=0.1, kn_concentration=1.0,
                  tokenize_function=TreebankWordTokenizer().tokenize,
-                 normalize_function=lower):
+                 normalize_function=lambda x: x.lower()):
         self._unk_cutoff = unk_cutoff
         self._jm_lambda = jm_lambda
         self._dirichlet_alpha = dirichlet_alpha
