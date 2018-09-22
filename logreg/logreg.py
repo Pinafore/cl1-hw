@@ -48,7 +48,7 @@ class Example:
 
 
 class LogReg:
-    def __init__(self, num_features, mu=0, step=lambda x: 0.05):
+    def __init__(self, num_features, mu=0, step):
         """
         Create a logistic regression classifier
         :param num_features: The number of features (including bias)
