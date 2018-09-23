@@ -120,14 +120,6 @@ class BigramLanguageModel:
         # Modify this code to return the correct value.
         return 0.0
 
-    def good_turing(self, context, word):
-        """
-        Return the Good Turing probability of a word given a context
-        """
-        # This initially return 0.0, ignoring the word and context.
-        # Modify this code to return the correct value.
-        return 0.0
-
     def jelinek_mercer(self, context, word):
         """
         Return the Jelinek-Mercer log probability estimate of a word
