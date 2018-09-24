@@ -27,7 +27,7 @@ necessary counts you'll need for the probability functions later.  You
 will probably want to use default dictionaries or probability
 distributions.  Finally, given the counts that you've stored in
 _add\_train_, you'll need to implement probability estimates for
-contexts.  Theres are required probability estimates you'll need to
+contexts.  These are the required probability estimates you'll need to
 implement:
 * _mle_: Simple division of counts for that observation by total counts for the context
 * _laplace_: Add one to all counts
