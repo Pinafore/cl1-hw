@@ -7,7 +7,7 @@ As always, check out the Github repository with the course homework templates:
 
 http://github.com/ezubaric/cl1-hw.git
 
-The code for this homework is in the _hw3_ directory.  This assignment is worth 40 points.
+The code for this homework is in the _hw3_ directory.  This assignment is worth 50 points.
 
 Preparing Data (10 points)
 ---
@@ -20,7 +20,15 @@ We will use the Brown corpus (nltk.corpus.brown) as our training set and the Tre
 Estimation (30 points)
 ------
 
-After you've finalized the vocabulary, then you need to add training data to the model.  This is the most important step!  Modify the _add\_train_ function so that given a sentence it keeps track of the necessary counts you'll need for the probability functions later.  You will probably want to use default dictionaries or probability distributions.  Finally, given the counts that you've stored in _add\_train_, you'll need to implement probability estimates for contexts.  There are four required probability estimates you'll need to implement:
+After you've finalized the vocabulary, then you need to add training
+data to the model.  This is the most important step!  Modify the
+_add\_train_ function so that given a sentence it keeps track of the
+necessary counts you'll need for the probability functions later.  You
+will probably want to use default dictionaries or probability
+distributions.  Finally, given the counts that you've stored in
+_add\_train_, you'll need to implement probability estimates for
+contexts.  These are the required probability estimates you'll need to
+implement:
 * _mle_: Simple division of counts for that observation by total counts for the context
 * _laplace_: Add one to all counts
 * _dirichlet_: Add a specified parameter greater than zero to all counts
@@ -29,7 +37,10 @@ After you've finalized the vocabulary, then you need to add training data to the
   discount parameter $\delta$ and concentration parameter alpha to
   implement interpolated Kneser-Ney.
 
-Now if you run the main section of the _language\_model_ file, you'll get per-sentence reports of perplexity.  Take a look at what sentences are particularly hard or easy (you don't need to turn anything in here, however).
+Now if you run the main section of the _language\_model_ file, you'll
+get per-sentence reports of perplexity.  Take a look at what sentences
+are particularly hard or easy (you don't need to turn anything in
+here, however).
 
 Exploration (10 points)
 ----------
