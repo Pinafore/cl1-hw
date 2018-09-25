@@ -236,8 +236,8 @@ if __name__ == "__main__":
                            'jelinek_mercer', 'good_turing', 'laplace'], \
       "Invalid estimation method"
 
-    sent = raw_input()
+    sent = input()
     while sent:
         print("#".join(str(x) for x in lm.tokenize_and_censor(sent)))
         print(lm.perplexity(sent, getattr(lm, args.method)))
-        sent = raw_input()
+        sent = input()
