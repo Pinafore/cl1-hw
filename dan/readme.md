@@ -46,7 +46,7 @@ Coding:
 5. Write the model training/testing function. We don't have unit test for this part, but to get reasonable performance, it's necessary to get it correct.
 
 Analysis:
-1. Report the accuracy of test set. (It would get around 0.8 accuacy)
+1. Report the accuracy of test set. (It would get around 0.8 accuracy)
 2. Look at the dev set, give some examples and explain the possible reasons why these examples are predicted incorrectly. 
 
 
