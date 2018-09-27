@@ -14,6 +14,7 @@ def load_data(filename):
     """
     load the json file into data list
     """
+
     data = list()
     with open(filename) as json_data:
         questions = json.load(json_data)
@@ -28,7 +29,11 @@ def load_data(filename):
 def load_words(exs):
     """
     vocabuary building
+
+    Keyword arguments:
+    exs: list of input questions-type pairs
     """
+
     words = set()
     UNK = '<unk>'
     PAD = '<pad>'
@@ -50,10 +55,16 @@ def load_words(exs):
 def vectorize(ex, word2ind):
     """
     vectorize a single example based on the word2ind dict. 
-    Input is a tokenized sentence (python list) and label(int)
-    Output is a vectorized sentence(python list) and label(int)
+
+    Keyword arguments:
+    exs: list of input questions-type pairs
+    ex: tokenized question sentence (list)
+    label: type of question sentence
+
+    Output:  vectorized sentence(python list) and label(int)
     e.g. ['text', 'test', 'is', 'fun'] -> [0, 2, 3, 4]
     """
+
     question_text, question_label = ex
     vec_text = [0] * len(question_text)
     #### modify the code to vectorize the question text
@@ -69,6 +80,7 @@ class Question_Dataset(Dataset):
     """
     Pytorch data class for question classfication data
     """
+
     def __init__(self, examples, word2ind):
         self.examples = examples
         self.word2ind = word2ind
@@ -82,9 +94,14 @@ class Question_Dataset(Dataset):
 ###You don't need to change this funtion
 
 def batchify(batch):
-    """Gather a batch of individual examples into one batch, 
-    which includes the question text, question length and labels 
     """
+    Gather a batch of individual examples into one batch, 
+    which includes the question text, question length and labels 
+
+    Keyword arguments:
+    batch: list of outputs from vectorize function
+    """
+
     question_len = list()
     label_list = list()
     for ex in batch:
@@ -100,14 +117,21 @@ def batchify(batch):
     return q_batch
 
 
-def evaluate(data_loader, model):
+def evaluate(data_loader, model, device):
     """
     evaluate the current model, get the accuracy for dev/test set
+
+    Keyword arguments:
+    data_loader: pytorch build-in data loader output
+    model: model to be evaluated
+    decide: cpu of gpu
     """
+
     model.eval()
     num_examples = 0
     error = 0
     for idx, batch in enumerate(data_loader):
+        batch.to(device)
         question_text = batch['text']
         question_len = batch['len']
         labels = batch['labels']
@@ -121,10 +145,19 @@ def evaluate(data_loader, model):
     return accuracy
 
 
-def train(args, model, train_data_loader, dev_data_loader, accuracy):
+def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     """
     Train the current model
+
+    Keyword arguments:
+    args: arguments 
+    model: model to be trained
+    train_data_loader: pytorch build-in data loader output for training examples
+    dev_data_loader: pytorch build-in data loader output for dev examples
+    accuracy: previous best accuracy
+    decide: cpu of gpu
     """
+
     model.train()
     optimizer = torch.optim.Adamax(model.parameters())
     criterion = nn.CrossEntropyLoss()
@@ -135,6 +168,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy):
     #### modify the following code to complete the training funtion
 
     for idx, batch in enumerate(train_data_loader):
+        batch.to(device)
         question_text = batch['text']
         question_len = batch['len']
         labels = batch['labels']
@@ -191,7 +225,7 @@ class DanModel(nn.Module):
         """
         Model forward pass
         
-        
+        Keyword arguments:
         input_text : vectorized question text 
         text_len : batch * 1, text length for each question
         in_prob: if True, output the softmax of last layer
@@ -209,6 +243,7 @@ class DanModel(nn.Module):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Question Type')
+    parser.add_argument('--no-cuda', action='store_true', default=False)
     parser.add_argument('--train-file', type=str, default='./data/question_train_cl1.json')
     parser.add_argument('--dev-file', type=str, default='./data/question_dev_cl1.json')
     parser.add_argument('--test-file', type=str, default='./data/question_test_cl1.json')
@@ -223,6 +258,9 @@ if __name__ == "__main__":
     parser.add_argument('--checkpoint', type=int, default=50)
 
     args = parser.parse_args()
+    #### check if using gpu is available
+    args.cuda = not args.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda" if args.cuda else "cpu")
 
     ### Load data
     train_exs = load_data(args.train_file)
@@ -231,6 +269,7 @@ if __name__ == "__main__":
 
     ### Create vocab
     voc, word2ind, ind2word = load_words(train_exs)
+
     
 
     if args.test:
@@ -247,6 +286,7 @@ if __name__ == "__main__":
             model = torch.load(args.load_model)
         else:
             model = DanModel(args.num_classes, len(voc))
+            model.to(device)
         print(model)
         #### Load batchifed dataset
         train_dataset = Question_Dataset(train_exs, word2ind)
@@ -263,7 +303,7 @@ if __name__ == "__main__":
             train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size,
                                                sampler=train_sampler, num_workers=0,
                                                collate_fn=batchify)
-            accuracy = train(args, model, train_loader, dev_loader, accuracy)
+            accuracy = train(args, model, train_loader, dev_loader, accuracy, device)
         print('start testing:\n')
 
         test_dataset = Question_Dataset(test_exs, word2ind)
@@ -271,4 +311,4 @@ if __name__ == "__main__":
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size,
                                                sampler=test_sampler, num_workers=0,
                                                collate_fn=batchify)
-        evaluate(test_loader, model)
+        evaluate(test_loader, model, device)
