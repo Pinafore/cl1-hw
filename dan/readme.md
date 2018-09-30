@@ -1,7 +1,7 @@
 Deep Learning 
 =
 
-Due: 5. October (23:55)
+Due: 12. October (23:55)
 
 
 Overview
