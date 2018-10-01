@@ -20,16 +20,14 @@ def dict_sample(d, cutoff=-1):
     if cutoff==-1:
         cutoff = random()
     normalizer = float(sum(d.values()))
-    #print "Normalizer: ", normalizer
 
     current = 0
     for i in d:
         assert(d[i] > 0)
         current += float(d[i]) / normalizer
         if current >= cutoff:
-            #print "Chose", i
             return i
-    print "Didn't choose anything: ", cutoff, current
+    print("Didn't choose anything: %f %f" % (cutoff, current))
 
 
 def lgammln(xx):
@@ -91,16 +89,17 @@ class VocabBuilder:
 
         for ii in [x.lower() for x in words if x.lower() not in self._stop \
                        and len(x) >= self._min_length]:
-            self._counts.inc(ii)
+            self._counts[ii] += 1
 
     def vocab(self, size=5000):
         """
         Return a list of the top words sorted by frequency.
         """
+        keys = list(self._counts.keys())
         if len(self._counts) > self._cut_first + size:
-            return self._counts.keys()[self._cut_first:(size + self._cut_first)]
+            return keys[self._cut_first:(size + self._cut_first)]
         else:
-            return self._counts.keys()[:size]
+            return keys[:size]
 
 class LdaTopicCounts:
     """
@@ -127,7 +126,7 @@ class LdaTopicCounts:
         Sets the vocabulary for the topic model.  Only these words will be
         recognized.
         """
-        for ii in xrange(len(words)):
+        for ii in range(len(words)):
             self._beta_sum += self._default_beta
 
     def change_prior(self, word, beta):
@@ -144,7 +143,7 @@ class LdaTopicCounts:
         """
         During initialization, say that a word token with id ww was given topic
         """
-        self._topic_term[topic].inc(word)
+        self._topic_term[topic][word] += 1
         self._normalizer[topic] += 1
 
     def change_count(self, topic, word, delta):
@@ -154,7 +153,7 @@ class LdaTopicCounts:
         
         self._finalized = True
 
-        self._topic_term[topic].inc(word, delta)
+        self._topic_term[topic][word] += delta
         self._normalizer[topic] += delta
 
     def get_normalizer(self, topic):
@@ -216,7 +215,7 @@ class Sampler:
         self._doc_counts = defaultdict(FreqDist)
         self._doc_tokens = defaultdict(list)
         self._doc_assign = defaultdict(list)
-        self._alpha = [alpha for x in xrange(num_topics)]
+        self._alpha = [alpha for x in range(num_topics)]
         self._sample_stats = defaultdict(int)
         self._vocab = vocab
         self._topics = LdaTopicCounts(beta)
@@ -245,7 +244,6 @@ class Sampler:
         will be provided.
         """
         temp_doc = [vocab.index(x) for x in doc if x in vocab]
-        #print '\n\n', temp_doc, '\n\n'
 
         if not doc_id:
             doc_id = len(self._doc_tokens)
@@ -261,7 +259,7 @@ class Sampler:
         for ww in temp_doc:
             assignment = randint(0, self._num_topics - 1)
             self._doc_assign[doc_id].append(assignment)
-            self._doc_counts[doc_id].inc(assignment)
+            self._doc_counts[doc_id][assignment] += 1
             self._topics.initialize(ww, assignment)
 
             token_count += 1
@@ -306,9 +304,7 @@ class Sampler:
         Sample the topic assignments of all tokens in all documents for the
         specified number of iterations.
         """
-        for ii in xrange(iterations):
-            #if ii % 20 == 0:
-            #    print("Iteration %i" % ii)
+        for ii in range(iterations):
             start = time.time()
             for jj in self._doc_assign:
                 self.sample_doc(jj)
@@ -337,7 +333,6 @@ class Sampler:
 
         topicassignfile = open(outputfilename + ".topic_assign", 'w')
         for doc_id in self._doc_assign.keys():
-            # print self._doc_assign[doc_id]
             tmp = " ".join([str(x) for x in self._doc_assign[doc_id]]) + "\n"
             topicassignfile.write(tmp)
         topicassignfile.close()
@@ -360,7 +355,7 @@ class Sampler:
           "Sampling doesn't make sense if this hasn't been unassigned."
         sample_probs = {}
         term = self._doc_tokens[doc_id][index]
-        for kk in xrange(self._num_topics):
+        for kk in range(self._num_topics):
 
             # TODO: Compute the conditional probability of
             # sampling a topic; at the moment it's just the
@@ -380,7 +375,7 @@ class Sampler:
         
         topics = self._topics
 
-        for index in xrange(len(one_doc_topics)):
+        for index in range(len(one_doc_topics)):
             self.change_topic(doc_id, index, -1)
             sample_probs = self.sample_probs(doc_id, index)
 

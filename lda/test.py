@@ -16,7 +16,7 @@ class TestSequenceFunctions(unittest.TestCase):
                 
         doc_len = {0:4, 1:3, 2:4}
         for dd in doc_len:
-            for ii in xrange(doc_len[dd]):
+            for ii in range(doc_len[dd]):
                 self._lda.change_topic(dd, ii, -1)
 
         # Set up the sample probabilities like in the worksheet
