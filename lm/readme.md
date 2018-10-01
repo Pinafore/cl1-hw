@@ -7,7 +7,7 @@ As always, check out the Github repository with the course homework templates:
 
 http://github.com/ezubaric/cl1-hw.git
 
-The code for this homework is in the _hw3_ directory.  This assignment is worth 40 points.
+The code for this homework is in the _hw3_ directory.  This assignment is worth 50 points.
 
 Preparing Data (10 points)
 ---

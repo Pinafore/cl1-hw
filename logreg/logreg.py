@@ -155,11 +155,11 @@ if __name__ == "__main__":
     argparser.add_argument("--step", help="Initial SG step size",
                            type=float, default=0.1, required=False)
     argparser.add_argument("--positive", help="Positive class",
-                           type=str, default="../data/hockey_baseball/positive", required=False)
+                           type=str, default="data/positive", required=False)
     argparser.add_argument("--negative", help="Negative class",
-                           type=str, default="../data/hockey_baseball/negative", required=False)
+                           type=str, default="data/negative", required=False)
     argparser.add_argument("--vocab", help="Vocabulary that can be features",
-                           type=str, default="../data/hockey_baseball/vocab", required=False)
+                           type=str, default="data/vocab", required=False)
     argparser.add_argument("--passes", help="Number of passes through train",
                            type=int, default=1, required=False)
     argparser.add_argument("--ec", help="Extra credit option (df, lazy, or rate)",
