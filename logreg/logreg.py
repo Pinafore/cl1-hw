@@ -1,7 +1,6 @@
 
 import random
-import numpy
-from numpy import zeros, sign
+import numpy as np
 from math import exp, log
 from collections import defaultdict
 
@@ -16,12 +15,11 @@ random.seed(kSEED)
 def sigmoid(score, threshold=20.0):
     """
     Prevent overflow of exp by capping activation at 20.
-
     :param score: A real valued number to convert into a number between 0 and 1
     """
 
     if abs(score) > threshold:
-        score = threshold * sign(score)
+        score = threshold * np.sign(score)
 
     activation = exp(score)
     return activation / (1.0 + activation)
@@ -34,14 +32,13 @@ class Example:
     def __init__(self, label, words, vocab, df):
         """
         Create a new example
-
         :param label: The label (0 / 1) of the example
         :param words: The words in a list of "word:count" format
         :param vocab: The vocabulary to use as features (list)
         """
         self.nonzero = {vocab.index(kBIAS): 1}
         self.y = label
-        self.x = zeros(len(vocab))
+        self.x = np.zeros(len(vocab))
         for word, count in [x.split(":") for x in words]:
             if word in vocab:
                 assert word != kBIAS, "Bias can't actually appear in document"
@@ -51,27 +48,25 @@ class Example:
 
 
 class LogReg:
-    def __init__(self, num_features, mu=0, step=lambda x: 0.05):
+    def __init__(self, num_features, mu, step):
         """
         Create a logistic regression classifier
-
         :param num_features: The number of features (including bias)
         :param mu: Regularization parameter (for extra credit)
         :param step: A function that takes the iteration as an argument (the default is a constant value)
         """
 
         self.dimension = num_features
-        self.beta = zeros(num_features)
+        self.beta = np.zeros(num_features)
         self.mu = mu
         self.step = step
-        self.last_update = zeros(num_features)
+        self.last_update = np.zeros(num_features)
 
         assert self.mu >= 0, "Regularization parameter must be non-negative"
 
     def progress(self, examples):
         """
         Given a set of examples, compute the probability and accuracy
-
         :param examples: The dataset to score
         :return: A tuple of (log probability, accuracy)
         """
@@ -86,7 +81,7 @@ class LogReg:
                 logprob += log(1.0 - p)
 
             if self.mu > 0:
-                logprob -= self.mu * numpy.sum(self.beta ** 2)
+                logprob -= self.mu * np.sum(self.beta ** 2)
 
             # Get accuracy
             if abs(ii.y - p) < 0.5:
@@ -98,11 +93,9 @@ class LogReg:
                   lazy=False, use_tfidf=False):
         """
         Compute a stochastic gradient update to improve the log likelihood.
-
         :param train_example: The example to take the gradient with respect to
         :param iteration: The current iteration (an integer)
         :param use_tfidf: A boolean to switch between the raw data and the tfidf representation
-
         :return: Return the new value of the regression coefficients
         """
 
@@ -112,7 +105,6 @@ class LogReg:
         """
         After going through all normal updates, apply regularization to
         all variables that need it.
-
         Only implement this function if you do the extra credit.
         """
 
@@ -121,7 +113,6 @@ class LogReg:
 def read_dataset(positive, negative, vocab, test_proportion=.1):
     """
     Reads in a text dataset with a given vocabulary
-
     :param positive: Positive examples
     :param negative: Negative examples
     :param vocab: A list of vocabulary words
