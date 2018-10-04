@@ -124,15 +124,14 @@ def evaluate(data_loader, model, device):
     Keyword arguments:
     data_loader: pytorch build-in data loader output
     model: model to be evaluated
-    decide: cpu of gpu
+    device: cpu of gpu
     """
 
     model.eval()
     num_examples = 0
     error = 0
     for idx, batch in enumerate(data_loader):
-        batch.to(device)
-        question_text = batch['text']
+        question_text = batch['text'].to(device)
         question_len = batch['len']
         labels = batch['labels']
         ####Your code here
@@ -155,7 +154,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     train_data_loader: pytorch build-in data loader output for training examples
     dev_data_loader: pytorch build-in data loader output for dev examples
     accuracy: previous best accuracy
-    decide: cpu of gpu
+    device: cpu of gpu
     """
 
     model.train()
@@ -168,8 +167,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     #### modify the following code to complete the training funtion
 
     for idx, batch in enumerate(train_data_loader):
-        batch.to(device)
-        question_text = batch['text']
+        question_text = batch['text'].to(device)
         question_len = batch['len']
         labels = batch['labels']
 
@@ -243,7 +241,7 @@ class DanModel(nn.Module):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Question Type')
-    parser.add_argument('--no-cuda', action='store_true', default=False)
+    parser.add_argument('--no-cuda', action='store_true', default=True)
     parser.add_argument('--train-file', type=str, default='./data/question_train_cl1.json')
     parser.add_argument('--dev-file', type=str, default='./data/question_dev_cl1.json')
     parser.add_argument('--test-file', type=str, default='./data/question_test_cl1.json')
