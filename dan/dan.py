@@ -37,8 +37,6 @@ def load_words(exs):
     words = set()
     UNK = '<unk>'
     PAD = '<pad>'
-    words.add(PAD)
-    words.add(UNK)
     word2ind = {PAD: 0, UNK: 1}
     ind2word = {0: PAD, 1: UNK}
     for q_text, _ in exs:
@@ -49,6 +47,7 @@ def load_words(exs):
         idx = len(word2ind)
         word2ind[w] = idx
         ind2word[idx] = w
+    words = [PAD, UNK] + words
     return words, word2ind, ind2word
 
 
