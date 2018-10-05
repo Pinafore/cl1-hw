@@ -184,7 +184,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
 
             print('number of steps: %d, loss: %.5f time: %.5f' % (idx, print_loss_avg, time.time()- start))
             print_loss_total = 0
-            curr_accuracy = evaluate(dev_data_loader, model)
+            curr_accuracy = evaluate(dev_data_loader, model, device)
             if accuracy < curr_accuracy:
                 torch.save(model, args.save_model)
                 accuracy = curr_accuracy
@@ -278,7 +278,7 @@ if __name__ == "__main__":
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size,
                                                sampler=test_sampler, num_workers=0,
                                                collate_fn=batchify)
-        evaluate(test_loader, model)
+        evaluate(test_loader, model, device)
     else:
         if args.resume:
             model = torch.load(args.load_model)
