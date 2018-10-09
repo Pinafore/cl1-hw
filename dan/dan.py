@@ -137,7 +137,7 @@ def evaluate(data_loader, model, device):
 
         top_n, top_i = logits.topk(1)
         num_examples += question_text.size(0)
-        error += torch.abs(torch.sum(top_i.squeeze() - torch.LongTensor(labels))).item()
+        error += torch.nonzero(top_i.squeeze() - torch.LongTensor(labels)).size(0)
     accuracy = 1 - error / num_examples
     print('accuracy', accuracy)
     return accuracy
