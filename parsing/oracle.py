@@ -27,9 +27,9 @@ def transition_sequence(sentence):
     Return the sequence of shift-reduce actions that reconstructs the input sentence.
     """
 
-    sentence_length = len(sentence.nodelist)
-    for ii in xrange(sentence_length - 1):
+    sentence_length = len(sentence.nodes)
+    for ii in range(sentence_length - 1):
         yield Transition('s')
-    for ii in xrange(sentence_length - 1, 1, -1):
+    for ii in range(sentence_length - 1, 1, -1):
         yield Transition('r', (ii - 1, ii))
     yield Transition('s')
