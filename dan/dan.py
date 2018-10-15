@@ -37,8 +37,6 @@ def load_words(exs):
     words = set()
     UNK = '<unk>'
     PAD = '<pad>'
-    words.add(PAD)
-    words.add(UNK)
     word2ind = {PAD: 0, UNK: 1}
     ind2word = {0: PAD, 1: UNK}
     for q_text, _ in exs:
@@ -49,6 +47,7 @@ def load_words(exs):
         idx = len(word2ind)
         word2ind[w] = idx
         ind2word[idx] = w
+    words = [PAD, UNK] + words
     return words, word2ind, ind2word
 
 
@@ -124,22 +123,21 @@ def evaluate(data_loader, model, device):
     Keyword arguments:
     data_loader: pytorch build-in data loader output
     model: model to be evaluated
-    decide: cpu of gpu
+    device: cpu of gpu
     """
 
     model.eval()
     num_examples = 0
     error = 0
     for idx, batch in enumerate(data_loader):
-        batch.to(device)
-        question_text = batch['text']
+        question_text = batch['text'].to(device)
         question_len = batch['len']
         labels = batch['labels']
         ####Your code here
 
         top_n, top_i = logits.topk(1)
         num_examples += question_text.size(0)
-        error += torch.abs(torch.sum(top_i.squeeze() - torch.LongTensor(labels))).item()
+        error += torch.nonzero(top_i.squeeze() - torch.LongTensor(labels)).size(0)
     accuracy = 1 - error / num_examples
     print('accuracy', accuracy)
     return accuracy
@@ -155,7 +153,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     train_data_loader: pytorch build-in data loader output for training examples
     dev_data_loader: pytorch build-in data loader output for dev examples
     accuracy: previous best accuracy
-    decide: cpu of gpu
+    device: cpu of gpu
     """
 
     model.train()
@@ -168,8 +166,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     #### modify the following code to complete the training funtion
 
     for idx, batch in enumerate(train_data_loader):
-        batch.to(device)
-        question_text = batch['text']
+        question_text = batch['text'].to(device)
         question_len = batch['len']
         labels = batch['labels']
 
@@ -186,7 +183,7 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
 
             print('number of steps: %d, loss: %.5f time: %.5f' % (idx, print_loss_avg, time.time()- start))
             print_loss_total = 0
-            curr_accuracy = evaluate(dev_data_loader, model)
+            curr_accuracy = evaluate(dev_data_loader, model, device)
             if accuracy < curr_accuracy:
                 torch.save(model, args.save_model)
                 accuracy = curr_accuracy
@@ -243,7 +240,7 @@ class DanModel(nn.Module):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Question Type')
-    parser.add_argument('--no-cuda', action='store_true', default=False)
+    parser.add_argument('--no-cuda', action='store_true', default=True)
     parser.add_argument('--train-file', type=str, default='./data/question_train_cl1.json')
     parser.add_argument('--dev-file', type=str, default='./data/question_dev_cl1.json')
     parser.add_argument('--test-file', type=str, default='./data/question_test_cl1.json')
@@ -280,7 +277,7 @@ if __name__ == "__main__":
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size,
                                                sampler=test_sampler, num_workers=0,
                                                collate_fn=batchify)
-        evaluate(test_loader, model)
+        evaluate(test_loader, model, device)
     else:
         if args.resume:
             model = torch.load(args.load_model)
