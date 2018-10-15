@@ -15,11 +15,11 @@ Treebank Probabilities (5 points)
 
 To warm up, you'll first compute PCFG probabilities from
 data.  You'll create a class that can read in sentences (through the
-`add\_sentence` function and then answer queries using the
+`add_sentence` function and then answer queries using the
 `query` function.
 
 Add the required functionality to the file `treebank.py`.  You
-can see how the code will be called.
+can see how the code will be called:
 
 
 ```
@@ -37,7 +37,7 @@ Shift-Reduce Parsers (15 points)
 
 Next, you'll create sequences of shift-reduce actions that can produce
 dependency parses from a string of words.  You'll implement the
-`transition\_sequence` function in the `oracle.py` file.
+`transition_sequence` function in the `oracle.py` file.
 Your code will be much simpler if you use
 [generators](https://wiki.python.org/moin/Generators).
 
@@ -84,3 +84,8 @@ r	(fijo, .)
 r	(None, fijo)
 s
 ```
+
+Writeup?  Extra Credit?
+-------------------------
+
+Nope.  This is an easy homework.  Focus on projects!
