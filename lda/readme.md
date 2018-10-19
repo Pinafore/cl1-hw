@@ -21,7 +21,7 @@ Implementing a Gibbs Sampler (20 points)
 
 * Finish implementing the sample probs function so that it returns a dictio- nary that provides the conditional distribution of a token. This should be an unnormalized distribution (this will make it easier to debug).
 In addition to using the unit tests (as usual), there’s also a directory of toy data you can try the code out on.
-After you’ve done these things, turn in your completed lda.py file on Moodle.
+After you’ve done these things, turn in your completed lda.py file on the submit server.
 
 
 Running on Real Data (10 Points)
