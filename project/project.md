@@ -3,7 +3,7 @@ not need to do well at this task, but you should submit a system that
 completes the task.  This will help the whole class share data and
 resources.
 
-If you focus on something other than predicting answers, *that's fine*!  
+If you focus on something other than predicting answers, *that's fine*!  While you'll need to submit answers for the project, you don't have to particularly well on that task.  If you want to focus on coreference, finding time expressions, topic identification, etc. and that helps improve question answering even the slightest bit from the baseline system, you'll still get a good grade.
 
 About the Data
 ==============
@@ -120,7 +120,7 @@ Project Writeup
 
 By 23:55 15. December, have the person in your group whose last name
 is alphabetically first submit their project writeup explaining what
-you did and what results you achieved on Moodle.  This document should
+you did and what results you achieved on the submit server.  This document should
 make it clear:
 
 * Why this is a good idea
