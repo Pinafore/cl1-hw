@@ -49,11 +49,11 @@ better (or easier to use) than others.
 
 Competition
 ==================
-We currently have:
-
-[Baseline system](https://github.com/Pinafore/qanta-codalab)
-[Leaderboard](https://pinafore.github.io/qanta-leaderboard/)
-[Codalab tutorial worksheet](https://worksheets.codalab.org/worksheets/0x26df3339cf734a9cace34abc800defd2/)
+We are using infrastructure for a public competition:
+* [Baseline system](https://github.com/Pinafore/qanta-codalab)
+* [Leaderboard](https://pinafore.github.io/qanta-leaderboard/)
+* [Codalab tutorial worksheet](https://worksheets.codalab.org/worksheets/0x26df3339cf734a9cace34abc800defd2/)
+* [General Information Webpage](http://qanta.org)
 
 Proposal
 ==================
