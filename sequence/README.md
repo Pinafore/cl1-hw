@@ -1,4 +1,4 @@
-Sequence Tagging
+Sequence Tagging (40 Points)
 ================
 
 Introduction
