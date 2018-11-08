@@ -1,6 +1,4 @@
 
-#Ahmed - people feel free to use nltk pos tags, parses or load the parses/pos tags from conll file
-
 # Utility functions
 def tags(corpus):
     return sorted(list(set(x[1] for x in corpus.tagged_words())))

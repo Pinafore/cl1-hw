@@ -16,6 +16,8 @@ The tag also determines the type of the entity: person, location,
 organization .. etc. Here is an example
 
 `Sentence: Adobe opens a new office in College Park`
+
+
 `Tags: B-ORG O O O O O B-LOC I-LOC`
 
 All your implementation should be in the `Named_Entity_Tagger.py` file.
