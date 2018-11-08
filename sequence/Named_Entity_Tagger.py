@@ -179,7 +179,6 @@ if __name__ == "__main__":
     train_sents, train_tags = dataset_to_sents_and_tags(conll_train)
         
     valid_sents, valid_tags = dataset_to_sents_and_tags(conll_valid)
-    #TODO improve on conll test
 
     tp = TaggingPerceptron(vocabulary(conll_train),
                        tags(conll_train))
