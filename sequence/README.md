@@ -20,8 +20,8 @@ organization .. etc. Here is an example
 
 `Tags: B-ORG O O O O O B-LOC I-LOC`
 
-All your implementation should be in the `Named_Entity_Tagger.py` file.
-For the extra credit, feel free to write separate files and import
+All your implementation should be in `Named_Entity_Tagger.py`.
+For the extra credit part, feel free to write separate files and import
 them in `Named_Entity_Tagger.py`, but make sure you include
 them in your submission.
 
