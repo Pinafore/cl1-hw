@@ -52,7 +52,7 @@ a feature vector based on the features defined above.
 Structured perceptron update (10 points)
 -----------------------------------------
 
-The second task to implement the update function
+The second task is to implement the update function
 of the structured perceptron. Given a sentence, a 
 predicted tag sequence and the gold tag sequence,
 update the vector `w` in the `update` method.
