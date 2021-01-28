@@ -77,19 +77,12 @@ regarded his work as a failure:
 his verses were fine
 until the fourth line"""
 
-        g = """There was a young lady one fall
-Who wore a newspaper dress to a ball.
-The dress caught fire
-And burned her entire
-Front page, sporting section and all."""
-
         self.assertEqual(self.ld.is_limerick(a), True)
         self.assertEqual(self.ld.is_limerick(b), False)
         self.assertEqual(self.ld.is_limerick(c), False)
         self.assertEqual(self.ld.is_limerick(d), False)
         self.assertEqual(self.ld.is_limerick(f), False)
         self.assertEqual(self.ld.is_limerick(e), True)
-        self.assertEqual(self.ld.is_limerick(g), True)
 
 if __name__ == '__main__':
     unittest.main()
