@@ -136,6 +136,10 @@ Please do not go over 2500 words unless you have a really good reason.
 Images are a much better use of space than words, usually (there's no
 limit on including images, but use judgement and be selective).
 
+I'd suggest that you use either the ACL or ICML template:
+* https://icml.cc/Conferences/2018/StyleAuthorInstructions
+* https://acl2018.org/downloads/acl18-latex.zip
+
 Grade
 ======================
 

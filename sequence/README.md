@@ -5,7 +5,7 @@ Introduction
 ----------------------
 In this homework, we will implement a named entity tagging model
 using the structured perceptron algorithm.
-The homework has three required parts and an open-ended extra credit
+The homework has three required parts and an open-ended extra credit part
 that aims at improving the accuracy of the tagger.
 
 The task is to assign a tag to each word in a sentence.
@@ -52,7 +52,7 @@ a feature vector based on the features defined above.
 Structured perceptron update (10 points)
 -----------------------------------------
 
-The second task to implement the update function
+The second task is to implement the update function
 of the structured perceptron. Given a sentence, a 
 predicted tag sequence and the gold tag sequence,
 update the vector `w` in the `update` method.
