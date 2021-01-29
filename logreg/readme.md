@@ -1,8 +1,6 @@
 Logistic Regression
 =
 
-Due: 21. September (23:55)
-
 Overview
 --------
 
