@@ -48,7 +48,8 @@ Extra credit:
     - With the appropriate flag, use the *df* vector rather than *x* in the update
     - Show the effect in your analysis document
 3.  Modify the _sg update_ function to perform lazy regularized updates.
-
+    - Show the effect in your analysis document 
+    
 Caution: When implementing extra credit, make sure your implementation of the
 regular algorithms doesn't change.
 
