@@ -33,7 +33,7 @@ Coding (25 points):
 Analysis (5 points):
 
 1. What is the role of the learning rate?
-2. How many passes over the data do you need to complete?
+2. How many passes over the data do you need to complete for the *model* to stabilize?  The various metrics can give you clues about what the model is doing, but no one metric is perfect.
 3. What words are the best predictors of each class?  How (mathematically) did you find them?
 4. What words are the poorest predictors of classes?  How (mathematically) did you find them?
 
