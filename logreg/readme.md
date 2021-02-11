@@ -44,8 +44,8 @@ Extra credit:
     - Support it in your _sg update_
     - Show the effect in your analysis document
 2.  Use document frequency (provided in the vocabulary file) to modify the feature values to [tf-idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf).
-    - Modify the Example to store the df vector
-    - With the appropriate flag, use the *df* vector rather than *x* in the update
+    - Modify the Example to store the ~~df~~ **tfidf** vector **in a variable named x_tfidf**.
+    - With the appropriate flag, use the ~~df~~ **x_tfidf** vector rather than *x* in the update
     - Show the effect in your analysis document
 3.  Modify the _sg update_ function to perform [lazy regularized updates](https://lingpipe.files.wordpress.com/2008/04/lazysgdregression.pdf), which only update the weights of features when they appear in an example.
     - Show the effect in your analysis document 
