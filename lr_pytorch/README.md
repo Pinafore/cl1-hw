@@ -30,7 +30,7 @@ Analysis (10 points):
 What to turn in
 -
 
-1. Submit your _pytorch-lr.py_ file (include your name at the top of the source)
+1. Submit your _lr_pytorch.py_ file (include your name at the top of the source)
 1. Submit your _analysis.pdf_ file
     - no more than one page
     - pictures are better than text
