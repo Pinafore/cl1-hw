@@ -1,4 +1,3 @@
-# Alex Jian Zheng
 import random
 import math
 import torch
