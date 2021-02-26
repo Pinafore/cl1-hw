@@ -1,88 +1,58 @@
-The evaluation of this project is to answer trivia questions.  You do
-not need to do well at this task, but you should submit a system that
-completes the task.  This will help the whole class share data and
-resources.
-
-If you focus on something other than predicting answers, *that's fine*!  While you'll need to submit answers for the project, you don't have to particularly well on that task.  If you want to focus on coreference, finding time expressions, topic identification, etc. and that helps improve question answering even the slightest bit from the baseline system, you'll still get a good grade.
-
-About the Data
-==============
-
-Quiz bowl is an academic competition between schools in
-English-speaking countries; hundreds of teams compete in dozens of
-tournaments each year. Quiz bowl is different from Jeopardy, a recent
-application area.  While Jeopardy also uses signaling devices, these
-are only usable after a question is completed (interrupting Jeopardy's
-questions would make for bad television).  Thus, Jeopardy is rapacious
-classification followed by a race---among those who know the
-answer---to punch a button first.
-
-Here's an example of a quiz bowl question:
-
-Expanding on a 1908 paper by Smoluchowski, he derived a formula for
-the intensity of scattered light in media fluctuating densities that
-reduces to Rayleigh's law for ideal gases in The Theory of the
-Opalescence of Homogenous Fluids and Liquid Mixtures near the Critical
-State.  That research supported his theories of matter first developed
-when he calculated the diffusion constant in terms of fundamental
-parameters of the particles of a gas undergoing Brownian Motion.  In
-that same year, 1905, he also published On a Heuristic Point of View
-Concerning the Production and Transformation of Light.  That
-explication of the photoelectric effect won him 1921 Nobel in Physics.
-For ten points, name this German physicist best known for his theory
-of Relativity.
-
-*ANSWER*: Albert _Einstein_
-
-Two teams listen to the same question. Teams interrupt the question at
-any point by "buzzing in"; if the answer is correct, the team gets
-points and the next question is read.  Otherwise, the team loses
-points and the other team can answer.
-
-You are welcome to use any *automatic* method to choose an answer.  It
-need not be similar nor build on our provided systems.  In addition to
-the data we provide, you are welcome to use any external data *except*
-our test quiz bowl questions (i.e., don't hack our server!).  You are
-welcome (an encouraged) to use any publicly available software, but
-you may want to check on Piazza for suggestions as many tools are
-better (or easier to use) than others.
-
-Competition
+Subject
 ==================
-We are using infrastructure for a public competition:
-* [Baseline system](https://github.com/Pinafore/qanta-codalab)
-* [Leaderboard](https://pinafore.github.io/qanta-leaderboard/)
-* [Codalab tutorial worksheet](https://worksheets.codalab.org/worksheets/0x26df3339cf734a9cace34abc800defd2/)
-* [General Information Webpage](http://qanta.org)
+
+You may either enter a shared project (on either [question answering](qa.md) or SOMETHING ELSE) or
+choose a project of your own.
+
+If you choose to work on a project of your own choosing, it must:
+* Have readily available data
+* Be of general interest (there should be published guidelines for what constitutes "standard" performance) and should be a problem worth tackling
+* Be of specific interest to computational linguistics: there should be clear and obvious application of the techniques we have used in the course
+* Have a baseline that you can implement (or run yourself) easily within a week
+
+If you choose to work on a project of your own choosing, you will be
+held to a higher standard.  You must clearly document baselines and
+show improvement over those baselines.  You'll also need to convince
+us to make sure you clearly convey why it's an interesting problem.
+
+Groups
+==================
+
+You must form a group of 4-6 students enrolled in this course.  If you have a project idea and you're not able to convince two other people to work on it, it's probably not that interesting.  You should instead join another group.  
 
 Proposal
 ==================
 
-The project proposal is due 26. October.  This one page PDF document
+The project proposal is due 13. March.  This one page PDF document
 should describe:
+
+* What project you're working on.  If you're not doing the shared competition, you must describe the task, data, and baselines clearly.
 
 * Who is on your team
 
 * What techniques you will explore 
 
 * Your timeline for completing the project (be realistic; you should
-  have your first submission by 14. November)
+  have your first results by the first deliverable deadline)
 
-Have the person whose last name is alphabetically last submit the
-proposal on the submit server.  Late days cannot be used on this
+Have the person in your group whose name is alphabetically first
+submit your assignment on Piazza.  Late days cannot be used on this
 assignment.
 
-Update 
-====================== 
+First Deliverable
+======================
 
-On 14. November, you'll have to update how things are going: what's
-working, what isn't, and how does it change your timeline?  Have the middle person alphabetically submit this one page update.
+Your first deliverable is due 16. April.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
+* You have your data
+* You've implemented baseline techniques that work
+* You've made some progress on the overall goal of your project
+
+Post your first deliverable report publicly on Piazza.
 
 Final Presentation
 ======================
 
-The final presentation will be in class on 5. and 10. December.  In
-the final presentation you will:
+The final presentation will be an eight minute video.  In the final presentation you will:
 
 * Explain what you did
 
@@ -90,41 +60,34 @@ the final presentation you will:
 
 * What challenges you had
 
-* Review how well you did (based on the competition)
+* Review how well you did 
 
-* Provide an error analysis.  An error analysis must contain examples from the
+* Provide an error analysis or otherwise do a qualitative examination of your data.  For example, in a traditional supervised setup, this would contain examples from the
   development set that you get wrong.  You should show those sentences
   and explain why (in terms of features or the model) they have the
-  wrong answer.  You should have been doing this all along as you
-  derive new features, but this is your final inspection of
-  your errors. The feature or model problems you discover should not
+  wrong answer.  You should have been doing this all along, but this is your final inspection of
+  your errors. The features or model problems you discover should not
   be trivial features you could add easily.  Instead, these should be
   features or models that are difficult to correct.  An error analysis
   is not the same thing as simply presenting the error matrix, as it
   does not inspect any individual examples.
 
-* The linguistic motivation for your features.  This is a
-  computational linguistics class, so you should give precedence to
-  features / techniques that we use in this class (e.g., syntax,
-  morphology, part of speech, word sense, etc.).  Given two features
-  that work equally well and one that is linguistically motivated,
-  we'll prefer the linguistically motivated one.
-
 * Presumably you did many different things; how did they each
   individually contribute to your final result?
 
-Each group has 10 minutes to deliver their presentation, plus a few
-minutes for questions and swapping.  It is okay to go under time, but
+It is okay to go under time, but
 _do not_ go over time.  It will negatively impact your grade; I will
 cut you off if necessary.  (Sorry to be a jerk about this, but we have
 enough groups that we cannot have much give on time.)
 
+We'll treat this as a flipped classroom session (as usual).  You'll post your videos by May 7, we'll watch them before the last class, and then we'll ask questions.
+
 Project Writeup
 ======================
 
-By 23:55 15. December, have the person in your group whose last name
-is alphabetically first submit their project writeup explaining what
-you did and what results you achieved on the submit server.  This document should
+By 10:00 13. May (the final exam time as set by the registrar), have the person in your group whose last name
+is alphabetically last submit their project writeup explaining what
+you did and what results you achieved on GradeScope.  This document should
 make it clear:
 
 * Why this is a good idea
@@ -135,10 +98,6 @@ make it clear:
 Please do not go over 2500 words unless you have a really good reason.
 Images are a much better use of space than words, usually (there's no
 limit on including images, but use judgement and be selective).
-
-I'd suggest that you use either the ACL or ICML template:
-* https://icml.cc/Conferences/2018/StyleAuthorInstructions
-* https://acl2018.org/downloads/acl18-latex.zip
 
 Grade
 ======================
@@ -159,3 +118,4 @@ The grade will be out of 25 points, broken into five areas:
   ammount of effort.
 
 * _Performance_: How did your techniques perform?
+
