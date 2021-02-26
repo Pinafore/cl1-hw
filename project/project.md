@@ -72,6 +72,13 @@ The final presentation will be an eight minute video.  In the final presentation
   is not the same thing as simply presenting the error matrix, as it
   does not inspect any individual examples.
 
+* The linguistic motivation for your features.  This is a
+  computational linguistics class, so you should give precedence to
+  features / techniques that we use in this class (e.g., syntax,
+  morphology, part of speech, word sense, etc.).  Given two features
+  that work equally well and one that is linguistically motivated,
+  we'll prefer the linguistically motivated one.
+
 * Presumably you did many different things; how did they each
   individually contribute to your final result?
 
@@ -98,6 +105,11 @@ make it clear:
 Please do not go over 2500 words unless you have a really good reason.
 Images are a much better use of space than words, usually (there's no
 limit on including images, but use judgement and be selective).
+
+I'd suggest that you use either the ACL or ICML template:
+* https://icml.cc/Conferences/2018/StyleAuthorInstructions
+* https://acl2018.org/downloads/acl18-latex.zip
+
 
 Grade
 ======================
