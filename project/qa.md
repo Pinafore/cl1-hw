@@ -57,32 +57,38 @@ This can be through:
 4. Using better methods to find the answer span 
 5. Adding additional features for a reranker (https://arxiv.org/abs/2102.03016), potentially using adversarial data (https://sites.google.com/view/qanta/projects/adversarial)
 
+*FIRST STEP*: Train an existing system on new data, analyze how it works on the original task.
+
 Create a better system for knowing when to signal to answer
 -----------------------------------------------------------
 
 Unlike other datasets, a challenging aspect of playing quiz bowl competitively is knowing when your system is confident enough to answer, not just selecting the best answer.
 
-You can improve this by transfer learning (e.g., using (https://rajpurkar.github.io/SQuAD-explorer/ SQuAD 2.0) 
+You can improve this by transfer learning going to/from SQuAD 2.0 (https://rajpurkar.github.io/SQuAD-explorer/) or NQ (https://ai.google.com/research/NaturalQuestions)
+
+*FIRST STEP*: Train an existing system on new data, analyze how it works on the original task.
 
 Create a system to use speech data to answer questions
 ------------------------------------------------------
+
+Possible approaches:
 
 Convert between question formats using machine translation
 ----------------------------------------------------------
 
 Model when an answer would be asked
 -----------------------------------
+One preprocessing step might be needing to extract the year the question was asked, it might not be easily extractable from the dataset as is.  Once that's done, 
 
 Predict the difficulty of a question
 ------------------------------------
 
 
 
-Competition
+More Resources
 ==================
 We are using infrastructure for a public competition:
 * [Baseline system](https://github.com/Pinafore/qanta-codalab)
-* [Leaderboard](https://pinafore.github.io/qanta-leaderboard/)
 * [Codalab tutorial worksheet](https://worksheets.codalab.org/worksheets/0x26df3339cf734a9cace34abc800defd2/)
 * [General Information Webpage](http://qanta.org)
 
