@@ -51,14 +51,18 @@ Create a better system for answering questions
 The is most straightforward.  Given some text, predict what the answer is.  If more than a couple teams do this project (or the next), we can create a leaderboard to compare systems on heldout systems.
 
 This can be through:
-1. Adding additional data
-2. Using better retrieval systems
-3. Trying to train on multiple datasets at once
-4. 
+1. Adding additional data (https://www.gutenberg.org/) (https://wikis.fandom.com/wiki/List_of_Wikia_wikis)
+2. Using better retrieval systems (https://github.com/facebookresearch/DPR)
+3. Trying to train on multiple datasets at once (https://arxiv.org/abs/1905.13453)
+4. Using better methods to find the answer span 
+5. Adding additional features for a reranker (https://arxiv.org/abs/2102.03016), potentially using adversarial data (https://sites.google.com/view/qanta/projects/adversarial)
 
 Create a better system for knowing when to signal to answer
 -----------------------------------------------------------
 
+Unlike other datasets, a challenging aspect of playing quiz bowl competitively is knowing when your system is confident enough to answer, not just selecting the best answer.
+
+You can improve this by transfer learning (e.g., using (https://rajpurkar.github.io/SQuAD-explorer/ SQuAD 2.0) 
 
 Create a system to use speech data to answer questions
 ------------------------------------------------------
