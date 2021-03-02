@@ -48,7 +48,13 @@ Possible Project Ideas
 
 Create a better system for answering questions
 ----------------------------------------------
-The is most straightforward.  Given some text, predict what the answer is.
+The is most straightforward.  Given some text, predict what the answer is.  If more than a couple teams do this project (or the next), we can create a leaderboard to compare systems on heldout systems.
+
+This can be through:
+1. Adding additional data
+2. Using better retrieval systems
+3. Trying to train on multiple datasets at once
+4. 
 
 Create a better system for knowing when to signal to answer
 -----------------------------------------------------------
