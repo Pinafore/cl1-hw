@@ -131,3 +131,12 @@ The grade will be out of 25 points, broken into five areas:
 
 * _Performance_: How did your techniques perform?
 
+Computational Resources
+=============================
+Check Piazza for Google Cloud Credits you can use for your project.  In addition, the University of Maryland Center for Machine Learning (CML) provides
+computational resources for project-based machine learning projects in
+graduate courses.  To request access, send an e-mail to
+ kxnguyen@umd.edu with the subject line "CMSC 723 Project
+Computational Resources" with the contact information for everyone in
+your group.  Please also direct any technical issues to the TA, who
+can loop in CML staff as needed.
