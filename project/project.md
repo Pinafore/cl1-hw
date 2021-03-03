@@ -83,9 +83,7 @@ The final presentation will be an eight minute video.  In the final presentation
   individually contribute to your final result?
 
 It is okay to go under time, but
-_do not_ go over time.  It will negatively impact your grade; I will
-cut you off if necessary.  (Sorry to be a jerk about this, but we have
-enough groups that we cannot have much give on time.)
+_do not_ go over time.  It will negatively impact your grade. 
 
 We'll treat this as a flipped classroom session (as usual).  You'll post your videos by May 7, we'll watch them before the last class, and then we'll ask questions.
 
@@ -124,12 +122,12 @@ The grade will be out of 25 points, broken into five areas:
   clear and effective?
 
 * _Technical Soundness_: Did you use the right tools for the job, and
-  did you use them correctly?  Were the relevant to this class?
+  did you use them correctly?  Were they relevant to this class?
 
 * _Effort_: Did you do what you say you would, and was it the right
-  ammount of effort.
+  ammount of effort?
 
-* _Performance_: How did your techniques perform?
+* _Results_:  How well did your techniques perform, and how thorough and insightful is your analysis?
 
 Computational Resources
 =============================
