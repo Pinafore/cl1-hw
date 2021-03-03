@@ -38,14 +38,19 @@ def read_dataset(positive, negative, vocab):
     :param vocab: Vocabulary words file pointer
     """
 
-    # You'll need to change the below line, since you can't assume
+    # Below, we'll give you some code to get started because otherwise our test code will fail in ways that isn't very helpful.
+    # 
+    # Don't feel like you need to use this code if you have a better way of doing it (e.g., using sklearn), but you can use this if you want.
+    # 
+    # We'll need to allocate a matrix to store the data, but we can't start our matrix yet because we don't know the dimensions.
+    # So first, what are the number of documents?  You'll need to change the below line, since you can't assume
     # that you have five documents in your dataset.
     num_docs = 5
 
+    # But once you know the number of documents, you can create a matrix with the appropriate number of dimensions, which we'll call sportsdata.
     sportsdata = zeros((num_docs, len(x for x in vocab.readlines())))
     print("Created datasets with %i rows and %i columns" % (num_docs, len(vocab)))
     
-
     return sportsdata
 
 class SimpleLogreg(nn.Module):
