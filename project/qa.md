@@ -54,12 +54,12 @@ This can be through:
 1. Adding additional data (https://www.gutenberg.org/) (https://wikis.fandom.com/wiki/List_of_Wikia_wikis)
 2. Using better retrieval systems (https://github.com/facebookresearch/DPR)
 3. Trying to train on multiple datasets at once (https://arxiv.org/abs/1905.13453)
-4. Using better methods to find the answer span 
+4. Using better methods to find the answer span
 5. Adding additional features for a reranker (https://arxiv.org/abs/2102.03016), potentially using adversarial data (https://sites.google.com/view/qanta/projects/adversarial)
 
 *FIRST STEP*: Train an existing system on new data, analyze how it works on the original task.  For example, train and deploy a DPR / ORQA system on quiz bowl and see how well it does.
 
-*KEY RESULTS*: Accuracy / F1 
+*KEY RESULTS*: Accuracy / F1
 
 Create a better system for knowing when to signal to answer
 -----------------------------------------------------------
@@ -75,7 +75,27 @@ You can improve this by transfer learning going to/from SQuAD 2.0 (https://rajpu
 Convert between question formats using machine translation
 ----------------------------------------------------------
 
+Many different QA datasets are similar, but have slightly differences
+in phrasing and resources.  For example:
+*Jeopardy*: A state since the 1700s but not in the original 13, it
+ends with its own 2-letter postal abbreviation
+*Natural Questions*: What state postal code KY?
+*Quiz Bowl*: For ten points, the Mammoth Cave system in what U.S. state is the longest cave in the world?
 
+Being able to convert between datasets or generate new data that looks
+like a datset has multiple uses:
+* Providing additional training data for machines
+* Getting around copyright restrictions
+* Providing additional training data for humans (so they can practice
+playing Jeopardy! or Quizbowl)
+
+*FIRST STEP (Generation)*: Given a dataset, treat (evidence, question)
+ pairs as MT data and train a simple MT system
+ (https://github.com/joeynmt/joeynmt) to take the evidence as input
+ and generate the question.  If your dataset doesn't have evidence, do
+ a search over Wikipedia.
+
+*FIRST STEP (Conversion)*: Given a dataset, match its questions with
 
 Model when an answer would be asked
 -----------------------------------
@@ -100,4 +120,3 @@ We are using infrastructure for a public competition:
 * [Baseline system](https://github.com/Pinafore/qanta-codalab)
 * [Codalab tutorial worksheet](https://worksheets.codalab.org/worksheets/0x26df3339cf734a9cace34abc800defd2/)
 * [General Information Webpage](http://qanta.org)
-
