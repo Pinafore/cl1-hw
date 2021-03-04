@@ -96,6 +96,16 @@ playing Jeopardy! or Quizbowl)
  a search over Wikipedia.
 
 *FIRST STEP (Conversion)*: Given a dataset, match its questions with
+ another question (with the same answer) in another data.  An easy way
+ of doing this would be to have a threshold on word overlap.  Then use
+ those as MT pairs with a simple MT system.
+
+*NEXT STEPS*: Generating better examples, seeing if they're useful.
+1. Include evidence during conversion.
+2. See if systems / humans can answer the generated questions (they
+   should) or can tell if they're generated automatically (they shouldn't).
+3. If you train a system on the original domain with synthetic
+   question, does accuracy improve?
 
 Model when an answer would be asked
 -----------------------------------
@@ -109,9 +119,25 @@ Some questions are timeless: "When was the Magna Carta signed?".  Other question
 3. Try to improve QA accuracy for those questions.
 4. Given news / Wikipedia edits predict what questions / topics will be asked in the future.
 
+*KEY RESULTS*: Train on years up to time T, can you 1) predict what
+ new answer will appear in time T+1 2) answer those questions more effectively.
+
 Predict the human difficulty of a question
 ------------------------------------------
 
+One of the benefits of the quiz bowl data is that we have multiple
+pieces of information about how hard a question is: the audience (high
+school, college, open), when a clue appears in the question (remember,
+last sentence is harder), and also from human data (Protobowl:
+https://sites.google.com/view/qanta/resources).
+
+There are several reasons we might want to estimate how hard a
+question is (for either computers or humans):
+1. Compare human vs. computer question answering
+2. Generate questions
+3. Prioritize questions for annotation (see "focus on the bubble":
+http://users.umiacs.umd.edu/~jbg/docs/2020_acl_trivia.pdf)
+4. Combined with generation, create new Quizbowl questions
 
 
 More Resources
