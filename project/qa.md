@@ -7,7 +7,7 @@ English-speaking countries; hundreds of teams compete in dozens of
 tournaments each year. Quiz bowl is different from Jeopardy, a recent
 application area.  While Jeopardy also uses signaling devices, these
 are only usable after a question is completed (interrupting Jeopardy's
-questions would make for bad television).  Thus, Jeopardy is rapacious
+questions would make for bad television).  Thus, Jeopardy is a
 classification followed by a race---among those who know the
 answer---to punch a button first.
 
@@ -74,6 +74,8 @@ You can improve this by transfer learning going to/from SQuAD 2.0 (https://rajpu
 
 Convert between question formats using machine translation
 ----------------------------------------------------------
+
+
 
 Model when an answer would be asked
 -----------------------------------
