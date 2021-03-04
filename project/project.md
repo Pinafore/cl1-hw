@@ -23,7 +23,7 @@ You must form a group of 4-6 students enrolled in this course.  If you have a pr
 Proposal
 ==================
 
-The project proposal is due 13. March.  This one page PDF document
+The project proposal can be turned in 13. March or 24. March.  This one page PDF document
 should describe:
 
 * What project you're working on.  If you're not doing the shared competition, you must describe the task, data, and baselines clearly.
@@ -36,8 +36,8 @@ should describe:
   have your first results by the first deliverable deadline)
 
 Have the person in your group whose name is alphabetically first
-submit your assignment on Piazza.  Late days cannot be used on this
-assignment.
+submit your assignment on Piazza (we're doing this on Piazza so that people can see projects and see if there are potential synergies / best practice that can be shared).  Late days cannot be used on this
+assignment.  (We'll create a thread for this you can add to as a followup.)
 
 First Deliverable
 ======================
