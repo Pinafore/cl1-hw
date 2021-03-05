@@ -10,7 +10,7 @@ The big picture is that we need to create an incentive system to get people to r
 2. Do a forced alignment (https://www.eleanorchodroff.com/tutorial/kaldi/forced-alignment.html)
 3. Have the words appear as the words are said
 
-*NEXT STEPS*: Create a schedule for getting the recordings and improving the experience of those playing the game.  Focus on questions that will be most challenging for ASR.
+*NEXT STEPS*: Create a schedule for getting the recordings and improving the experience of those playing the game.  Focus on questions that will be most challenging for ASR.  Let people compete against each other while hearing the same question online.
 
 *KEY RESULTS*: See how much fine tuning on the newly collected data helps full pipeline QA.
 

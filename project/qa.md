@@ -40,7 +40,11 @@ Possible Project Ideas
 
 Create a better system for answering questions
 ----------------------------------------------
-*GOAL*: The is most straightforward.  Given some text, predict what the answer is.  If more than a couple teams do this project (or the next), we can create a leaderboard to compare systems on heldout systems.
+
+*GOAL*: The is most straightforward.  Given some text, predict what
+ the answer is.  If more than a couple teams do this project (or the
+ next), we can create a leaderboard to compare systems on heldout
+ systems.
 
 You are welcome to use any *automatic* method to choose an answer.  It
 need not be similar nor build on our provided systems.  In addition to
@@ -57,20 +61,30 @@ This can be through:
 4. Using better methods to find the answer span
 5. Adding additional features for a reranker (https://arxiv.org/abs/2102.03016), potentially using adversarial data (https://sites.google.com/view/qanta/projects/adversarial)
 
-*FIRST STEP*: Train an existing system on new data, analyze how it works on the original task.  For example, train and deploy a DPR / ORQA system on quiz bowl and see how well it does.
+*FIRST STEP*: Train an existing system on new data, analyze how it
+ works on the original task.  For example, train and deploy a DPR /
+ ORQA system on quiz bowl and see how well it does.
 
 *KEY RESULTS*: Accuracy / F1
 
 Create a better system for knowing when to signal to answer
 -----------------------------------------------------------
 
-*GOAL*: Unlike other datasets, a challenging aspect of playing quiz bowl competitively is knowing when your system is confident enough to answer, not just selecting the best answer.
+*GOAL*: Unlike other datasets, a challenging aspect of playing quiz
+ bowl competitively is knowing when your system is confident enough to
+ answer, not just selecting the best answer.
 
-You can improve this by transfer learning going to/from SQuAD 2.0 (https://rajpurkar.github.io/SQuAD-explorer/) or NQ (https://ai.google.com/research/NaturalQuestions), which also include the option to "abstain".
+You can improve this by transfer learning going to/from SQuAD 2.0
+(https://rajpurkar.github.io/SQuAD-explorer/) or NQ
+(https://ai.google.com/research/NaturalQuestions), which also include
+the option to "abstain".
 
-*FIRST STEP*: Train an existing system on new data, analyze how it works on the original task.  E.g. train an abstain classifier on NQ, apply it to Quiz Bowl.
+*FIRST STEP*: Train an existing system on new data, analyze how it
+ works on the original task.  E.g. train an abstain classifier on NQ,
+ apply it to Quiz Bowl.
 
 *KEY RESULTS*: Expected wins metric (https://arxiv.org/abs/1904.04792)
+ for quiz bowl, abstention F1 for other datasets.
 
 Convert between question formats using machine translation
 ----------------------------------------------------------
@@ -79,7 +93,7 @@ Many different QA datasets are similar, but have slightly differences
 in phrasing and resources.  For example:
 *Jeopardy*: A state since the 1700s but not in the original 13, it
 ends with its own 2-letter postal abbreviation
-*Natural Questions*: What state postal code KY?
+*Natural Questions* / *PAQ* (https://github.com/facebookresearch/PAQ): What state postal code KY?
 *Quiz Bowl*: For ten points, the Mammoth Cave system in what U.S. state is the longest cave in the world?
 
 Being able to convert between datasets or generate new data that looks
@@ -105,11 +119,21 @@ playing Jeopardy! or Quizbowl)
 2. See if systems / humans can answer the generated questions (they
    should) or can tell if they're generated automatically (they shouldn't).
 3. If you train a system on the original domain with synthetic
-   question, does accuracy improve?
+question, does accuracy improve?
+
+*KEY RESULTS*: Quality of generated questions / improvement in QA
+ accuracy using augmented training data.
 
 Model when an answer would be asked
 -----------------------------------
-Some questions are timeless: "When was the Magna Carta signed?".  Other questions have a four-year expiration date: "Who won the last world cup?" or "What was the tipping point in the electoral college?".  One preprocessing step might be needing to extract the year the question was asked, it might not be easily extractable from the dataset as is.  Once that's done, we can try to figure out the effect between when questions are asked and the QA pair.
+
+Some questions are timeless: "When was the Magna Carta signed?".
+Other questions have a four-year expiration date: "Who won the last
+world cup?" or "What was the tipping point in the electoral college?".
+One preprocessing step might be needing to extract the year the
+question was asked, it might not be easily extractable from the
+dataset as is.  Once that's done, we can try to figure out the effect
+between when questions are asked and the QA pair.
 
 *FIRST STEP*: Compute a distribution over answers, excluding rare ones, and find the ones that are most temporally constrained.  Those that appear only for a brief period, those that appear and persist, and those that stopped being asked.
 
@@ -139,6 +163,19 @@ question is (for either computers or humans):
 http://users.umiacs.umd.edu/~jbg/docs/2020_acl_trivia.pdf)
 4. Combined with generation, create new Quizbowl questions
 
+*FIRST STEP*: Create a classifier that can distinguish the final line
+of a high school question from the final line of a college question.
+
+*NEXT STEPS*: Given shuffled sentences from quiz bowl questions, put
+ them into correct order.  Run a strong computer QA system on the
+ data, compare against Protobowl data.  Add in features from Sugawara
+ (https://arxiv.org/abs/1808.09384).  Further analyze human vs. computer
+ answering ability using an IRT model
+ (https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=2885).
+ Where are the biggest discrepancies?
+
+*KEY RESULT*: What is the accuracy of predicting whether humans /
+ computers get the question right, which questions have the biggest discrepancies?
 
 More Resources
 ==================
