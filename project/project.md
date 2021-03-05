@@ -1,7 +1,8 @@
 Subject
 ==================
 
-You may either enter a shared project (on either [question answering](qa.md) or SOMETHING ELSE) or
+You may either enter a shared project on 
+[question answering](qa.md), a shared project on [social media](https://github.com/Pinafore/cl1-hw/blob/master/project/sw_project.pdf), or
 choose a project of your own.
 
 If you choose to work on a project of your own choosing, it must:
