@@ -24,7 +24,7 @@ You must form a group of 4-6 students enrolled in this course.  If you have a pr
 Proposal
 ==================
 
-The project proposal can be turned in 13. March or 24. March.  This one page PDF document
+The project proposal can be turned in 13. March or 24. March (we're giving two due dates because some people are raring to get started with the project and want to run ideas by us ASAP and other people need more time).  This one page PDF document
 should describe:
 
 * What project you're working on.  If you're not doing the shared competition, you must describe the task, data, and baselines clearly.
