@@ -14,6 +14,17 @@ The big picture is that we need to create an incentive system to get people to r
 
 *KEY RESULTS*: See how much fine tuning on the newly collected data helps full pipeline QA.
 
+Improve Process for Editing and Writing Questions
+-------------------------------------------------
+
+We created an interface that allowed people to write really difficult trivia questions (http://users.umiacs.umd.edu/~jbg/docs/2019_tacl_trick.pdf), but people haven't been using it.  We'd like to create an interface that assists the workflow of trivia authors to get them to actually use such a tool.
+
+*FIRST STEP*: Create a React/Flask app that, given an input question, either answers it or shows the most similar question to the input.
+
+*NEXT STEP*: Understand trivia authoring and editing workflow, create extensible framework that will help authors do what they need to do.
+
+*KEY RESULTS*: Can we get people to actually use the application?
+
 Identifying Bad Evaluation Questions via Dataset Cartography
 ------------------------------------------------------------
 
