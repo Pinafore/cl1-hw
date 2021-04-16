@@ -36,9 +36,9 @@ The tagset is:
 * `ORG`: for Organization
 * `MISC`: for miscellaneous named entities
 
-The data uses BIO encoding (called IOB in the textbook), which means that each named entity tag is prefixed with a B-, which means beginning, or an I-, which means inside. So, for a multiword entity, like “James Earle Jones”, the first token “James” would be tagged with “B-PER”, and each subsequent token is “I-PER”. The O tag is for non-entities.
+The data uses BIO encoding (called IOB in the textbook), which means that each named entity tag is prefixed with a `B-`, which means beginning, or an `I-`, which means inside. So, for a multiword entity, like “James Earle Jones”, the first token “James” would be tagged with `B-PER`, and each subsequent token is `I-PER`. The `O` tag is for non-entities.
 
-We strongly recommend that you study the training and dev data (no one’s going to stop you from examining the test data, but for the integrity of your model, it’s best to not look at it). Are there idiosyncracies in the data? Are there patterns you can exploit with cool features? Are there obvious signals that identify names? For example, in some Turkish writing, there is a tradition of putting an apostrophe between a named entity and the morphology attached to it. A feature of isApostrophePresent() goes a long way. Of course, in English and several other languages, capitalization is a hugely important feature. In some African languages, there are certain words that always precede city names.
+We strongly recommend that you study the training and dev data (no one’s going to stop you from examining the test data, but for the integrity of your model, it’s best to not look at it). Are there idiosyncracies in the data? Are there patterns you can exploit with cool features? Are there obvious signals that identify names? For example, in some Turkish writing, there is a tradition of putting an apostrophe between a named entity and the morphology attached to it. Thus, in Turkish, a feature of `isApostrophePresent()` goes a long way. Of course, in English and several other languages, capitalization is a hugely important feature. In some African languages, there are certain words that always precede city names.
 
 You will be glad to hear that the data is a mercifully small download. See the NLTK data page for for download options, but one way to get the conll2002 data is:
     $ python -m nltk.downloader conll2002
@@ -46,7 +46,7 @@ You will be glad to hear that the data is a mercifully small download. See the N
 Evaluation
 ---
 
-There are two common ways of evaluating NER systems: phrase-based, and token-based. In phrase-based, the more common of the two, a system must predict the entire span correctly for each name. For example, say we have text containing “James Earle Jones”, and our system predicts “[PER James Earle] Jones”. Phrase-based gives no credit for this because it missed “Jones”, whereas token-based would give partial credit for correctly identifying “James” and “Earle” as B-PER and I-PER respectively. We will use phrase-based to report scores.
+There are two common ways of evaluating NER systems: phrase-based, and token-based. In phrase-based, the more common of the two, a system must predict the entire span correctly for each name. For example, say we have text containing “James Earle Jones”, and our system predicts `[PER James Earle] Jones`. Phrase-based gives no credit for this because it missed “Jones”, whereas token-based would give partial credit for correctly identifying “James” and “Earle” as `B-PER` and `I-PER` respectively. We will use phrase-based to report scores.
 
 The output of your code must be word gold pred, as in:
 
@@ -96,7 +96,7 @@ Explain the different types of models you experimented with, how they performed,
     
     loaded_model = pickle.load(open(filename, 'rb'))
 
-Using your best performing model, do some error analysis (a necessary skill for any researcher to have!) and determine what types of mistakes your model seems to be making. Some things you can think about are in what cases the mistakes are typing issues (i.e. predicting ORG instead of LOC) vs. span issues (i.e. predicting B-LOC when it should be I-LOC), and whether those correlate with certain POS tags or contexts. A thoughtful analysis with cited examples should easily get full points for this part of the report.
+Using your best performing model, do some error analysis (a necessary skill for any researcher to have!) and determine what types of mistakes your model seems to be making. Some things you can think about are in what cases the mistakes are typing issues (i.e. predicting `ORG` instead of `LOC`) vs. span issues (i.e. predicting `B-LOC` when it should be `I-LOC`), and whether those correlate with certain POS tags or contexts. A thoughtful analysis with cited examples should easily get full points for this part of the report.
 
 Please limit your report to two pages.
 
