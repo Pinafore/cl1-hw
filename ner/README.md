@@ -24,7 +24,7 @@ Typical features for a feature-based NER system:
 * The word has a particular prefix or suffix
 * The word shape of the word (Initial Capital, ALL UPPER CASE, CamelCase)
 
-The file ner.py has a really simple implementation of a feature-based perceptron.  You are free to use any features you wish, but please do not use a different machine learning algorithm (one of the goals here is to get you thinking about old-fashioned feature engineering).
+The file ner.py has a really simple implementation of a feature-based perceptron.  You are free to use any features you wish, but please stick with models implemented in sklearn (although you can use features like word embeddings). One of the goals here is to get you thinking about old-fashioned feature engineering.
 
 The file conlleval.py tells you the score you get.
 
