@@ -86,7 +86,7 @@ The final presentation will be an eight minute video.  In the final presentation
 It is okay to go under time, but
 _do not_ go over time.  It will negatively impact your grade. 
 
-We'll treat this as a flipped classroom session (as usual).  You'll post your videos by May 7, we'll watch them before the last class, and then we'll ask questions.
+We'll treat this as a flipped classroom session (as usual).  You'll post your videos by May 9, we'll watch them before the last class, and then we'll ask questions.
 
 Project Writeup
 ======================
