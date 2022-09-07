@@ -7,7 +7,7 @@ As always, check out the Github repository with the course homework templates:
 
 http://github.com/ezubaric/cl1-hw.git
 
-The code for this homework is in the _hw3_ directory.  This assignment is worth 50 points.
+The code for this homework is in the _lm_ directory.  This assignment is worth 40 points.
 
 Preparing Data (10 points)
 ---
@@ -17,7 +17,7 @@ We will use the Brown corpus (nltk.corpus.brown) as our training set and the Tre
 * After that is done, you can complete the _vocab\_lookup_ function.  This should return a unique identifier for a word, or a common "unknown" identifier for words that do not meet the _unk\_cutoff_ threshold.  You can use strings as your identifier (e.g., leaving inputs unchanged if they pass the threshold) or you can replace strings with integers (this will lead to a more efficient implementation).  The unit tests are engineered to accept both options.
 * After you do this, then the finalize and censor functions should work (but you don't need to do anything).  But check that the appropriate unit tests are working correctly.
 
-Estimation (30 points)
+Estimation (20 points)
 ------
 
 After you've finalized the vocabulary, then you need to add training
@@ -33,9 +33,6 @@ implement:
 * _laplace_: Add one to all counts
 * _dirichlet_: Add a specified parameter greater than zero to all counts
 * _jelinek_mercer_: Interpolate between probability distributions with parameter lambda
-* _kneser\_ney_: Use discounting and prefixes with
-  discount parameter $\delta$ and concentration parameter alpha to
-  implement interpolated Kneser-Ney.
 
 Now if you run the main section of the _language\_model_ file, you'll
 get per-sentence reports of perplexity.  Take a look at what sentences
@@ -51,5 +48,6 @@ Extra Credit
 ------
 
 Extra Credit (make sure they don't screw up required code / functions that will be run by the autograder):
+* _kneser\_ney_: Use discounting and prefixes with discount parameter $\delta$ and concentration parameter alpha to implement interpolated Kneser-Ney.
 * Implement a function to produce English-looking output (return an iterator or list) from your language model (function called _sample_)
 * Make the code really efficient for reading in sequences of characters
