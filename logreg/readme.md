@@ -10,27 +10,23 @@ whether documents are talking about hockey or baseball.
 
 ![Hockey and Baseball: Are they really that different?](baseball_hockey.jpg "Two sports I know nothing about")
 
-This will be slightly more difficult than the last homework (the
-difficulty will slowly ramp upward).  You should not use any libraries
+You should not use any libraries
 that implement any of the functionality of logistic regression for
 this assignment; logistic regression is implemented in scikit learn and many other places,
 but you should do everything by hand now.  You'll be able to use
 library implementations of logistic regression in the future.
 
-You'll turn in your code on the submit server.  This assignment is worth 30
-points.
-
 What you have to do
 ----
 
-Coding (25 points):
+Coding (35 points):
 
 1. Understand how the code is creating feature vectors (this will help you code the solution and to do the later analysis).  You don't actually need to write any code for this, however.
 2. (Optional) Store necessary data in the constructor so you can do classification later.  
 3. You'll likely need to write some code to get the best/worst features (see below).
 3. Modify the _sg update_ function to perform non-regularized updates.
 
-Analysis (5 points):
+Analysis (15 points):
 
 1. What is the role of the learning rate?
 2. How many passes over the data do you need to complete for the *model* to stabilize?  The various metrics can give you clues about what the model is doing, but no one metric is perfect.
