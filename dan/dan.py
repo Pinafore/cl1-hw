@@ -7,38 +7,54 @@ from torch.utils.data import Dataset
 from torch.nn.utils import clip_grad_norm_
 import json
 import time
+import nltk
 
-###You don't need to change this funtion
+kUNK = '<unk>'
+kPAD = '<pad>'
 
-def load_data(filename):
+# You don't need to change this funtion
+def class_labels(data):
+    class_to_i = {}
+    i_to_class = {}
+    i = 0
+    for _, ans in data:
+        if ans not in class_to_i.keys():
+            class_to_i[ans] = i
+            i_to_class[i] = ans
+            i+=1
+    return class_to_i, i_to_class
+
+# You don't need to change this funtion
+def load_data(filename, lim):
     """
     load the json file into data list
     """
 
     data = list()
     with open(filename) as json_data:
-        questions = json.load(json_data)
+        if lim>0:
+            questions = json.load(json_data)["questions"][:lim]
+        else:
+            questions = json.load(json_data)["questions"]
         for q in questions:
-            q_text = q['question_text'].split()
-            label = q['label']
-            data.append((q_text, label))
+            q_text = nltk.word_tokenize(q['text'])
+            #label = q['category']
+            label = q['page']
+            if label:
+                data.append((q_text, label))
     return data
 
-###You don't need to change this funtion
-
+# You don't need to change this funtion
 def load_words(exs):
     """
     vocabuary building
-
     Keyword arguments:
     exs: list of input questions-type pairs
     """
 
     words = set()
-    UNK = '<unk>'
-    PAD = '<pad>'
-    word2ind = {PAD: 0, UNK: 1}
-    ind2word = {0: PAD, 1: UNK}
+    word2ind = {kPAD: 0, kUNK: 1}
+    ind2word = {0: kPAD, 1: kUNK}
     for q_text, _ in exs:
         for w in q_text:
             words.add(w)
@@ -47,56 +63,71 @@ def load_words(exs):
         idx = len(word2ind)
         word2ind[w] = idx
         ind2word[idx] = w
-    words = [PAD, UNK] + words
+    words = [kPAD, kUNK] + words
     return words, word2ind, ind2word
 
 
-def vectorize(ex, word2ind):
+class QuestionDataset(Dataset):
     """
-    vectorize a single example based on the word2ind dict. 
-
-    Keyword arguments:
-    exs: list of input questions-type pairs
-    ex: tokenized question sentence (list)
-    label: type of question sentence
-
-    Output:  vectorized sentence(python list) and label(int)
-    e.g. ['text', 'test', 'is', 'fun'] -> [0, 2, 3, 4]
+    Pytorch data class for questions
     """
 
-    question_text, question_label = ex
-    vec_text = [0] * len(question_text)
-    #### modify the code to vectorize the question text
-    #### You should consider the out of vocab(OOV) cases
-    #### question_text is already tokenized
+    ###You don't need to change this funtion
+    def __init__(self, examples, word2ind, num_classes, class2ind=None):
+        self.questions = []
+        self.labels = []
 
-    
-
-    return vec_text, question_label
-
-
-class Question_Dataset(Dataset):
-    """
-    Pytorch data class for question classfication data
-    """
-
-    def __init__(self, examples, word2ind):
-        self.examples = examples
+        for qq, ll in examples:
+            self.questions.append(qq)
+            self.labels.append(ll)
+        
+        if type(self.labels[0])==str:
+            for i in range(len(self.labels)):
+                try:
+                    self.labels[i] = class2ind[self.labels[i]]
+                except:
+                    self.labels[i] = num_classes
         self.word2ind = word2ind
     
+    ###You don't need to change this funtion
     def __getitem__(self, index):
-        return vectorize(self.examples[index], self.word2ind)
+        return self.vectorize(self.questions[index], self.word2ind), \
+          self.labels[index]
     
+    ###You don't need to change this funtion
     def __len__(self):
-        return len(self.examples)
+        return len(self.questions)
 
+    @staticmethod
+    def vectorize(ex, word2ind):
+        """
+        vectorize a single example based on the word2ind dict. 
+        Keyword arguments:
+        exs: list of input questions-type pairs
+        ex: tokenized question sentence (list)
+        label: type of question sentence
+        Output:  vectorized sentence(python list) and label(int)
+        e.g. ['text', 'test', 'is', 'fun'] -> [0, 2, 3, 4]
+        """
+
+        vec_text = [0] * len(ex)
+
+        #### modify the code to vectorize the question text
+        #### You should consider the out of vocab(OOV) cases
+        #### question_text is already tokenized    
+        ####Your code here
+
+
+
+        return vec_text
+
+    
 ###You don't need to change this funtion
 
 def batchify(batch):
     """
     Gather a batch of individual examples into one batch, 
     which includes the question text, question length and labels 
-
     Keyword arguments:
     batch: list of outputs from vectorize function
     """
@@ -106,6 +137,7 @@ def batchify(batch):
     for ex in batch:
         question_len.append(len(ex[0]))
         label_list.append(ex[1])
+
     target_labels = torch.LongTensor(label_list)
     x1 = torch.LongTensor(len(question_len), max(question_len)).zero_()
     for i in range(len(question_len)):
@@ -119,7 +151,6 @@ def batchify(batch):
 def evaluate(data_loader, model, device):
     """
     evaluate the current model, get the accuracy for dev/test set
-
     Keyword arguments:
     data_loader: pytorch build-in data loader output
     model: model to be evaluated
@@ -133,6 +164,7 @@ def evaluate(data_loader, model, device):
         question_text = batch['text'].to(device)
         question_len = batch['len']
         labels = batch['labels']
+
         ####Your code here
 
         top_n, top_i = logits.topk(1)
@@ -146,7 +178,6 @@ def evaluate(data_loader, model, device):
 def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
     """
     Train the current model
-
     Keyword arguments:
     args: arguments 
     model: model to be trained
@@ -171,10 +202,9 @@ def train(args, model, train_data_loader, dev_data_loader, accuracy, device):
         labels = batch['labels']
 
         #### Your code here
+        
 
-
-
-        clip_grad_norm_(model.parameters(), args.grad_clipping)
+        clip_grad_norm_(model.parameters(), args.grad_clipping) 
         print_loss_total += loss.data.numpy()
         epoch_loss_total += loss.data.numpy()
 
@@ -197,7 +227,8 @@ class DanModel(nn.Module):
     architecture, saving, updating examples, and predicting examples.
     """
 
-    #### You don't need to change the parameters for the model
+    #### You don't need to change the parameters for the model for passing tests, might need to tinker to improve performance/handle
+    #### pretrained word embeddings/for your project code.
 
 
     def __init__(self, n_classes, vocab_size, emb_dim=50,
@@ -212,46 +243,62 @@ class DanModel(nn.Module):
         self.linear1 = nn.Linear(emb_dim, n_hidden_units)
         self.linear2 = nn.Linear(n_hidden_units, n_classes)
 
-        #### modify the init function, you need to add necessary layer definition here
-        #### note that linear1, linear2 are used for mlp layer
+        # Create the actual prediction framework for the DAN classifier.
+
+        # You'll need combine the two linear layers together, probably
+        # with the Sequential function.  The first linear layer takes
+        # word embeddings into the representation space, and the
+        # second linear layer makes the final prediction.  Other
+        # layers / functions to consider are Dropout, ReLU. 
+        # For test cases, the network we consider is - linear1 -> ReLU() -> Dropout(0.5) -> linear2
+
+        #### Your code here
+        
         
        
-
-
     def forward(self, input_text, text_len, is_prob=False):
         """
-        Model forward pass
+        Model forward pass, returns the logits of the predictions.
         
         Keyword arguments:
         input_text : vectorized question text 
         text_len : batch * 1, text length for each question
-        in_prob: if True, output the softmax of last layer
-
+        is_prob: if True, output the softmax of last layer
         """
-        #### write the forward funtion, the output is logits 
-        logits = None
+
+        logits = torch.LongTensor([0.0] * self.n_classes)
+
+        # Complete the forward funtion.  First look up the word embeddings.
+        
+        # Then average them 
+        
+        # Before feeding them through the network
+        
+
+        if is_prob:
+            logits = self._softmax(logits)
 
         return logits
 
 
 
-###You basically do not need to modify the below code 
-###But you may need to add funtions to support doing error analysis 
+# You basically do not need to modify the below code 
+# But you may need to add funtions to support error analysis 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Question Type')
     parser.add_argument('--no-cuda', action='store_true', default=True)
-    parser.add_argument('--train-file', type=str, default='./data/question_train_cl1.json')
-    parser.add_argument('--dev-file', type=str, default='./data/question_dev_cl1.json')
-    parser.add_argument('--test-file', type=str, default='./data/question_test_cl1.json')
-    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--train-file', type=str, default='../qanta.train.json')
+    parser.add_argument('--dev-file', type=str, default='../qanta.dev.json')
+    parser.add_argument('--test-file', type=str, default='../qanta.test.json')
+    parser.add_argument('--batch-size', type=int, default=128)
     parser.add_argument('--num-epochs', type=int, default=20)
     parser.add_argument('--grad-clipping', type=int, default=5)
     parser.add_argument('--resume', action='store_true', default=False)
     parser.add_argument('--test', action='store_true', default=False)
     parser.add_argument('--save-model', type=str, default='q_type.pt')
     parser.add_argument('--load-model', type=str, default='q_type.pt')
-    parser.add_argument('--num-classes', type=int, default=3)
+    parser.add_argument("--limit", help="Number of training documents", type=int, default=-1, required=False)
     parser.add_argument('--checkpoint', type=int, default=50)
 
     args = parser.parse_args()
@@ -260,19 +307,25 @@ if __name__ == "__main__":
     device = torch.device("cuda" if args.cuda else "cpu")
 
     ### Load data
-    train_exs = load_data(args.train_file)
-    dev_exs = load_data(args.dev_file)
-    test_exs = load_data(args.test_file)
+    train_exs = load_data(args.train_file, args.limit)
+    dev_exs = load_data(args.dev_file, -1)
+    test_exs = load_data(args.test_file, -1)
 
     ### Create vocab
     voc, word2ind, ind2word = load_words(train_exs)
 
-    
+    #get num_classes from training + dev examples - this can then also be used as int value for those test class labels not seen in training+dev.
+    num_classes = len(list(set([ex[1] for ex in train_exs+dev_exs])))
+
+    print(num_classes)
+
+    #get class to int mapping
+    class2ind, ind2class = class_labels(train_exs + dev_exs)  
 
     if args.test:
         model = torch.load(args.load_model)
         #### Load batchifed dataset
-        test_dataset = Question_Dataset(test_exs, word2ind)
+        test_dataset = QuestionDataset(test_exs, word2ind, num_classes, class2ind)
         test_sampler = torch.utils.data.sampler.SequentialSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size,
                                                sampler=test_sampler, num_workers=0,
@@ -282,14 +335,14 @@ if __name__ == "__main__":
         if args.resume:
             model = torch.load(args.load_model)
         else:
-            model = DanModel(args.num_classes, len(voc))
+            model = DanModel(num_classes, len(voc))
             model.to(device)
         print(model)
         #### Load batchifed dataset
-        train_dataset = Question_Dataset(train_exs, word2ind)
+        train_dataset = QuestionDataset(train_exs, word2ind, num_classes, class2ind)
         train_sampler = torch.utils.data.sampler.RandomSampler(train_dataset)
 
-        dev_dataset = Question_Dataset(dev_exs, word2ind)
+        dev_dataset = QuestionDataset(dev_exs, word2ind, num_classes, class2ind)
         dev_sampler = torch.utils.data.sampler.SequentialSampler(dev_dataset)
         dev_loader = torch.utils.data.DataLoader(dev_dataset, batch_size=args.batch_size,
                                                sampler=dev_sampler, num_workers=0,
@@ -303,7 +356,7 @@ if __name__ == "__main__":
             accuracy = train(args, model, train_loader, dev_loader, accuracy, device)
         print('start testing:\n')
 
-        test_dataset = Question_Dataset(test_exs, word2ind)
+        test_dataset = QuestionDataset(test_exs, word2ind, num_classes, class2ind)
         test_sampler = torch.utils.data.sampler.SequentialSampler(test_dataset)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size,
                                                sampler=test_sampler, num_workers=0,

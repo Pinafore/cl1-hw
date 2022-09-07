@@ -1,7 +1,7 @@
 Deep Learning 
 =
 
-Due: 12. October (23:55)
+Due: 8 March 2019 (23:55)
 
 
 Overview
@@ -13,8 +13,7 @@ framework, but they work well for a variety of tasks and will help
 introduce some of the core concepts of using deep learning in
 practice.
 
-In this homework, you'll use pytorch to implement a DAN classifier for determining which category the quiz-bowl question is 
-talking about (Literature, History or Science).
+In this homework, you'll use pytorch to implement a DAN classifier for determining the answer to a quizbowl question (a minor switch on lines 41-42 allows change to the much simpler task of predicting the category of a quizbowl question). 
 
 You'll turn in your code on the submit server. This assignment is worth 40 points.
 
@@ -38,15 +37,15 @@ For data loader, there includes two functions, batichfy and vectorize. For each 
 What you have to do
 ----------------
 
-Coding:
+Coding: (35 points)
 1. Understand the structure of the code.
 2. Write the data vectorize funtion.
 3. Write DAN model initialization. 
 4. Write model forward function.
 5. Write the model training/testing function. We don't have unit test for this part, but to get reasonable performance, it's necessary to get it correct.
 
-Analysis:
-1. Report the accuracy of test set. (It would get around 0.8 accuracy)
+Analysis: (5 points)
+1. Report the accuracy of test set. (Should easily get above 0.8 for category prediction, answer prediction is trickier but please report the things you tried)
 2. Look at the dev set, give some examples and explain the possible reasons why these examples are predicted incorrectly. 
 
 
@@ -67,7 +66,7 @@ https://pytorch.org/get-started/locally/
 Extra Credit
 ----------------
 
-For extra credit, you need to initialize the word representations with word2vec,
+(Please code extra credit part separately, not for submission to submit server) For extra credit, you need to initialize the word representations with word2vec,
 GloVe, or some other representation.  Compare the final performance
 based on these initializations *and* see how the word representations
 change. Write down your findings in analysis.pdf.
@@ -82,8 +81,4 @@ What to turn in
     
     Include your name at the top of the pdf
 
-
-GPUs
-----------------
-In this homework, we don't use GPUs, the training is fast enough for CPU based code.
 

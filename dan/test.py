@@ -1,5 +1,5 @@
 import unittest
-from dan import DanModel, vectorize
+from dan import DanModel, QuestionDataset
 import numpy as np
 import torch
 import torch.nn as nn
@@ -79,15 +79,15 @@ class TestSequenceFunctions(unittest.TestCase):
         word2ind = {'text': 0, '<unk>': 1, 'test': 2, 'is': 3, 'fun': 4, 'check': 5, 'vector': 6, 'correct': 7}
         lb = 1
         text1 = ['text', 'test', 'is', 'fun']
-        ex1 = text1, lb
-        vec_text, _ = vectorize(ex1, word2ind)
+        ex1 = text1
+        vec_text = QuestionDataset.vectorize(ex1, word2ind)
         self.assertEqual(vec_text[0], 0)
         self.assertEqual(vec_text[1], 2)
         self.assertEqual(vec_text[2], 3)
         self.assertEqual(vec_text[3], 4)
         text2 = ['check', 'vector', 'correct', 'hahaha']
-        ex2 = text2, lb
-        vec_text, _ = vectorize(ex2, word2ind)
+        ex2 = text2
+        vec_text = QuestionDataset.vectorize(ex2, word2ind)
         self.assertEqual(vec_text[0], 5)
         self.assertEqual(vec_text[1], 6)
         self.assertEqual(vec_text[2], 7)
