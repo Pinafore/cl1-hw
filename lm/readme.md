@@ -1,8 +1,6 @@
 Language Models
 =
 
-Due: 28. September
-
 As always, check out the Github repository with the course homework templates:
 
 http://github.com/ezubaric/cl1-hw.git
