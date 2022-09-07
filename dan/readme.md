@@ -1,9 +1,6 @@
 Deep Learning 
 =
 
-Due: 8 March 2019 (23:55)
-
-
 Overview
 --------
 
@@ -44,7 +41,7 @@ Coding: (35 points)
 4. Write model forward function.
 5. Write the model training/testing function. We don't have unit test for this part, but to get reasonable performance, it's necessary to get it correct.
 
-Analysis: (5 points)
+Analysis: (10 points)
 1. Report the accuracy of test set. (Should easily get above 0.8 for category prediction, answer prediction is trickier but please report the things you tried)
 2. Look at the dev set, give some examples and explain the possible reasons why these examples are predicted incorrectly. 
 
@@ -80,5 +77,3 @@ What to turn in
     No more than one page 
     
     Include your name at the top of the pdf
-
-
