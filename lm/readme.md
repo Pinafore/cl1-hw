@@ -49,3 +49,10 @@ Extra Credit (make sure they don't screw up required code / functions that will 
 * _kneser\_ney_: Use discounting and prefixes with discount parameter $\delta$ and concentration parameter alpha to implement interpolated Kneser-Ney.
 * Implement a function to produce English-looking output (return an iterator or list) from your language model (function called _sample_)
 * Make the code really efficient for reading in sequences of characters
+
+FAQ
+--------
+
+*Q: What if the counts of <s> and </s> fall below the threshold?*
+
+A: They should always be included in the vocabulary.
