@@ -1,8 +1,6 @@
 Topic Modeling
 =
 
-Due: 19. October (23:55)
-
 As always, check out the Github repository with the course homework templates:
 
 http://github.com/ezubaric/cl1-hw.git
@@ -10,7 +8,6 @@ http://github.com/ezubaric/cl1-hw.git
 The code for this homework is in the _lda_ directory.  
 
 This homework is about unsupervised clustering. You’ll complete an implementation of latent Dirichlet allocation and run it on real data, discovering clusters of documents in Wikipedia. While there’s not much programming you have to do for this assignment (probably less than 10 lines of code), it depends on understanding the rest of the code around it. Don’t leave it until the last minute.
-
 
 
 Implementing a Gibbs Sampler (20 points)
