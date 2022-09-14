@@ -53,6 +53,6 @@ Extra Credit (make sure they don't screw up required code / functions that will 
 FAQ
 --------
 
-*Q: What if the counts of <s> and </s> fall below the threshold?*
+*Q: What if the counts of \<s\> and \<\/s\> fall below the threshold?*
 
 A: They should always be included in the vocabulary.
