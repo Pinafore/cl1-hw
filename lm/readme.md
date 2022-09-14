@@ -52,7 +52,18 @@ Extra Credit (make sure they don't screw up required code / functions that will 
 
 FAQ
 --------
+*Q: Why are there two passes over the data?*
+
+A: The first pass establishes the vocabulary, the second pass accumulates the counts.  You could in theory do it in one pass, but it gets much more complicated.
 
 *Q: What if the counts of \<s\> and \<\/s\> fall below the threshold?*
 
 A: They should always be included in the vocabulary.
+
+*Q: What happens when I try to take the log of zero?*
+
+A: Return kNEG\_INF instead.
+
+*Q: Do I tune the hyperparameters for interpolation, discount, etc.?*
+
+A: No, that's not part of this assignment.
