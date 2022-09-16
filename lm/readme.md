@@ -60,6 +60,10 @@ A: The first pass establishes the vocabulary, the second pass accumulates the co
 
 A: They should always be included in the vocabulary.
 
+*Q: And what about words that fall below the threshold?*
+
+A: They must also be represented, so the vocab size will be the number of tokens at or above the UNK threshold plus three (one for UNK, one for START, and one for END).  
+
 *Q: What happens when I try to take the log of zero?*
 
 A: Return kNEG\_INF instead.
