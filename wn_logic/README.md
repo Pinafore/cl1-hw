@@ -23,9 +23,13 @@ How to Ask Questions
 You'll have to ask questions in a logical form.  For full generality, you'll be able to pose questions in Conjunctive Normal Form (CNF).  The basic building blocks of a CNF are an OR of individual predicates in a clause.  All of the clauses are combined by an AND.
 
 > If your thesis is utterly vacuous
+> 
 > Use first-order prediate calculus
+> 
 > With sufficient formality
+> 
 > The sheerest banality
+> 
 > Will be hailed by the critics: "Miraulous!"
 
 
