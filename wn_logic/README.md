@@ -1,4 +1,7 @@
+Overview
+=======
 
+In this homework you'll use logic to search for a hidden concept.
 
 What the Homework is About
 =====================
@@ -41,7 +44,45 @@ We express the statement as a list of lists.  Each inner list is a clause, and t
 
     oracle.cnf_eval([["hypernyms", "hypernyms"], ["part_meronyms"]], [[wn.synset("dog.n.01"), wn.synset("cat.n.01"))], [wn.synset('flag.n.07')]])
     
-While this is very flexible, it's a little cumbersome.  So you can also use the functions ``for_all`` and ``there_exists`` to check whether 
+While this is very flexible, it's a little cumbersome.  So you can
+also use the functions ``for_all`` and ``there_exists`` to check
+whether a particular set of synsets or lemmas have a specificed
+connection to the mystery concept.
+
+What you have to do
+==============
+
+I've implemented a really inefficient depth-first search to find the
+target synset.  Clearly, this is a really bad way to do it.  On the
+version of WN on my computer, this took over 18000 steps to get to the
+solution.
+
+        self.check_lemma(oracle, wn.synset('entity.n.01'))
+
+        while not any(self._searched.values()):
+            previously_searched = list(self._searched.keys())
+            for parent in previously_searched:
+                for candidate in parent.hyponyms():
+                    if not candidate in self._searched:
+                        self.check_lemma(oracle, candidate)
+						
+You will need to replace this code to make the code get to the goal
+concept more quickly.
+
+How is Homework Graded
+==================
+
+This homework is worth 40 points.
+
+Unlike other homeworks, where you need to implement some basic
+functionality, you need to make the code faster.  This homework will
+also have a leaderboard to compare your efficiency to other students.
+
+You can get extra points by doing particularly well compared to other
+students.
+
+If you can find the goal concept in under 100 steps, you will get full
+credit for the assignment.
 
 What's the best question to ask?
 ================================

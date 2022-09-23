@@ -3,6 +3,9 @@
 # Homework Template: A bad searcher that tries to find a target synset in WordNet
 
 from nltk.corpus import wordnet as wn
+from nltk.corpus.reader.wordnet import Synset
+
+from wn_eval import Oracle
 
 class Searcher:
     """
@@ -14,7 +17,7 @@ class Searcher:
         # Feel free to add your own data members
         self._searched = {}
 
-    def check_lemma(self, oracle, candidate):
+    def check_lemma(self, oracle: Oracle, candidate: Synset) -> bool:
         """
         Convenience method to check whether two synsets are the same by seeing if the oracle matches a lemma of this synset.
         
@@ -25,8 +28,9 @@ class Searcher:
         print("Searching %s" % str(candidate))        
         lemma = candidate.lemmas()[0]
         self._searched[candidate] = oracle.there_exists('lemmas', [lemma])
+        return self._searched[candidate]
         
-    def __call__(self, oracle):
+    def __call__(self, oracle: Oracle) -> Synset:
         """
         Given an oracle, return the synset that the oracle has as its target.
         
@@ -53,8 +57,6 @@ class Searcher:
         return found
 
 if __name__ == "__main__":
-    from wn_eval import Oracle
-
     oracle = Oracle(wn.synset('dog.n.01'))
 
     searcher = Searcher()

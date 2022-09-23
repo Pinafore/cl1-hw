@@ -1,15 +1,19 @@
 from nltk.corpus import wordnet as wn
+from nltk.corpus.reader.wordnet import Synset
+from nltk.corpus.reader.wordnet import Lemma
+
+from typing import Union
 
 class Oracle:
-    def __init__(self, synset):
+    def __init__(self, synset: Synset):
         self._num_queries = 0
 
         self._synset = synset
 
-    def num_queries(self):
+    def num_queries(self) -> int:
         return self._num_queries
         
-    def for_all(self, relationship, arguments):
+    def for_all(self, relationship: list[list[str]], arguments: list[list[Union[Synset, Lemma]]]) -> bool:
         self._num_queries += 1
 
         relationship_handle = getattr(self._synset, relationship)
@@ -17,7 +21,7 @@ class Oracle:
 
         return all(x in result for x in arguments)
 
-    def there_exists(self, relationship, arguments):
+    def there_exists(self, relationship: str, arguments: list[Union[Synset, Lemma]]) -> bool:
         self._num_queries += 1
 
         relationship_handle = getattr(self._synset, relationship)
@@ -25,7 +29,7 @@ class Oracle:
 
         return any(x in result for x in arguments)
 
-    def cnf_eval(self, relationships, arguments):
+    def cnf_eval(self, relationships: str, arguments: list[Union[Synset, Lemma]]) -> bool:
         self._num_queries += 1
 
         final = True
