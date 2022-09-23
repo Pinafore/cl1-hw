@@ -30,8 +30,10 @@ Analysis (15 points):
 
 1. What is the role of the learning rate?
 2. How many passes over the data do you need to complete for the *model* to stabilize?  The various metrics can give you clues about what the model is doing, but no one metric is perfect.
-3. What words are the best predictors of each class?  How (mathematically) did you find them?
-4. What words are the poorest predictors of classes?  How (mathematically) did you find them?
+3. Pretend you need to explain to your boss what features you use to
+   discover a post is about baseball or hockey.  How would you answer
+   this question? What words are the best predictors of each class?  How (mathematically) did you find them?
+4. What words aren't good predictors of either class?  How (mathematically) did you find them?
 
 Extra credit:
 
@@ -313,6 +315,10 @@ Hints
     datasets first (I've provided _toy text_ in the data directory to get you started).
 1.  Certainly make sure that you do the unregularized version first
     and get it to work well.
-1.  Use numpy functions whenever you can to make the computation faster.
+1.  Use numpy functions whenever you can to make the computation
+    faster.
+1.  For the tf-idf extra credit, use the vocab file: the second
+    element is the document frequency.  This requires you to modify
+    the ``read_dataset`` function.
 
 
