@@ -41,7 +41,7 @@ We express the statement as a list of lists.  Each inner list is a clause, and t
 
     oracle.cnf_eval([["hypernyms", "hypernyms"], ["part_meronyms"]], [[wn.synset("dog.n.01"), wn.synset("cat.n.01"))], [wn.synset('flag.n.07')]])
     
-While this is very flexible, it's a little cumbersome.  So you can also use the functions ``for_all`` and ``there_exists`` to check whether 
+While this is very flexible, it's a little cumbersome.  So you can also use the functions ``for\_all`` and ``there\_exists`` to check whether 
 
 What's the best question to ask?
 ================================
@@ -58,6 +58,6 @@ FAQ
 
 *Q: Can't I just look at the synset?*
 
-~A: We haven't mangled the synset member of the oracle, but because you have to turn in your code, we will verify that you're not using the synset in your search algorithm.~
+_A: We haven't mangled the synset member of the oracle, but because you have to turn in your code, we will verify that you're not using the synset in your search algorithm._
 
 
