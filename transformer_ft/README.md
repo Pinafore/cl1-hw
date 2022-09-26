@@ -29,7 +29,7 @@ Extra credit:
     - You cannot change the base model
     - You can add more data or change the encoding / tokenization 
     - Show the effect in your analysis document
-1.  Investigate predicting the page (the Wikipedia page associated with the answer).  You will want to restrict the number of possible answers, but always evaluate against the whole set (e.g., use an UNK label for the pages you exclude).
+1.  Investigate predicting the page (the Wikipedia page associated with the answer).  You will want to restrict the number of possible answers, but always evaluate against the whole set (e.g., use an UNK label for the pages you exclude).  Show the results of your exploration in the writeup.
 1.  Visualize the attention weights for examples you got wrong and explain what went wrong (these visualizations don't count against the page limit)
     
 Caution: When implementing extra credit, make sure your implementation of the
