@@ -13,7 +13,7 @@ class Oracle:
     def num_queries(self) -> int:
         return self._num_queries
         
-    def for_all(self, relationship: list[list[str]], arguments: list[list[Union[Synset, Lemma]]]) -> bool:
+    def for_all(self, relationship: 'list[list[str]]', arguments: 'list[list[Union[Synset, Lemma]]]') -> bool:
         self._num_queries += 1
 
         relationship_handle = getattr(self._synset, relationship)
@@ -21,7 +21,7 @@ class Oracle:
 
         return all(x in result for x in arguments)
 
-    def there_exists(self, relationship: str, arguments: list[Union[Synset, Lemma]]) -> bool:
+    def there_exists(self, relationship: str, arguments: 'list[Union[Synset, Lemma]]') -> bool:
         self._num_queries += 1
 
         relationship_handle = getattr(self._synset, relationship)
@@ -29,7 +29,7 @@ class Oracle:
 
         return any(x in result for x in arguments)
 
-    def cnf_eval(self, relationships: str, arguments: list[Union[Synset, Lemma]]) -> bool:
+    def cnf_eval(self, relationships: str, arguments: 'list[Union[Synset, Lemma]]') -> bool:
         self._num_queries += 1
 
         final = True
@@ -68,3 +68,4 @@ if __name__ == "__main__":
     print("Does a dog belong in a pack or a flock and have a poofy tail and is a president of the US?")
     print(dog_oracle.cnf_eval(relationships, arguments))
                         
+
