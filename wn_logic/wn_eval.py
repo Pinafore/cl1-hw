@@ -1,3 +1,6 @@
+import nltk
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset
 from nltk.corpus.reader.wordnet import Lemma
