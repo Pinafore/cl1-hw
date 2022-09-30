@@ -77,11 +77,13 @@ This homework is worth 40 points.
 Unlike other homeworks, where you need to implement some basic
 functionality, you need to make the code faster.  This homework will
 also have a leaderboard to compare your efficiency to other students.
+We will run the searcher on several synets to test the average
+performance of your algorithm.
 
 You can get extra points by doing particularly well compared to other
 students.
 
-If you can find the goal concept in under 100 steps, you will get full
+If you can find the goal concept in under 100 steps when running 'wn_search.py' file, you will get full
 credit for the assignment.
 
 What's the best question to ask?
