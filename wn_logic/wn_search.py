@@ -1,11 +1,15 @@
 # Author: Jordan Boyd-Graber
 # Date: 22. Sept 2022
 # Homework Template: A bad searcher that tries to find a target synset in WordNet
-
+import nltk
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset
-
+from nltk.corpus.reader.wordnet import Lemma
 from wn_eval import Oracle
+from typing import Union
+
 
 class Searcher:
     """
@@ -25,7 +29,7 @@ class Searcher:
         oracle -- The oracle that can check whether the candidate matches
         candidate -- The synset to check
         """
-        print("Searching %s" % str(candidate))        
+        # print("Searching %s" % str(candidate))        
         lemma = candidate.lemmas()[0]
         self._searched[candidate] = oracle.there_exists('lemmas', [lemma])
         return self._searched[candidate]
@@ -44,14 +48,20 @@ class Searcher:
         # Start at the top, go breadth first
         self.check_lemma(oracle, wn.synset('entity.n.01'))
 
+
+        i = 1
         while not any(self._searched.values()):
             previously_searched = list(self._searched.keys())
             for parent in previously_searched:
                 for candidate in parent.hyponyms():
                     if not candidate in self._searched:
                         self.check_lemma(oracle, candidate)
+                        i += 1
+
+        # print('this many iterations {}'.format(i))
         # ---------------------------------------
-        assert any(self._searched.values()), "Searched all of WN without finding it!"
+        # assert any(self._searched.values()), "Searched all of WN without finding it!"
+        self._searched.values()
         found = [x for x in self._searched if self._searched[x]][0]
 
         return found
@@ -63,5 +73,3 @@ if __name__ == "__main__":
     print("Search result is:")
     print(searcher(oracle))
     print("Took %i steps to get there" % oracle.num_queries())
-        
-        
