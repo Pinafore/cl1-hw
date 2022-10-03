@@ -60,7 +60,7 @@ class Searcher:
 
         # print('ran {} iterations'.format(i))
         # ---------------------------------------
-        # assert any(self._searched.values()), "Searched all of WN without finding it!"
+        assert any(self._searched.values()), "Searched all of WN without finding it!"
         self._searched.values()
         found = [x for x in self._searched if self._searched[x]][0]
 
