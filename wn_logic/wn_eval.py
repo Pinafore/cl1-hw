@@ -15,6 +15,18 @@ class Oracle:
 
     def num_queries(self) -> int:
         return self._num_queries
+
+    def check(self, target: Synset):
+        """
+        Given a query, see if it's the same synset as the goal.
+        Returns true if it's a match (based on offset ID).
+
+        Keyword Arguments:
+        target -- The synset to check
+        """
+        self._num_queries += 1
+
+        return self._synset.offset() == target.offset()
         
     def for_all(self, relationship: 'list[list[str]]', arguments: 'list[list[Union[Synset, Lemma]]]') -> bool:
         self._num_queries += 1
