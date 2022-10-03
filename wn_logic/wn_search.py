@@ -58,7 +58,7 @@ class Searcher:
                         self.check_lemma(oracle, candidate)
                         i += 1
 
-        # print('this many iterations {}'.format(i))
+        # print('ran {} iterations'.format(i))
         # ---------------------------------------
         # assert any(self._searched.values()), "Searched all of WN without finding it!"
         self._searched.values()
