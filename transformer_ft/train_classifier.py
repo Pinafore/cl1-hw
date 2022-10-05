@@ -17,7 +17,11 @@ kUNK = "~UNK~"
 
 def accuracy(eval_pred):
     """
-    Compute accuracy for the classification task using the load_metric function.
+    Compute accuracy for the classification task using the
+    load_metric function.  This function is needed for the
+    compute_metrics argument of the Trainer.
+
+    You shouldn't need to modify this function.
 
     Keyword args:
     eval_pred -- Output from a classifier with the logits and labels.
@@ -53,6 +57,9 @@ class DatasetTrainer:
         """
         self._dataset = load_dataset("qanta", 'mode=full,char_skip=25')
 
+        # TODO: Modify the dataset so that you can predict with the
+        # column you want on a subset of the data.
+        
         # Build the label set
 
 
@@ -62,6 +69,8 @@ class DatasetTrainer:
     def tokenize_data(self):
         """
         Tokenize our data so that it's ready for BERT.
+
+        You should not need to modify this function.
         """
         tokenizer = AutoTokenizer.from_pretrained("distilbert-base-cased")
         tokenize_function = lambda x: tokenizer(x["full_question"], padding="max_length", truncation=True)

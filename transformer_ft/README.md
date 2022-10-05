@@ -15,7 +15,7 @@ What you have to do
 Coding (30 points):
 
 1. Understand how the code is grabbing a model and data from huggingface
-2. Turn one of the columns from the dataset into a label and limit how much data you read in.  *You should really implement this first, as otherwise your debugging process will be really slow.  Please take this advice from me, who wrote the solution much more slowly as a result because I 
+2. Turn one of the columns from the dataset into a label and limit how much data you read in.  *You should really implement this first, as otherwise your debugging process will be really slow.  Please take this advice from me, who wrote the solution much more slowly as a result because I thought: "It's just reading in some data; I can't screw that up, right?  Save yourself an hour and implement that limit keyword argument first thing.*
 3. Finetune a classifier on that prediction task
 3. Modify the _sg update_ function to perform non-regularized updates.
 
