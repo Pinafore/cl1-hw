@@ -51,7 +51,7 @@ _A.  Yes._
 
 *Q.  Loading the data from Huggingface gives me a dictionary, what's up with that?*
 
-_A.  There's a separate Huggingface Dataset for each fold, and the QANTA dataset has a bunch of folds for training different aspects of the system.  You can get more complicated, but just train on ``guesstrain`` and evaluate on ``guessdev`` to get started.
+_A.  There's a separate Huggingface Dataset for each fold, and the QANTA dataset has a bunch of folds for training different aspects of the system.  You can get more complicated, but just train on ``guesstrain`` and evaluate on ``guessdev`` to get started._
 
 *Q.  I'm really at a loss of where to start.  Can you give a hint which functions we should use?*
 
