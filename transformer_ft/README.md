@@ -17,7 +17,7 @@ Coding (30 points):
 1. Understand how the code is grabbing a model and data from huggingface
 2. Turn one of the columns from the dataset into a label and limit how much data you read in.  *You should really implement this first, as otherwise your debugging process will be really slow.  Please take this advice from me, who wrote the solution much more slowly as a result because I thought: "It's just reading in some data; I can't screw that up, right?  Save yourself an hour and implement that limit keyword argument first thing.*
 3. Finetune a classifier on that prediction task
-3. Modify the _sg update_ function to perform non-regularized updates.
+3. Write code to record how well your model is doing.
 
 Analysis (5 points):
 
@@ -27,7 +27,7 @@ Extra credit:
 
 1. Improve the accuracy
     - You cannot change the base model
-    - You can add more data or change the encoding / tokenization 
+    - You can add more data (beyond the QANTA datset) or change the encoding / tokenization 
     - Show the effect in your analysis document
 1.  Investigate predicting the page (the Wikipedia page associated with the answer).  You will want to restrict the number of possible answers, but always evaluate against the whole set (e.g., use an UNK label for the pages you exclude).  Show the results of your exploration in the writeup.
 1.  Visualize the attention weights for examples you got wrong and explain what went wrong (these visualizations don't count against the page limit)
