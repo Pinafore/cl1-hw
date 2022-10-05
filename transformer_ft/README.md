@@ -15,7 +15,7 @@ What you have to do
 Coding (30 points):
 
 1. Understand how the code is grabbing a model and data from huggingface
-2. Turn one of the columns from the dataset into a label and limit how much data you read in.  *You should really implement this first, as otherwise your debugging process will be really slow.  Please take this advice from me, who wrote the solution much more slowly as a result because I thought: "It's just reading in some data; I can't screw that up, right?  Save yourself an hour and implement that limit keyword argument first thing.*
+2. Turn one of the columns from the dataset into a label and limit how much data you read in.  **You should really implement this first, as otherwise your debugging process will be really slow.  Please take this advice from me, who wrote the solution much more slowly as a result because I thought: "It's just reading in some data; I can't screw that up, right?  Save yourself an hour and implement that limit keyword argument first thing.**
 3. Finetune a classifier on that prediction task
 3. Write code to record how well your model is doing.
 
@@ -45,34 +45,34 @@ What to turn in
 Hints
 -
 
-*Q.  This homework is just looking up documentation from HuggingFace and StackOverflow and doesn't have any of the clever dynamic programming we did before.  Is this representative of NLP Research today?*
+**Q.  This homework is just looking up documentation from HuggingFace and StackOverflow and doesn't have any of the clever dynamic programming we did before.  Is this representative of NLP Research today?**
 
 _A.  Yes._
 
-*Q.  Loading the data from Huggingface gives me a dictionary, what's up with that?*
+**Q.  Loading the data from Huggingface gives me a dictionary, what's up with that?**
 
 _A.  There's a separate Huggingface Dataset for each fold, and the QANTA dataset has a bunch of folds for training different aspects of the system.  You can get more complicated, but just train on ``guesstrain`` and evaluate on ``guessdev`` to get started._
 
-*Q.  I'm really at a loss of where to start.  Can you give a hint which functions we should use?*
+**Q.  I'm really at a loss of where to start.  Can you give a hint which functions we should use?**
 
 _A.  Look at the imports._
 
-*Q.  Can we use other training data?*
+**Q.  Can we use other training data?**
 
 _A. You can use any data you'd like except for the data from a fold that ends in "dev" or "test"._
 
-*Q.  Can I use the category feature in the input?*
+**Q.  Can I use the category feature in the input?**
 
 _A.  No, you cannot use ``category`` or ``subcategory`` as part of the training data (but of course you can use it as a label)._
 
-*Q.  Can I use a different base model?*
+**Q.  Can I use a different base model?**
 
 _A.  In the interest of fairness (not everyone has a beefy compute), you can't change the underlying model.  Also, Gradescope only accepts uploads of a given size._
 
-*Q. What if I get a ``IndexError`` while training the model?
+**Q. What if I get a ``IndexError`` while training the model?**
 
 _A. This probably means that you didn't specify all of the labels you'd see; perhaps increase your training size slightly (or remove filters)._
 
-*Q. What if I get a wrong type error?*
+**Q. What if I get a wrong type error?**
 
 _A.  This suggests that you didn't set up the label in the datatype that the model is expecting.  Take a look at ``class_encode_column``.
