@@ -34,14 +34,14 @@ For data loader, there includes two functions, batichfy and vectorize. For each 
 What you have to do
 ----------------
 
-Coding: (35 points)
+Coding: (28 points)
 1. Understand the structure of the code.
 2. Write the data vectorize funtion.
 3. Write DAN model initialization. 
 4. Write model forward function.
 5. Write the model training/testing function. We don't have unit test for this part, but to get reasonable performance, it's necessary to get it correct.
 
-Analysis: (10 points)
+Analysis: (12 points)
 1. Report the accuracy of test set. (Should easily get above 0.8 for category prediction, answer prediction is trickier but please report the things you tried)
 2. Look at the dev set, give some examples and explain the possible reasons why these examples are predicted incorrectly. 
 
@@ -60,7 +60,7 @@ If you are using macos or windows, check the pytorch website for installation
 For more information, check
 https://pytorch.org/get-started/locally/
 
-Extra Credit
+Extra Credit (4 points)
 ----------------
 
 (Please code extra credit part separately, not for submission to submit server) For extra credit, you need to initialize the word representations with word2vec,
@@ -71,8 +71,8 @@ change. Write down your findings in analysis.pdf.
 What to turn in 
 ----------------
 
-1. Submit your dan.py file
-2. Submit your analysis.pdf file 
+1. Submit your dan.py file (DAN)
+2. Submit your analysis.pdf file to (DAN Analysis)
 
     No more than one page 
     
