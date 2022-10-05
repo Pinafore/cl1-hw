@@ -75,4 +75,4 @@ _A. This probably means that you didn't specify all of the labels you'd see; per
 
 **Q. What if I get a wrong type error?**
 
-_A.  This suggests that you didn't set up the label in the datatype that the model is expecting.  Take a look at ``class_encode_column``.
+_A.  This suggests that you didn't set up the label in the datatype that the model is expecting.  Take a look at ``class_encode_column``._
