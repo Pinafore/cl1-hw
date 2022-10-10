@@ -32,7 +32,7 @@ can see how the code will be called:
 0.0009114385538508279
 ```
 
-Shift-Reduce Parsers (40 points)
+Shift-Reduce Parsers (26 points)
 --------------------------------------
 
 Next, you'll create sequences of shift-reduce actions that can produce
