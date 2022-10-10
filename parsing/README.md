@@ -10,7 +10,7 @@ git://github.com/ezubaric/cl1-hw.git
 
 The code for this homework is in the parsing directory.
 
-Treebank Probabilities (5 points)
+Treebank Probabilities (4 points)
 --------------------------
 
 To warm up, you'll first compute PCFG probabilities from
@@ -32,7 +32,7 @@ can see how the code will be called:
 0.0009114385538508279
 ```
 
-Shift-Reduce Parsers (15 points)
+Shift-Reduce Parsers (40 points)
 --------------------------------------
 
 Next, you'll create sequences of shift-reduce actions that can produce
