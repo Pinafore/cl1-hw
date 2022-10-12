@@ -10,7 +10,7 @@ git://github.com/ezubaric/cl1-hw.git
 
 The code for this homework is in the parsing directory.
 
-Treebank Probabilities ( points)
+Treebank Probabilities (4 points)
 --------------------------
 
 To warm up, you'll first compute PCFG probabilities from
