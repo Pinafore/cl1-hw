@@ -16,6 +16,18 @@ held to a higher standard.  You must clearly document baselines and
 show improvement over those baselines.  You'll also need to convince
 us to make sure you clearly convey why it's an interesting problem.
 
+What Makes a Valid Project
+===========================
+
+You do not have to make a publishable piece of work.  It's fine to:
+* Replicate a technique that does not have published source code
+* Run an existing method on new data
+* Make a minor modification to existing work
+* Do a thorough analysis of existing work
+* Create a visualization or interface for existing work
+
+The bar is considerably lower than for a publication!
+
 Groups
 ==================
 
@@ -43,7 +55,7 @@ assignment.  (We'll create a thread for this you can add to as a followup.)
 First Deliverable
 ======================
 
-Your first deliverable is due 16. April.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
+Your first deliverable is due 1. December.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
 * You have your data
 * You've implemented baseline techniques that work
 * You've made some progress on the overall goal of your project
@@ -53,7 +65,7 @@ Post your first deliverable report publicly on Piazza.
 Final Presentation
 ======================
 
-The final presentation will be an eight minute video.  In the final presentation you will:
+The final presentation will be a poster session.  Your poster should:
 
 * Explain what you did
 
@@ -83,15 +95,11 @@ The final presentation will be an eight minute video.  In the final presentation
 * Presumably you did many different things; how did they each
   individually contribute to your final result?
 
-It is okay to go under time, but
-_do not_ go over time.  It will negatively impact your grade. 
-
-We'll treat this as a flipped classroom session (as usual).  You'll post your videos by May 9, we'll watch them before the last class, and then we'll ask questions.
 
 Project Writeup
 ======================
 
-By 10:00 13. May (the final exam time as set by the registrar), have the person in your group whose last name
+By 11:59 20. Dec (the final exam time as set by the registrar), have the person in your group whose last name
 is alphabetically last submit their project writeup explaining what
 you did and what results you achieved on GradeScope.  This document should
 make it clear:
