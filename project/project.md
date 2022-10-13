@@ -19,7 +19,7 @@ us to make sure you clearly convey why it's an interesting problem.
 Groups
 ==================
 
-You must form a group of 4-6 students enrolled in this course.  If you have a project idea and you're not able to convince two other people to work on it, it's probably not that interesting.  You should instead join another group.  
+You must form a group of 3-6 students enrolled in this course.  If you have a project idea and you're not able to convince two other people to work on it, it's probably not that interesting.  You should instead join another group.  
 
 Proposal
 ==================
