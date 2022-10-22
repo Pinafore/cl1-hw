@@ -27,6 +27,8 @@ def transition_sequence(sentence):
     Return the sequence of shift-reduce actions that reconstructs the input sentence.
     """
 
+    # You'll need to modify this code, but the code currently here does produce a tree.  Think about what this returns; it's going to create a very linear tree.  This is obviously incorrect, so you must edit the code to produce a real tree that actually recreates the desired tree.
+    
     sentence_length = len(sentence.nodes)
     for ii in range(sentence_length - 1):
         yield Transition('s')
