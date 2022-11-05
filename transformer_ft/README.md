@@ -23,14 +23,14 @@ Analysis (5 points):
 
 1. What is the accuracy of the model as a function of the ammount of fine-tuning data?  Make sure to investigate with very little fine-tuning data.
 
-Extra credit:
+Extra credit (5 points):
 
-1. Improve the accuracy
+1. Improve the accuracy (3 points)
     - You cannot change the base model
     - You can add more data (beyond the QANTA datset) or change the encoding / tokenization 
     - Show the effect in your analysis document
-1.  Investigate predicting the page (the Wikipedia page associated with the answer).  You will want to restrict the number of possible answers, but always evaluate against the whole set (e.g., use an UNK label for the pages you exclude).  Show the results of your exploration in the writeup.
-1.  Visualize the attention weights for examples you got wrong and explain what went wrong (these visualizations don't count against the page limit)
+1.  Investigate predicting the page (the Wikipedia page associated with the answer).  You will want to restrict the number of possible answers, but always evaluate against the whole set (e.g., use an UNK label for the pages you exclude).  Show the results of your exploration in the writeup. (1 point)
+1.  Visualize the attention weights for examples you got wrong and explain what went wrong (these visualizations don't count against the page limit) (1 point)
     
 Caution: When implementing extra credit, make sure your implementation of the
 regular algorithms doesn't change.
