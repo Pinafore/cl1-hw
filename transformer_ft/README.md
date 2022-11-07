@@ -21,7 +21,7 @@ Coding (30 points):
 
 Analysis (5 points):
 
-1. What is the accuracy of the model as a function of the ammount of fine-tuning data?  Make sure to investigate with very little fine-tuning data.
+1. What is the accuracy of the model as a function of the amount of fine-tuning data?  Make sure to investigate with very little fine-tuning data.
 
 Extra credit (5 points):
 
