@@ -38,7 +38,7 @@ regular algorithms doesn't change.
 What to turn in
 -
 
-1. Submit your _train_classifier.py_ file and your saved finetuned model (include your name at the top of the source) 
+1. Submit your _train_classifier.py_ file (include your name at the top of the source) 
 1. Submit your _analysis.pdf_ file
     - no more than one page (NB: This is also for the extra credit.  To minimize effort for the grader, you'll need to put everything on a page.  
 
