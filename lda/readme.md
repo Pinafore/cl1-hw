@@ -23,7 +23,7 @@ After you’ve done these things, turn in your completed lda.py file on the subm
 
 Running on Real Data (10 Points)
 ----------------
-In the Github repo, there’s a directory called wiki. Run you topic model on this set of 400 random wikipedia pages and examine the topics. Upload your results as topics.txt. You’ll run to run it at least for 1000 iterations.
+In the Github repo, there’s a directory called wiki. Run you topic model on this set of 400 random wikipedia pages and examine the topics. Upload your results as topics.pdf. You’ll run to run it at least for 1000 iterations.
 
 
 Extra Credit (5 points)
