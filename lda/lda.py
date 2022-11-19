@@ -95,7 +95,7 @@ class VocabBuilder:
         """
         Return a list of the top words sorted by frequency.
         """
-        keys = list(self._counts.keys())
+        keys = list(self._counts)
         if len(self._counts) > self._cut_first + size:
             return keys[self._cut_first:(size + self._cut_first)]
         else:
