@@ -1,0 +1,5 @@
+gradescope-utils>=0.3.1
+nltk>=3.5
+numpy
+typing
+argparse
