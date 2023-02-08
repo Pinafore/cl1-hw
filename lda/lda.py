@@ -193,18 +193,12 @@ class LdaTopicCounts:
             handle.write("------------\nTopic %i (%i tokens)\n------------\n" % \
                       (kk, self._normalizer[kk]))
 
-            word = 0
-            for ww in self._topic_term[kk]:
+            for ww, freq in self._topic_term[kk].most_common(limit):
                 handle.write("%0.5f\t%0.5f\t%0.5f\t%s\n" % \
                              (self.word_in_topic(kk, ww),
                               self.get_observations(kk, ww),
                               self.get_prior(ww),
                               vocab[ww]))
-                      
-                word += 1
-                if word > limit:
-                    break
-
 
 class Sampler:
     def __init__(self, num_topics, vocab, alpha=0.1, beta=0.01, rand_stub=None):
