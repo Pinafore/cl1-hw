@@ -1,3 +1,4 @@
+# Alex Jian Zheng
 import random
 import math
 import torch
@@ -17,7 +18,7 @@ class SportsDataset(Dataset):
     def __init__(self, data):
         self.n_samples, self.n_features = data.shape
         # The first column is label, the rest are the features
-        self.n_features -= 1 
+        self.n_features -= 1
         self.feature = torch.from_numpy(data[:, 1:].astype(np.float32)) # size [n_samples, n_features]
         self.label = torch.from_numpy(data[:, [0]].astype(np.float32)) # size [n_samples, 1]
 
@@ -29,6 +30,11 @@ class SportsDataset(Dataset):
     def __len__(self):
         return self.n_samples
 
+def read_vocab(vocab_file):
+    vocab = [str(x).split("\t")[0] for x in vocab_file.readlines() if '\t' in x]
+    print("Loaded vocab with %i terms" % len(vocab))
+    return vocab
+    
 def read_dataset(positive, negative, vocab):
     """
     Create a pytorch SportsDataset for the train and test data.
@@ -38,19 +44,18 @@ def read_dataset(positive, negative, vocab):
     :param vocab: Vocabulary words file pointer
     """
 
-    # Below, we'll give you some code to get started because otherwise our test code will fail in ways that isn't very helpful.
-    # 
-    # Don't feel like you need to use this code if you have a better way of doing it (e.g., using sklearn), but you can use this if you want.
-    # 
-    # We'll need to allocate a matrix to store the data, but we can't start our matrix yet because we don't know the dimensions.
-    # So first, what are the number of documents?  You'll need to change the below line, since you can't assume
+    # You'll need to change the below line, since you can't assume
     # that you have five documents in your dataset.
     num_docs = 5
+    num_docs = len(positive.readlines()) + len(negative.readlines())       
+    positive.seek(0)                                                       
+    negative.seek(0)                                                       
+    vocab = read_vocab(vocab)
 
-    # But once you know the number of documents, you can create a matrix with the appropriate number of dimensions, which we'll call sportsdata.
-    sportsdata = zeros((num_docs, len(x for x in vocab.readlines())))
+    sportsdata = zeros((num_docs, len(vocab)))
     print("Created datasets with %i rows and %i columns" % (num_docs, len(vocab)))
-    
+
+
     return sportsdata
 
 class SimpleLogreg(nn.Module):
@@ -78,7 +83,16 @@ class SimpleLogreg(nn.Module):
             y_predicted_cls = y_predicted.round()
             acc = y_predicted_cls.eq(data.label).sum() / float(data.label.shape[0])
             return acc
-        
+
+    def inspect(self, vocab, limit=10):
+        """
+        A fundtion to find the top features and print them.
+        """
+
+        None
+        weights = logreg.linear.weight[0].detach().numpy()
+
+
 def step(epoch, ex, model, optimizer, criterion, inputs, labels):
     """Take a single step of the optimizer, we factored it into a single
     function so we could write tests.  You should: A) get predictions B)
@@ -99,7 +113,7 @@ def step(epoch, ex, model, optimizer, criterion, inputs, labels):
     if (ex+1) % 20 == 0:
       acc_train = model.evaluate(train)
       acc_test = model.evaluate(test)
-      print(f'Epoch: {epoch+1}/{num_epochs}, Example {ex}, loss = {loss.item():.4f}, train_acc = {acc_train.item():.4f} test_acc = {acc_test.item():.4f}')    
+      print(f'Epoch: {epoch+1}/{num_epochs}, Example {ex}, loss = {loss.item():.4f}, train_acc = {acc_train.item():.4f} test_acc = {acc_test.item():.4f}')
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
@@ -116,9 +130,9 @@ if __name__ == "__main__":
                            type=int, default=1)
     argparser.add_argument("--learnrate", help="Learning rate for SGD",
                            type=float, default=0.1)
-    
+
     args = argparser.parse_args()
-    
+
     sportsdata = read_dataset(open(args.positive), open(args.negative), open(args.vocab))
     train_np, test_np = train_test_split(sportsdata, test_size=0.15, random_state=1234)
     train, test = SportsDataset(train_np), SportsDataset(test_np)
@@ -127,7 +141,7 @@ if __name__ == "__main__":
 
     # Initialize model
     logreg = SimpleLogreg(train.n_features)
-    
+
     num_epochs = args.passes
     batch = args.batch
     total_samples = len(train)
@@ -148,3 +162,6 @@ if __name__ == "__main__":
         # Run your training process
         step(epoch, ex, logreg, optimizer, criterion, inputs, labels)
 
+    # Print out the best features
+    vocab = read_vocab(open(args.vocab))
+    logreg.inspect(vocab)
