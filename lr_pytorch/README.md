@@ -37,9 +37,9 @@ Coding (15 points):
    appropriate values.
 
    So let's take a look at example line:
-   ```
+```
 scot:1  much:1  news:1  one:1   original:1      people:1        pitching:1      pose:1  pretty:1        realize:1       really:1        remember:1      rock:1    rotation:1      same:1  season:1        set:1   shutouts:1      sig:1   since:1 staff:1 starter:1       teams:1 think:1 those:1 to:1    was:1   where:1   win:1   with:1  world:1 yes:1
-   ```
+```
 
 So the basic logic is that we need to:
 * Go over all of the words in this line
