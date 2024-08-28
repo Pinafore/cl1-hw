@@ -42,8 +42,8 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(self.ld.num_syllables("reluctant"), 3)
 
     def test_examples(self):
-
-
+        self.setUp()
+        a,b,c,d,e,f,g = ['\n'.join(test['lines']) for test in self.limerick_tests]
         self.assertEqual(self.ld.is_limerick(a), True)
         self.assertEqual(self.ld.is_limerick(b), False)
         self.assertEqual(self.ld.is_limerick(c), False)
