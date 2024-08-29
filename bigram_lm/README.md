@@ -7,7 +7,7 @@ http://github.com/ezubaric/cl1-hw.git
 
 The code for this homework is in the _bigram lm_ directory.  This assignment is worth 40 points.
 
-Preparing Data (Extra Credit)
+Preparing Data (Done for you, but extra credit opportunity)
 ---
  
 We will use the Brown corpus (nltk.corpus.brown) as our training set and the
@@ -24,7 +24,7 @@ corpus.  First, however, we need to prepare our corpus.
   use strings as your identifier (e.g., leaving inputs unchanged if they pass
   the threshold) or you can replace strings with integers (this will lead to a
   more efficient implementation).  The unit tests are engineered to accept
-  both options.
+  both options.  **Your extra credit opportunity is to change the token representation to integers.**
 * After you do this, then the finalize and censor functions should work (but
   you don't need to do anything).  But check that the appropriate unit tests
   are working correctly.
