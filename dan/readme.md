@@ -20,6 +20,16 @@ Dataset
 The data is sampled from quiz bowl bonus question. We tokenize the questuion and split them into train/dec/test set.
 Each example includes the question text and the label (0 for Literature, 1 for History and 2 for Science). 
 
+Toy Data
+-----------------
+
+```math
+  \begin{bmatrix} 
+    X \\ 
+    Y 
+  \end{bmatrix}
+```
+
 Pytorch data loader
 ----------------
 
