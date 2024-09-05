@@ -1,7 +1,7 @@
 import unittest
 from math import log
 
-from language_model import BigramLanguageModel, kLM_ORDER, \
+from bigram_lm import BigramLanguageModel, kLM_ORDER, \
     kUNK_CUTOFF, kNEG_INF, kSTART, kEND, lg
 
 
