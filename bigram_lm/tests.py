@@ -40,16 +40,16 @@ class TestSequenceFunctions(unittest.TestCase):
         self.lm.train_seen("c")
         self.lm.finalize()
 
-        censored_a = list(self.lm.tokenize_and_censor("a b d"))
-        censored_b = list(self.lm.tokenize_and_censor("d b a"))
-        censored_c = list(self.lm.tokenize_and_censor("a b d"))
-        censored_d = list(self.lm.tokenize_and_censor("b d a"))
+
+        censored_a = list(self.lm.censor(['a', 'b', 'd']))
+        censored_b = list(self.lm.censor(['d', 'b', 'a']))
+        censored_c = list(self.lm.censor(['a', 'b', 'd']))
+        censored_d = list(self.lm.censor(['b', 'd', 'a']))
 
         self.assertEqual(censored_a, censored_c)
         self.assertEqual(censored_b, censored_d)
 
         # Should add start and end tag
-        print("#".join(self.lm.tokenize("a b d")))
         print(censored_a)
         self.assertEqual(len(censored_a), 5)
         self.assertEqual(censored_a[0], censored_b[0])
@@ -61,7 +61,8 @@ class TestSequenceFunctions(unittest.TestCase):
         self.lm.train_seen("a", 300)
         self.lm.finalize()
 
-        self.lm.add_train("a a b")
+
+        self.lm.add_train(['a', 'a', 'b'])
 
         # Test MLE
         word_start = self.lm.vocab_lookup(kSTART)
