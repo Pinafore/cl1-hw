@@ -12,6 +12,12 @@ spoken in 'hVd' contexts.  The dataset has the following vowels:
 
 and the user will input a list of two of these, separated by a comma.
 
+The dataset is described in Hillenbrand et al. (1995), and is contained
+in the 'Hillenbrand' directory, with subdirectories for men, women, and
+children's utterances.  You'll be using the librosa package to read in
+the wav files and compute 13-dimensional MFCCs; the basic code for this 
+is given.
+
 
 What you have to do
 ----
@@ -49,3 +55,9 @@ MFCCs computed at the midpoint frame may not be the best way of
 classifying vowels.  Write an alternative feature extractor function, 
 create_alt_dataset, that gets better classification performance on the
 pairs of vowels that weren't already at ceiling.
+
+
+References:
+
+Hillenbrand, J., Getty, L. A., Clark, M. J., and Wheeler, K. (1995). Acoustic characteristics of American English vowels. Journal of the Acoustical Society of America, 97(5):3099– 3111.
+
