@@ -20,8 +20,8 @@ class SpeechDataset(Dataset):
         self.n_samples, self.n_features = data.shape
         # The first column is label, the rest are the features
         self.n_features -= 1
-        self.feature = torch.from_numpy(data[:, 1:].astype(np.float32))
-        self.label = torch.from_numpy(data[:, [0]].astype(np.float32))
+        self.feature = torch.from_numpy(data[:, 1:].astype(np.float32)) # size [n_samples, n_features]
+        self.label = torch.from_numpy(data[:, [0]].astype(np.float32)) # size [n_samples, 1]
 
     # support indexing such that dataset[i] can be used to get i-th sample
     def __getitem__(self, index):
@@ -41,40 +41,53 @@ def list_files(directory, vowels):
         soundfile_dict[vowel] = glob.glob(directory+'/*/*'+vowel+'.wav')
 
     return soundfile_dict
-        
+
 def create_dataset(soundfile_dict, vowels, num_mfccs):
     """
-    Read in wav files, and return a 2-D numpy array that contains your speech dataset.
+    Read in wav files, and return a 2-D numpy array that contains your
+    speech dataset.
 
     :param soundfile_dict: A dictionary that, for each vowel V, contains a list of file
+
     paths corresponding to recordings of the utterance 'hVd'
+
     :param vowels: The set of vowels to be used in the logistic regression
+
     :param num_mfccs: The number of MFCCs to include as features
+
     """
-    # TODO: Complete this function, which will need to:
+
+    dataset = zeros((len(mfcc[vowels[0]])+len(mfcc[vowels[1]]),num_mfccs+1))
+
+    # TODO: Complete this function.  You will need to:
     #
     # 1. Extract MFCCs for every wav file in soundfile_dict. The basic code for
-    # extracting MFCCs from a wav file is given below.
+    # extracting MFCCs is given, but you will need to store the MFCCs in an
+    # appropriate data structure
     #
-    # 2. Take the midpoint frame from the MFCC matrix.  If there is an even
+    # 2. Take the midpoint frame from the MFCC matrix.  If there are an even
     # number of frames in an utterance, take the first of the two midpoint frames.
     #
-    # 3. z-score each feature, using the column mean and standard deviation.
+    # 3. z-score each feature, using the column mean and the column st. dev.
     #
     # Return a numpy array where the first element in each row is the label
     # (0 for the first element of 'vowels', 1 for the second) and the next
-    # num_mfccs elements in each row are z-scored MFCCs.
+    # num_features elements in each row are z-scored MFCCs.
 
-    dataset = zeros((len(mfcc[vowels[0]])+len(mfcc[vowels[1]]),num_mfccs+1))
+
+    mfcc = {}
 
     for vowel in vowels:
         for filename in soundfile_dict[vowel]:
             utterance, _ = librosa.load(filename,sr=16000)
-            mfccs = librosa.feature.mfcc(y=utterance, sr=16000, n_mfcc=num_mfccs, n_fft=512, win_length=400, hop_length=160)
+
+    # To use the midpoint frame
+
+    # z-score your dataset
 
     return dataset
 
-        
+
 class SimpleLogreg(nn.Module):
     def __init__(self, num_features):
         """
@@ -85,15 +98,14 @@ class SimpleLogreg(nn.Module):
         super(SimpleLogreg, self).__init__()
         # TODO: Replace this with a real nn.Module
         self.linear = None
-        
+
     def forward(self, x):
         """
         Compute the model prediction for an example.
 
         :param x: Example to evaluate
         """
-        # TODO: Write code to compute and return the model prediction
-        
+        # TODO: Complete this function
         return 0.5
 
     def evaluate(self, data):
@@ -115,11 +127,16 @@ def step(epoch, ex, model, optimizer, criterion, inputs, labels):
     :param labels: The labels for those inputs
     """
 
-    # TODO: Complete this function.  You should: A) get predictions B)
-    # compute the loss from that prediction C) backprop D) update the
-    # parameters.  There's additional code to print updates (for good software
-    # engineering practices, this should probably be logging, but printing
-    # is good enough for a homework).
+    # You should:
+    # A) get predictions
+    # B) compute the loss from that prediction
+    # C) backprop
+    # D) update the parameters
+
+    # There's additional code to print updates (for good software
+    # engineering practices, this should probably be logging, but
+    # printing is good enough for a homework).
+
 
     if (ex+1) % 20 == 0:
       acc_train = model.evaluate(train)
@@ -148,9 +165,18 @@ if __name__ == "__main__":
     directory = args.directory
     num_mfccs = args.num_mfccs
     vowels = args.vowels.split(',')
-    
+
+    # Vowels in the dataset (we're only using a subset):
+    # ae, ah, aw, eh, ei, er, ih, iy, oa, oo, uh, uw
     files = list_files(directory, vowels)
     speechdata = create_dataset(files, vowels, num_mfccs)
+
+## # This is for debugging the speech part without needing pytorch
+##    X = speechdata[0:,1:]
+##    y = speechdata[0:,0]
+##
+##    model = LogisticRegression(random_state=0, max_iter=1000).fit(X,y)
+##    model.score(X,y)
 
     train_np, test_np = train_test_split(speechdata, test_size=0.15, random_state=1234)
     train, test = SpeechDataset(train_np), SpeechDataset(test_np)
@@ -164,10 +190,10 @@ if __name__ == "__main__":
     batch = args.batch
     total_samples = len(train)
 
-    # TODO: Replace these with the correct loss and optimizer
+    # Replace these with the correct loss and optimizer
     criterion = None
     optimizer = None
-    
+
     train_loader = DataLoader(dataset=train,
                               batch_size=batch,
                               shuffle=True,
