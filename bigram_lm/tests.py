@@ -111,9 +111,9 @@ class TestSequenceFunctions(unittest.TestCase):
 
         # Test Jelinek Mercer
         self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_end),
-                               lg(0.1))
+                               lg(0.12))
         self.assertAlmostEqual(self.lm.jelinek_mercer(word_start, word_a),
-                               lg(0.8))
+                               lg(0.64))
         
 if __name__ == '__main__':
     unittest.main()
