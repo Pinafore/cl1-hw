@@ -47,7 +47,7 @@ class BigramLanguageModel:
         """Initialize our bigram language model.
 
         jm_lambda -- Parameter that controls interpolation between unigram and
-        bigram: this is the unigram weight.
+        bigram: this is the bigram weight.
 
         dirichlet_alpha -- The pseudocount added to every observation (even
         zero count ones) when estimating the probability (thus in total, we
@@ -267,7 +267,7 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--jm_lambda", help="Parameter that controls " + \
                            "interpolation between unigram and bigram: " + \
-                           "this is the unigram weight.",
+                           "this is the bigram weight.",
                            type=float, default=0.6, required=False)
     argparser.add_argument("--dir_alpha", help="The pseudocount added to " + \
                            "every observation (even zero count ones) when" + \
