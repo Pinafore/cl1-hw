@@ -61,6 +61,15 @@ limericks.  So "conspire" and "fire" do rhyme.
 
 **What if a word has no vowels?** Then it doesn't rhyme with anything.
 
+**What does this error mean?** If you see the error
+```
+  Resource cmudict not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  >>> import nltk
+  >>> nltk.download('cmudict')
+```
+Then you need to open up python and then run the download command above.  You can also download the data manually from NLTK, but that's more work.
 
 ## Extra Credit
 
