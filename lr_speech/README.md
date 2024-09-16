@@ -48,7 +48,7 @@ Coding:
    each utterance, you'll z-score each feature across all of the utterances.
 
 3. Create a logistic regression model with a softmax/sigmoid activation
-   function, using a network with just an input and an output layer. To make unit tests work,
+   function, using a network with one linear layer. To make unit tests work,
    we had to initialize a member of the SimpleLogreg class.  Replace the
    none object with an [appropriate nn.Module](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html).
 
