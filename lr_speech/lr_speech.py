@@ -57,7 +57,7 @@ def create_dataset(soundfile_dict, vowels, num_mfccs):
 
     """
 
-    dataset = zeros((len(mfcc[vowels[0]])+len(mfcc[vowels[1]]),num_mfccs+1))
+    dataset = zeros((len(soundfile_dict[vowels[0]])+len(soundfile_dict[vowels[1]]),num_mfccs+1))
 
     # TODO: Complete this function.  You will need to:
     #
