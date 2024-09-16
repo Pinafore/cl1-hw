@@ -6,7 +6,7 @@ import soundfile
 from torch.nn import BCELoss as Loss
 from torch.optim import SGD as Opt
 
-from lr_speech_solution import SpeechDataset, create_dataset, step, SimpleLogreg
+from lr_speech import SpeechDataset, create_dataset, step, SimpleLogreg
 from numpy import array
 
 # specify a small number of files
