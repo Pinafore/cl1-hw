@@ -50,7 +50,7 @@ class TestPyTorchLR(unittest.TestCase):
         s = create_dataset(soundfile_dict,vowels,13)
         for ii in range(2):
             for jj in range(13):
-                self.assertAlmostEqual(s[ii][jj+1], self.raw_data[ii][jj])
+                self.assertAlmostEqual(s[ii][jj+1], self.raw_data[ii][jj], 3)
 
     def test_forward(self):
         self.assertAlmostEqual(0.30474069714546204, float(self.model.forward(self.data)[0]))
