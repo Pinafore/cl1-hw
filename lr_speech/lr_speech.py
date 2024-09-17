@@ -75,8 +75,6 @@ def create_dataset(soundfile_dict, vowels, num_mfccs):
     # num_features elements in each row are z-scored MFCCs.
 
 
-    mfcc = {}
-
     for vowel in vowels:
         for filename in soundfile_dict[vowel]:
             utterance, _ = librosa.load(filename,sr=16000)
