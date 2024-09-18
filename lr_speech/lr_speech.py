@@ -66,7 +66,7 @@ def create_dataset(soundfile_dict, vowels, num_mfccs):
     # appropriate data structure
     #
     # 2. Take the midpoint frame from the MFCC matrix.  If there are an even
-    # number of frames in an utterance, take the first of the two midpoint frames.
+    # number of frames in an utterance, take the second of the two midpoint frames.
     #
     # 3. z-score each feature, using the column mean and the column st. dev.
     #
