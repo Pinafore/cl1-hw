@@ -1,0 +1,15 @@
+zimply
+python-baseconv
+gensim
+pandas
+torch
+torchvision
+unidecode
+spacy
+openai
+tqdm
+nltk
+bs4
+scikit-learn
+torchtext
+faiss-cpu
