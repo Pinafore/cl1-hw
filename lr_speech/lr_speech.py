@@ -170,13 +170,6 @@ if __name__ == "__main__":
     files = list_files(directory, vowels)
     speechdata = create_dataset(files, vowels, num_mfccs)
 
-## # This is for debugging the speech part without needing pytorch
-##    X = speechdata[0:,1:]
-##    y = speechdata[0:,0]
-##
-##    model = LogisticRegression(random_state=0, max_iter=1000).fit(X,y)
-##    model.score(X,y)
-
     train_np, test_np = train_test_split(speechdata, test_size=0.15, random_state=1234)
     train, test = SpeechDataset(train_np), SpeechDataset(test_np)
 
