@@ -1,7 +1,9 @@
 Feature Engineering
 =
 
-Before, you built a logistic regression classifier from scratch.  Now, we're going to *improve* a logistic regression classifier, using a pre-made system for learning the weights from data.
+Before, you built a logistic regression classifier from scratch.  Now, we're
+going to *improve* a logistic regression classifier, using a pre-made system
+for learning the weights from data.
 
 In this homework, you're going to continue to improve the accuracy of such a
 system by creating new features (but as we'll talk about in a moment,
@@ -41,9 +43,10 @@ It may seem straightforward, but do not start this at the last minute. There
 are often many things that go wrong in testing out features, and you'll want
 to make sure your features work well once you've found them.
 
-Likewise, because this homework is not going to tell you exactly what
-you need to do, you'll need to have understood many of the concepts
-we've covered in the class: classification obviously, but also tokens or using linguistic concepts to generate interesting/useful features.
+Likewise, because this homework is not going to tell you exactly what you need
+to do, you'll need to have understood many of the concepts we've covered in
+the class: classification obviously, but also tokens or using linguistic
+concepts to generate interesting/useful features.
 
 Getting Started
 -
@@ -67,8 +70,29 @@ But before you get started, you need to understand the overall structure of the 
  * The guesser generates a "guess" that _could_ be an answer to the question
  * The buzzer then needs to determine if that guess is correct or not.  This is a classifier.  You're going to make that better by providing the buzzer with new features.
 
-You will need to be creative here!  To get a sense of how you might want to go through the process, review the lecture on feature engineering here:
+You will need to be creative here!  To get a sense of how you might want to go
+through the process, review a lecture on feature engineering for this task here:
 https://www.youtube.com/watch?v=IzKFgigocAg
+
+While the guesses you're using are coming from OpenAI's GPT, you won't need to
+use the API, we've cached all of the guesses for you.  Many students sometimes
+have trouble using those cached guesses, so a good sanity check is to make
+sure you have access to all of the cached guesses.
+
+If this working correctly, you should be able to run this and see:
+
+
+   > ./venv/bin/python3 gpr_guesser.py --fold=buzztrain
+      ...
+   Generating runs of length 100
+   100%|█████████████████████████████████████████████████| 18460/18460 [00:00<00:00, 94641.59it/s]
+   ---------------------
+   1.00
+   INFO:root:Hit ratio: 1.00
+
+If you don't see a 1.00 hit rate, something is wrong and everything else won't
+work after this.  Note that you won't be able to ask it for *new* guesses that
+are not in the cache, as that would require an API call.
 
 How to add a feature?
 -
