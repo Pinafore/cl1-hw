@@ -84,11 +84,17 @@ If this working correctly, you should be able to run this and see:
 
    > ./venv/bin/python3 gpr_guesser.py --fold=buzztrain
       ...
-   Generating runs of length 100
-   100%|█████████████████████████████████████████████████| 18460/18460 [00:00<00:00, 94641.59it/s]
+    Loaded 1152 question
+    Generating runs of length 100
+    100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1152/1152 [00:00<00:00, 35838.38it/s]
    ---------------------
-   1.00
-   INFO:root:Hit ratio: 1.00
+    1.0
+    INFO:root:Hit ratio: 1.000000
+    Saving to models/buzztrain_gpr_cache
+    INFO:root:Made 0 new queries, saving to models/buzztrain_gpr_cache [cf: models/buzztrain_gpr_cache / queries: False]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 441/441 [00:00<00:00, 894.84it/s]
+    100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████|
+    441/441 [00:00<00:00, 1036.50it/s]
 
 If you don't see a 1.00 hit rate, something is wrong and everything else won't
 work after this.  Note that you won't be able to ask it for *new* guesses that
@@ -165,10 +171,10 @@ be turned into a "pickle" file and stored in the models directory.  So
 let's train the classifier *without* that new feature.
 
     mkdir -p models
-    python3 buzzer.py --guesser_type=Gpr --limit=50 \
-      --GprGuesser_filename=../models/buzztrain_gpr_cache \
-      --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers Gpr \
-      --LogisticBuzzer_filename=models/no_length --features ""
+    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=50 \
+      --gpr_guesser_filename=../models/buzztrain_gpr_cache   \
+      --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr \
+      --logistic_buzzer_filename=models/no_length --features ""
     Setting up logging
     INFO:root:Using device 'cuda' (cuda flag=False)
     INFO:root:Initializing guesser of type Gpr
@@ -196,10 +202,10 @@ let's train the classifier *without* that new feature.
 
 If you get a warning about convergence, it is okay; hopefully it will converge better with more features!  Likewise, don't worry about the warning about the features, I just wanted to be sure it didn't add the length feature.  Because we want to do that next: train a model *with* that new feature.  Note that we're naming the model something different:
 
-    python3 buzzer.py --guesser_type=Gpr --limit=50 \
-      --GprGuesser_filename=../models/buzztrain_gpr_cache \
-      --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers Gpr \
-      --LogisticBuzzer_filename=models/with_length --features Length
+    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=5\
+    --gpr_guesser_filename=../models/buzztrain_gpr_cache   \
+    --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr \
+	--logistic_buzzer_filename=models/with_length --features Length
     Setting up logging
     INFO:root:Using device 'cuda' (cuda flag=False)
     INFO:root:Initializing guesser of type Gpr
@@ -235,23 +241,25 @@ Now you need to evaluate the classifier.  The script eval.py will run the classi
 
 Let's compare with the Length:
 
-    python3 buzzer.py --guesser_type=Gpr --limit=50 \
-    --GprGuesser_filename=../models/buzztrain_gpr_cache \
-    --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers Gpr \
+    python3 buzzer.py --guesser_type=gpr --limit=50 \
+    --gpr_guesser_filename=../models/buzzdev_gpr_cache \
+    --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers gpr \
     --features Length Frequency
 
 compared to without it:
 
-    .venv/bin/python3  eval.py --guesser_type=Gpr \
-    --TfidfGuesser_filename=models/TfidfGuesser --limit=25 \
-     --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers Gpr \
-     --GprGuesser_filename=../models/buzzdev_gpr_cache  \
-     --LogisticBuzzer_filename=models/no_length --features ""
+    .venv/bin/python3  eval.py --guesser_type=gpr   --limit=25   \
+    --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers gpr \
+	--gpr_guesser_filename=../models/buzzdev_gpr_cache    \
+	--logistic_buzzer_filename=models/no_length --features ""
 
-You'll see quite a bit of output, so I'm just going to walk through it bit by
-    bit, comparing the salient components.
+You'll see quite a bit of output, so we're just going to walk through it
+bit by bit, comparing the salient components.
 
- Now, both "best" and "waiting" are *correct*, but obviously "best" is best.  It's important to know what kind of examples contribute to each of these outcomes, so eval samples a subset for each of these and prints them and their features out.
+ Now, both "best" and "waiting" are *correct*, but obviously "best" is
+ best.  It's important to know what kind of examples contribute to
+ each of these outcomes, so eval samples a subset for each of these
+ and prints them and their features out.
 
     =================
     aggressive 0.22
@@ -374,31 +382,11 @@ Turn in the above files as usual via Gradescope, where we'll be using the
 leaderboard as before.  However, the position on the leaderboard will count
 for more of your grade.
 
-Checking the Cache
------------------
-
-If things aren't working well, you might have missing cache elements.  You can check if your cache "hits" enough by running this command:
-
-    jbg:GPT3QA jordan$ .venv/bin/python3 gpr_guesser.py --cache=models/buzztrain_gpr_cache --source_jsongz=data/qanta.buzztrain.json.gz
-    INFO:root:Loading 609173 questions and 609173 answers
-    Loaded 18460 question
-    Generating runs of length 100
-    100%|███████████████████████████████| 18460/18460 [00:00<00:00, 42508.31it/s]
-    ---------------------
-    0.9840390879478828
-    INFO:root:Hit ratio: 0.984039
-
-It won't be 100 because OpenAI refuses to answer some of the questions, but it should be above 0.975.  Anything else is likely a problem and will likely result in lower accuracy.
-
 FAQ
 -----------------
 **Q.: How can I improve the "waiting" category.**
 
 **A.:** That's the neat thing, you don't.  If the guesser is wrong, then there's nothing you can do to make it correct (future homeworks won't have that problem).  What you can do is to convert "timid" to "best" and convert "aggressive" to "waiting".  
-
-**Q. I get a ``No such file or directory: '../data/qanta.buzztrain.json.gz'`` when I run the code on Gradescope.**
-
-*A.* Since the data directory is below where the code runs on Gradescope, Change the path to ``'./data/qanta.buzztrain.json.gz'`` in the ``features.add_training`` line.  If you find this annoying, you can use the following workarounds: (i) putting this into a try/except framework to work with either place, (ii) creating a symlink so so that ./data points to ../data on your development computer, (3) [first checking which path exists](https://docs.python.org/3/library/os.path.html) and then using the correct one.
 
 **Q. Eval only shows me what the questions I'm getting right and wrong
 are.  How do I know what the features look like?**
@@ -406,9 +394,16 @@ are.  How do I know what the features look like?**
 **A.** Use ``features.py`` to investigate this.  This is how we
 generated the JSON files for the logistic regression homework.
 
-    python3 features.py --json_guess_output=../data/inspect.jsonl --buzzer_guessers 'Gpr' --questions=../data/qanta.buzztrain.json.gz --limit=1000
+    ./venv/bin/python3 features.py
+	--json_guess_output=../data/inspect.jsonl --buzzer_guessers 'gpr'
+	\
+	--questions=../data/qanta.buzzdev.json.gz --limit=1000
+	--guesser_type=gpr \
+	--gpr_guesser_filename=models/buzzdev_gpr_cache
 
-Make sure that you've enabled all of the features that you want to use.
+Make sure that you've enabled all of the features that you want to
+use, and you can see how the examples look like to the classifier by
+inspecting `../data/inspect.json`.
 
 **Q. Why can't I use ``['page']`` or ``['answer']`` when creating
 features?  Can I use it during training?**
