@@ -24,8 +24,8 @@ def add_general_params(parser):
 def add_question_params(parser):
     parser.add_argument('--limit', type=int, default=-1)
     parser.add_argument('--question_source', type=str, default='gzjson')
-    parser.add_argument('--questions', default = "../nlp-hw/data/qanta.guesstrain.json.gz",type=str)
-    parser.add_argument('--secondary_questions', default = "../nlp-hw/data/qanta.guessdev.json.gz",type=str)
+    parser.add_argument('--questions', default = "../data/qanta.guesstrain.json.gz",type=str)
+    parser.add_argument('--secondary_questions', default = "../data/qanta.guessdev.json.gz",type=str)
     parser.add_argument('--expo_output_root', default="expo/expo", type=str) 
 
 def add_buzzer_params(parser):
