@@ -400,12 +400,12 @@ are.  How do I know what the features look like?**
 **A.** Use ``features.py`` to investigate this.  This is how we
 generated the JSON files for the logistic regression homework.
 
-    ./venv/bin/python3 features.py
-	--json_guess_output=../data/inspect.jsonl --buzzer_guessers 'gpr'
-	\
-	--questions=../data/qanta.buzzdev.json.gz --limit=1000
+    ./venv/bin/python3 features.py \
+	--json_guess_output=../data/inspect.jsonl --buzzer_guessers 'gpr' \
+	--questions=../data/qanta.buzzdev.json.gz --limit=1000 \
 	--guesser_type=gpr \
-	--gpr_guesser_filename=models/buzzdev_gpr_cache
+	--gpr_guesser_filename=../models/buzzdev_gpr_cache \
+	--features Length Frequency
 
 Make sure that you've enabled all of the features that you want to
 use, and you can see how the examples look like to the classifier by
