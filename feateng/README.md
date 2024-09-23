@@ -247,10 +247,10 @@ Now you need to evaluate the classifier.  The script eval.py will run the classi
 
 Let's compare with the Length:
 
-    python3 buzzer.py --guesser_type=gpr --limit=50 \
-    --gpr_guesser_filename=../models/buzzdev_gpr_cache \
+    .venv/bin/python3  eval.py --guesser_type=gpr   --limit=25   \
     --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers gpr \
-    --features Length Frequency
+	--gpr_guesser_filename=../models/buzzdev_gpr_cache    \
+	--logistic_buzzer_filename=models/with_length --features Length
 
 compared to without it:
 
