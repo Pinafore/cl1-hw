@@ -121,12 +121,12 @@ To walk you through the process, let's create a new feature that encodes how
 often the guess appeared in the training set.  The first step is to define the
 class in ``features.py``.
 
-   class FrequencyFeature(Feature):                                            
-      def __init__(self, name):                                               
-          from eval import normalize_answer                                   
-          self.name = name                                                    
-          self.counts = Counter()                                             
-          self.normalize = normalize_answer                                   
+   class FrequencyFeature(Feature):
+      def __init__(self, name):
+          from eval import normalize_answer
+          self.name = name
+          self.counts = Counter()
+          self.normalize = normalize_answer
 
       def add_training(self, question_source):                                
           import json                                                         
