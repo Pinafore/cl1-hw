@@ -121,22 +121,27 @@ To walk you through the process, let's create a new feature that encodes how
 often the guess appeared in the training set.  The first step is to define the
 class in ``features.py``.
 
-	class FrequencyFeature:
-	    def __init__(self, name):
-		from eval import normalize_answer
-		self.name = name
-		self.counts = Counter()
-		self.normalize = normalize_answer
+   class FrequencyFeature(Feature):                                            
+      def __init__(self, name):                                               
+          from eval import normalize_answer                                   
+          self.name = name                                                    
+          self.counts = Counter()                                             
+          self.normalize = normalize_answer                                   
 
-	    def add_training(self, question_source):
-		import json
-		with gzip.open(question_source) as infile:
-			questions = json.load(infile)
-			for ii in questions:
-			    self.counts[self.normalize(ii["page"])] += 1
+      def add_training(self, question_source):                                
+          import json                                                         
+          import gzip                                                         
+          if 'json.gz' in question_source:                                    
+              with gzip.open(question_source) as infile:                      
+                  questions = json.load(infile)                               
+          else:                                                               
+              with open(question_source) as infile:                           
+                  questions = json.load(infile)                               
+          for ii in questions:                                                
+              self.counts[self.normalize(ii["page"])] += 1                    
 
-	    def __call__(self, question, run, guess):
-		   yield ("guess", log(1 + self.counts[self.normalize(guess)]))
+      def __call__(self, question, run, guess, guess_history, other_guesses=None):                
+          yield ("guess", log(1 + self.counts[self.normalize(guess)]))        
 
 
 Pay attention to the ``call`` function.  If you're not familiar with
@@ -429,6 +434,32 @@ But that's the exception, usually the only way you would use the real
 'page' during training on the buzzdev fold is as the label to the classifier: is this
 guess correct becomes a positive example, is this guess incorrect
 becomes a negative example.
+
+**Q: Is the Length feature complete?  How can I get the length of the
+  question being asked so far?**
+
+**A:** When a feature is constructed, you have access to the the
+  ``guess`` string.  From this, you can ask the number of characters,
+  the number of words (e.g., by splitting it).  The provided code:
+
+    def __call__(self, question, run, guess, guess_history, other_guesses=None):
+        # How many characters long is the question?
+
+        guess_length = 0
+        guess_length = log(1 + len(guess))
+
+        # How many words long is the question?
+
+
+        # How many characters long is the guess?
+        if guess is None or guess=="":
+            yield ("guess", -1)
+        else:
+            yield ("guess", guess_length)
+
+Only gives you the raw length in the number of characters.  You may
+want to improve this feature by (for example) subtracting the mean and
+dividing by the standard deviation.
 
 **Q: Can I modify buzzer.py so that I can use the history of guesses in a
  question?**
