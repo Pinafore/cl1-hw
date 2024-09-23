@@ -50,6 +50,7 @@ class LengthFeature(Feature):
         # How many characters long is the question?
 
         guess_length = 0
+        guess_length = log(1 + len(guess))
 
         # How many words long is the question?
 
