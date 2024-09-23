@@ -110,7 +110,7 @@ look at your predictions on the dev set and see where they're going wrong.
 in ``features.py``.  This is important so that you can try out different
 features by turning them on and off with the command line.
 
-2.  Add code to instantiate the feature in ``params.py``.
+2.  Add code to instantiate the feature in ``parameters.py``.
 
 3.  (Optionally) Change the API to feed in more information into the feature
 generation process.  This would be necessary to capture temporal dynamics or
@@ -157,7 +157,7 @@ is the feature name, the second element of the tuple is the feature
 value (look at the ``featurize`` function in buzzer.py).
 
 Now that you have a feature class, it needs to be loaded when you run
-your code.  This happens in ``params.py``.  Now you can
+your code.  This happens in ``parameters.py``.  Now you can
 add the feature name to the command line to turn it on.
 
     for ff in flags.features:
@@ -195,7 +195,7 @@ let's train the classifier *without* that new feature.
     INFO:root:Adding Gpr to Buzzer (total guessers=1)
     Initializing features: ['']
     dataset: ../data/qanta.buzztrain.json.gz
-    ERROR:root:1 features on command line (['']), but only added 0 (set()).  Did you add code to params.py's load_buzzer to actually add the feature to the buzzer?  Or did you forget to increment features_added in that function?
+    ERROR:root:1 features on command line (['']), but only added 0 (set()).  Did you add code to parameters.py's load_buzzer to actually add the feature to the buzzer?  Or did you forget to increment features_added in that function?
     INFO:root:Read 50 questions
     100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 118416.26it/s]
     INFO:root:Building guesses from dict_keys(['Gpr'])
@@ -317,7 +317,7 @@ What Can You Do?
 -
 
 You can:
-* Add features (e.g., to params.py)
+* Add features (e.g., to parameters.py)
 * Change feature representations (e.g., features.py)
 * Exclude data
 * Add data
@@ -373,7 +373,7 @@ approach to feature engineering.
 How to Turn in Your System
 -
 * ``features.py``: This file includes an implementation of your new features.
-* ``params.py``: This instantiates your new features.  Modify this so that the
+* ``parameters.py``: This instantiates your new features.  Modify this so that the
 set of your best features runs by *default*.
 * **Custom Training Data** (If you used additional training data beyond the Wikipedia pages, upload that as well
     * (OR) If either any of your files are >100MB, please submit a shell
