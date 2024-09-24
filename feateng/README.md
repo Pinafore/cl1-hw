@@ -235,13 +235,7 @@ we're naming the model something different:
     Ran on 500 questions of 500
 
 Now you need to evaluate the classifier.  The script eval.py will run the
-classifier on all of your data and then record the outcome.  There are several
-things that could happen:
-
- * _best_: Guess was correct, Buzz was correct
- * _timid_: Guess was correct, Buzz was not
- * _aggressive_: Guess was wrong, Buzz was wrong
- * _waiting_: Guess was wrong, Buzz was correct
+classifier on all of your data and then report the outcome.
 
 Let's compare with the Length:
 
@@ -259,11 +253,6 @@ compared to without it:
 
 You'll see quite a bit of output, so we're just going to walk through it
 bit by bit, comparing the salient components.
-
-Now, both "best" and "waiting" are *correct*, but obviously "best" is best.
-It's important to know what kind of examples contribute to each of these
-outcomes, so eval samples a subset for each of these and prints them and their
-features out.
 
 Initially with and without the length feature will not look that different.
 
@@ -302,7 +291,6 @@ So let's take a look at that code.
         else:                           
             yield ("guess", guess_length)
 
-
 Well, it's just using the length of the guess and not the length of the
 question "run", i.e., the question that's being asked.  That doesn't seem very
 good, right?  So let's add in another feature that keeps track of how many
@@ -330,7 +318,21 @@ Don't forget to rerun your training of the buzzer!  Now we have some much better
     Questions Right: 84 (out of 201) Accuracy: 0.84  Buzz ratio: 0.36 Buzz position: 0.142734
 
 
-We can now take a look at additional examples to see where we are still having issues.
+We can now take a look at *examples* to see where we are still having issues.    There are several
+things that could happen:
+
+ * _best_: Guess was correct, Buzz was correct
+ * _timid_: Guess was correct, Buzz was not
+ * _aggressive_: Guess was wrong, Buzz was wrong
+ * _waiting_: Guess was wrong, Buzz was correct
+
+
+Now, both "best" and "waiting" are *correct*, but obviously "best" is best.
+It's important to know what kind of examples contribute to each of these
+outcomes, so eval samples a subset for each of these and prints them and their
+features out.
+
+
    =================
    aggressive 0.11
    ===================
