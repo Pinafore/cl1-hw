@@ -121,7 +121,6 @@ To walk you through the process, let's create a new feature that encodes how
 often the guess appeared in the training set.  The first step is to define the
 class in ``features.py``.
 
-
     class FrequencyFeature(Feature):
        def __init__(self, name):
           from eval import normalize_answer
@@ -172,78 +171,77 @@ add the feature name to the command line to turn it on.
             feature.add_training("../data/qanta.buzztrain.json.gz")
             buzzer.add_feature(feature)
 
-Don't forget that you're training a classifier.  This classifier will
-be turned into a "pickle" file and stored in the models directory.  So
-let's train the classifier *without* that new feature.
+How to Debug a Feature
+========================
+
+Okay, now we're going to make the feature that's already added there a little
+bit better.  This is likely how much of what you're going to do will look
+like.  To do this, you'll need to train a classifier on the feature, see
+what's happening to the weights, adjust, and retrain the model.
+
+Don't forget that you're (re)training a classifier every time you change a
+feature set.  This classifier will be turned into a "pickle" file and stored
+in the models directory.  So let's train the classifier *without* that new
+feature, and we'll want our new set of features to be better than that.
 
     mkdir -p models
     ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=50 \
       --gpr_guesser_filename=../models/buzztrain_gpr_cache   \
       --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr \
       --logistic_buzzer_filename=models/no_length --features ""
-    Setting up logging
-    INFO:root:Using device 'cuda' (cuda flag=False)
-    INFO:root:Initializing guesser of type Gpr
-    INFO:root:Loading Gpr guesser
-    Loading buzzer
-    INFO:root:Buzzer using run length 100
-    INFO:root:Using device 'cuda' (cuda flag=False)
-    INFO:root:Initializing guesser of type Gpr
-    INFO:root:Loading Gpr guesser
-    INFO:root:9310 entries added to cache
-    INFO:root:9310 entries added to cache
-    INFO:root:Adding Gpr to Buzzer (total guessers=1)
+
+    ... snip ...
+
     Initializing features: ['']
     dataset: ../data/qanta.buzztrain.json.gz
-    ERROR:root:1 features on command line (['']), but only added 0 (set()).  Did you add code to parameters.py's load_buzzer to actually add the feature to the buzzer?  Or did you forget to increment features_added in that function?
-    INFO:root:Read 50 questions
-    100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 118416.26it/s]
-    INFO:root:Building guesses from dict_keys(['Gpr'])
-    INFO:root:Generating guesses for 401 new question
-    100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 401/401 [00:00<00:00, 501166.84it/s]
-    INFO:root:       401 guesses from Gpr
+    ERROR:root:1 features on command line (['']), but only added 0 (set()).  Did you add code to params.py's load_buzzer to actually add the feature to the buzzer?  Or did you forget to increment features_added in that function?
+    INFO:root:Loading questions from ../data/qanta.buzztrain.json.gz
+    INFO:root:Read 500 questions
+    INFO:root:Generating runs of length 100
+    100%|███████████████████████████████████████████████████████| 500/500 [00:00<00:00, 150010.87it/s]
+    INFO:root:Building guesses from dict_keys(['gpr'])
+    INFO:root:Generating guesses for 3934 new question
+    100%|█████████████████████████████████████████████████████| 3934/3934 [00:00<00:00, 386697.73it/s]
+    INFO:root:      3934 guesses from gpr
     INFO:root:Generating all features
-    100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 401/401 [00:00<00:00, 54978.95it/s]
-    Ran on 50 questions of 50
+    100%|███████████████████████████████████████████████████████| 3934/3934 [00:00<00:00, 9012.54it/s]
+    INFO:root:Saving buzzer to models/no_length.model.pkl
+    Ran on 500 questions of 500
 
-If you get a warning about convergence, it is okay; hopefully it will converge better with more features!  Likewise, don't worry about the warning about the features, I just wanted to be sure it didn't add the length feature.  Because we want to do that next: train a model *with* that new feature.  Note that we're naming the model something different:
+If you get a warning about convergence, it is okay; hopefully it will converge
+better with more features!  Likewise, don't worry about the warning about the
+features, I just wanted to be sure it didn't add the length feature.  Because
+we want to do that next: train a model *with* that new feature.  Note that
+we're naming the model something different:
 
-    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=5\
-    --gpr_guesser_filename=../models/buzztrain_gpr_cache   \
-    --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr \
-	--logistic_buzzer_filename=models/with_length --features Length
-    Setting up logging
-    INFO:root:Using device 'cuda' (cuda flag=False)
-    INFO:root:Initializing guesser of type Gpr
-    INFO:root:Loading Gpr guesser
-    Loading buzzer
-    INFO:root:Buzzer using run length 100
-    INFO:root:Using device 'cuda' (cuda flag=False)
-    INFO:root:Initializing guesser of type Gpr
-    INFO:root:Loading Gpr guesser
-    INFO:root:9310 entries added to cache
-    INFO:root:9310 entries added to cache
-    INFO:root:Adding Gpr to Buzzer (total guessers=1)
+    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=500 --gpr_guesser_filename=../models/buzztrain_gpr_cache   --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr --logistic_buzzer_filename=models/with_length --features Length
+
+    ... snip ... 
+
     Initializing features: ['Length']
     dataset: ../data/qanta.buzztrain.json.gz
     INFO:root:Adding feature Length
-    INFO:root:Read 50 questions
-    100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 118751.53it/s]
-    INFO:root:Building guesses from dict_keys(['Gpr'])
-    INFO:root:Generating guesses for 401 new question
-    100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 401/401 [00:00<00:00, 499084.84it/s]
-    INFO:root:       401 guesses from Gpr
+    INFO:root:Loading questions from ../data/qanta.buzztrain.json.gz
+    INFO:root:Read 500 questions
+    INFO:root:Generating runs of length 100
+    100%|███████████████████████████████████████████████████████| 500/500 [00:00<00:00, 153323.00it/s]
+    INFO:root:Building guesses from dict_keys(['gpr'])
+    INFO:root:Generating guesses for 3934 new question
+    100%|█████████████████████████████████████████████████████| 3934/3934 [00:00<00:00, 394180.41it/s]
+    INFO:root:      3934 guesses from gpr
     INFO:root:Generating all features
-    100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 401/401 [00:00<00:00, 46940.24it/s]
-    Ran on 50 questions of 50
+    100%|███████████████████████████████████████████████████████| 3934/3934 [00:00<00:00, 8675.89it/s]
+    INFO:root:Saving buzzer to models/with_length.model.pkl
+    Ran on 500 questions of 500
 
+Now you need to evaluate the classifier.  The script eval.py will run the
+classifier on all of your data and then record the outcome.  There are several
+things that could happen:
 
-Now you need to evaluate the classifier.  The script eval.py will run the classifier on all of your data and then record the outcome.  There are several things that could happen:
  * _best_: Guess was correct, Buzz was correct
  * _timid_: Guess was correct, Buzz was not
  * _aggressive_: Guess was wrong, Buzz was wrong
  * _waiting_: Guess was wrong, Buzz was correct
-
 
 Let's compare with the Length:
 
@@ -262,56 +260,123 @@ compared to without it:
 You'll see quite a bit of output, so we're just going to walk through it
 bit by bit, comparing the salient components.
 
- Now, both "best" and "waiting" are *correct*, but obviously "best" is
- best.  It's important to know what kind of examples contribute to
- each of these outcomes, so eval samples a subset for each of these
- and prints them and their features out.
+Now, both "best" and "waiting" are *correct*, but obviously "best" is best.
+It's important to know what kind of examples contribute to each of these
+outcomes, so eval samples a subset for each of these and prints them and their
+features out.
 
-    =================
-    aggressive 0.22
-    ===================
+Initially with and without the length feature will not look that different.
 
-                   guess: The Awakening (Chopin novel)
-                  answer: Edna_Pontellier
-                      id: 93160
-          Gpr_confidence: -0.1257
-             Length_char: -0.1111
-             Length_word: -0.1333
-            Length_guess: 3.3673
-                    text: This character faintheartedly commits herself to improving her studies
-                          after a night of reading Emerson alone in her house, and hushes Victor
-                          when he begins singing "Ah! Si tu savais!" While talking to a friend,
-                          she declares that she would give up the "unessential things" for her
-                          children, but she wouldn't give herself up. Doctor Mandelet advises
-                          this character's husband to permit her whims, which
+With Length:
 
-This example is where it is answering the name of the novel rather than the book's main character.  You can see all of the features for this example (e.g., Length-guess is 3.3673).
+    .venv/bin/python3  eval.py --guesser_type=gpr   --limit=25   --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers gpr --gpr_guesser_filename=../models/buzzdev_gpr_cache    --logistic_buzzer_filename=models/with_length --features Length
+                            Length_guess: -1.0023
+                          gpr_confidence: 7.6883
+    Questions Right: 84 (out of 201) Accuracy: 0.82  Buzz ratio: 0.36 Buzz position: -0.135464
+
+Without length:
+
+    .venv/bin/python3  eval.py --guesser_type=gpr   --limit=25   --questions=../data/qanta.buzzdev.json.gz --buzzer_guessers gpr --gpr_guesser_filename=../models/buzzdev_gpr_cache    --logistic_buzzer_filename=models/no_length --features ""
+                          gpr_confidence: 7.5694
+    Questions Right: 82 (out of 201) Accuracy: 0.80  Buzz ratio: 0.34 Buzz position: -0.095168
+
+So let's take a look at that code.
+
+    class LengthFeature(Feature):
+      """
+      Feature that computes how long the inputs and outputs of the QA system are.
+      """
+
+      def __call__(self, question, run, guess, guess_history, other_guesses=None):
+        # How many characters long is the question?
+
+        guess_length = 0
+        guess_length = log(1 + len(guess))
+
+        # How many words long is the question?
+
+
+        # How many characters long is the guess?
+        if guess is None or guess=="":  
+            yield ("guess", -1)         
+        else:                           
+            yield ("guess", guess_length)
+
+
+Well, it's just using the length of the guess and not the length of the
+question "run", i.e., the question that's being asked.  That doesn't seem very
+good, right?  So let's add in another feature that keeps track of how many
+characters long the run is.
+
+    class LengthFeature(Feature):
+      """
+      Feature that computes how long the inputs and outputs of the QA system are.
+      """
+
+      def __call__(self, question, run, guess, guess_history, other_guesses=None):
+        # How many characters long is the question?
+
+        guess_length = 0
+        guess_length = log(1 + len(guess))
+        yield ("guess", guess_length)  
+
+        yield ("char", log(1 + len(run)))
+
+Don't forget to rerun your training of the buzzer!  Now we have some much better results:
+
+                             Length_char: 0.7869
+                            Length_guess: -1.0144
+                          gpr_confidence: 6.8528
+    Questions Right: 84 (out of 201) Accuracy: 0.84  Buzz ratio: 0.36 Buzz position: 0.142734
+
+
+We can now take a look at additional examples to see where we are still having issues.
+   =================
+   aggressive 0.11
+   ===================
+
+               guess: The Awakening (Chopin novel)
+              answer: Edna_Pontellier
+                  id: 93160
+      gpr_confidence: -0.0008
+        Length_guess: 3.3673
+         Length_char: 6.4036
+                text: This character faintheartedly commits herself to improving her studies
+                      after a night of reading Emerson alone in her house, and hushes Victor
+                      when he begins singing "Ah! Si tu savais!" While talking to a friend,
+                      she declares that she would give up the "unessential things" for her
+                      children, but she wouldn't give herself up. Doctor Mandelet advises
+                      this character's husband to permit her whims, which include moving
+                      into a "pigeon house" outside of her house on Esplanade Street. This
+                      mother of Raoul and Etienne watches Adele Ratignolle give birth on her
+                      last night alive, and romances Alcee Arobin and
+		      
+This example is where it is answering the name of the novel rather than the book's main character.  You can see all of the features for this example (e.g., Length_char is 6.4).
 
 At the end of the eval script, you can see the
 overall accuracy, and the ratio of correct buzzes to incorrect buzzes (should
 be positive), and the buzz position (where in the question it's buzzing).
 
-    Questions Right: 90 (out of 201) Accuracy: 0.75  Buzz ratio: 67.50 Buzz position: 0.054159
+Don't focus too much on the accuracy.  The proportion of "Best" outcomes is a better measure of how well you're doing.
 
-And now we'll see what it is without the length features:
-
-    Questions Right: 87 (out of 201) Accuracy: 0.76  Buzz ratio: 66.50 Buzz position: -0.255239
-
-Again, don't focus too much on the accuracy.  The accuracy is actually higher
-for the no feature model!  But the proportion of "Best" outcomes is higher by
-0.02 once you add in this simple feature.
-
-At the very end of the script, you see the weights of each of the features.  Higher values mean that when the feature is high, it is more likely to buzz.  Lower features mean that when the feature is high, it is less likely to buzz.  Features near zero are ignored.  However, keep in mind the average value of the feature ... I'd encourage you to keep your features with mean zero and standard variance to make your life easier.
+At the very end of the script, you see the weights of each of the features.
+Higher values mean that when the feature is high, it is more likely to buzz.
+Lower features mean that when the feature is high, it is less likely to buzz.
+Features near zero are ignored.  However, keep in mind the average value of
+the feature ... I'd encourage you to keep your features with mean zero and
+standard variance to make your life easier.
 
 Let's see with length:
-                          Gpr_confidence: 4.4401
-                             Length_char: 0.9581
-                            Length_guess: -1.0036
-                             Length_word: 0.8495
+                             Length_char: 0.7869
+                            Length_guess: -1.0144
+                          gpr_confidence: 6.8528
 And without length:
                           Gpr_confidence: 5.5703
 
-The classifier with the length is more liketly to buzz later in the question.  If you only have the guesser confidence, then it's obviously correlated with that.  It uses it less if you add in the length as a feature.
+The classifier with the length is more liketly to buzz later in the question.
+If you only have the guesser confidence, then it's obviously correlated with
+that.  It uses it less if you add in the length as a feature.  But as the
+guess gets longer, it's correlated with less buzzing.
 
 What Can You Do?
 -
@@ -324,8 +389,10 @@ You can:
 
 Good Enough
 -
-This is a very open-ended assignment.  Improve the "best" class by
-at least 0.02 percent or improve the buzz ratio by 0.02 by adding new features, and you have done enough.
+
+This is a very open-ended assignment.  Improve the "best" class by at least
+0.02 percent or improve the buzz ratio by 0.02 by adding new features, and you
+have done enough.
 
 What Can't You Do?
 -
@@ -337,8 +404,6 @@ How to start
 2. Add a simple feature to the training data generated by gpr_guesser.py
 3. See if it increases the accuracy on held-out data when you run logistic regression (eval.py) or on the leaderboard
 4. Rinse and repeat!
-
-
 
 
 Finding Correct Guesses (15+ points)
