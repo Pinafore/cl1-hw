@@ -185,7 +185,7 @@ in the models directory.  So let's train the classifier *without* that new
 feature, and we'll want our new set of features to be better than that.
 
     mkdir -p models
-    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=50 \
+    ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=500 \
       --gpr_guesser_filename=../models/buzztrain_gpr_cache   \
       --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr \
       --logistic_buzzer_filename=models/no_length --features ""
