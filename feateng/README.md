@@ -128,20 +128,20 @@ class in ``features.py``.
           self.counts = Counter()
           self.normalize = normalize_answer
 
-      def add_training(self, question_source):                                
-          import json                                                         
-          import gzip                                                         
-          if 'json.gz' in question_source:                                    
-              with gzip.open(question_source) as infile:                      
-                  questions = json.load(infile)                               
-          else:                                                               
-              with open(question_source) as infile:                           
-                  questions = json.load(infile)                               
-          for ii in questions:                                                
-              self.counts[self.normalize(ii["page"])] += 1                    
+      def add_training(self, question_source):
+          import json
+          import gzip
+          if 'json.gz' in question_source:
+              with gzip.open(question_source) as infile:
+                  questions = json.load(infile)
+          else:
+              with open(question_source) as infile:
+                  questions = json.load(infile)
+          for ii in questions:
+              self.counts[self.normalize(ii["page"])] += 1
 
-      def __call__(self, question, run, guess, guess_history, other_guesses=None):                
-          yield ("guess", log(1 + self.counts[self.normalize(guess)]))        
+      def __call__(self, question, run, guess, guess_history, other_guesses=None):
+          yield ("guess", log(1 + self.counts[self.normalize(guess)]))
 
 
 Pay attention to the ``call`` function.  If you're not familiar with
@@ -216,7 +216,7 @@ we're naming the model something different:
 
     ./venv/bin/python3 buzzer.py --guesser_type=gpr --limit=500 --gpr_guesser_filename=../models/buzztrain_gpr_cache   --questions=../data/qanta.buzztrain.json.gz --buzzer_guessers gpr --logistic_buzzer_filename=models/with_length --features Length
 
-    ... snip ... 
+    ... snip ...
 
     Initializing features: ['Length']
     dataset: ../data/qanta.buzztrain.json.gz
@@ -286,9 +286,9 @@ So let's take a look at that code.
 
 
         # How many characters long is the guess?
-        if guess is None or guess=="":  
-            yield ("guess", -1)         
-        else:                           
+        if guess is None or guess=="":
+            yield ("guess", -1)
+        else:
             yield ("guess", guess_length)
 
 Well, it's just using the length of the guess and not the length of the
@@ -306,7 +306,7 @@ characters long the run is.
 
         guess_length = 0
         guess_length = log(1 + len(guess))
-        yield ("guess", guess_length)  
+        yield ("guess", guess_length)
 
         yield ("char", log(1 + len(run)))
 
@@ -352,7 +352,7 @@ features out.
                       into a "pigeon house" outside of her house on Esplanade Street. This
                       mother of Raoul and Etienne watches Adele Ratignolle give birth on her
                       last night alive, and romances Alcee Arobin and
-		      
+
 This example is where it is answering the name of the novel rather than the book's main character.  You can see all of the features for this example (e.g., Length_char is 6.4).
 
 At the end of the eval script, you can see the
@@ -441,7 +441,11 @@ How to Turn in Your System
 -
 * ``features.py``: This file includes an implementation of your new features.
 * ``parameters.py``: This instantiates your new features.  Modify this so that the
-set of your best features runs by *default*.
+set of your best features runs by *default*.  In other words, change
+this line so that instead of the empty list, it loads your favorite features:
+
+   parser.add_argument('--features', nargs='+', help='Features to feed into Buzzer', type=str,  default=[])
+
 * **Custom Training Data** (If you used additional training data beyond the Wikipedia pages, upload that as well
     * (OR) If either any of your files are >100MB, please submit a shell
     script named ``gather_resources.sh`` that will retrieve one or both of the
@@ -481,7 +485,7 @@ inspecting `../data/inspect.json`.
 **Q. Why can't I use ``['page']`` or ``['answer']`` when creating
 features?  Can I use it during training?**
 
-**A.** Remember that we have multiple folds of the data, and we're using mostly buzztrain 
+**A.** Remember that we have multiple folds of the data, and we're using mostly buzztrain
 and buzzdev in this homework.  For those fields you cannot use "page" / "text" when
 generating features for the example you're trying to decide whether or not to trust the guess,
 as that would be cheating.  That's why they get removed
@@ -489,7 +493,7 @@ before the feature generator is called (in ``add_data`` in ``buzzer.py``) so tha
 available, that's the "run", and your job is to see if the current
 "guess" is correct or not.
 
-Now, that's not to say that you can never use the page field.  You can use the field 
+Now, that's not to say that you can never use the page field.  You can use the field
 from *other* questions to better understand the distribution of answers, questions, etc.  You can see this
 in the example Frequency feature: it uses the page to compute how
 often each correct response is in the guesstrain fold.  You then check for a *guess* that comes
@@ -628,4 +632,3 @@ _Covered by Another Feature_: Remember that features only update when you have a
 _Not correlated with errors_: Like the above, if a system doesn't make a certain type of error, then a feature targeting that error, no matter how great, will not get used or be useful.  For example, if you create a feature that checks if a guess is consistent with a particular category won't be useful if the underlying guesser doesn't make cross-category errors.
 
 _Not specified correctly_: One of the reasons that simple features that count stuff work well is that they are linear, one of the key assumptions of logistic regression.  If a feature value of 0.2 correlates with a good outcome, 1.1 correlates with bad outcomes, but 2.8 correlates with good outcomes again, then it's not going to be a good feature because it can't actually get encoded by a linear classifier.  You can address this by inspecting the distribution and creating threshold functions.
-
