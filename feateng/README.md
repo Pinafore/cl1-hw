@@ -632,3 +632,11 @@ _Covered by Another Feature_: Remember that features only update when you have a
 _Not correlated with errors_: Like the above, if a system doesn't make a certain type of error, then a feature targeting that error, no matter how great, will not get used or be useful.  For example, if you create a feature that checks if a guess is consistent with a particular category won't be useful if the underlying guesser doesn't make cross-category errors.
 
 _Not specified correctly_: One of the reasons that simple features that count stuff work well is that they are linear, one of the key assumptions of logistic regression.  If a feature value of 0.2 correlates with a good outcome, 1.1 correlates with bad outcomes, but 2.8 correlates with good outcomes again, then it's not going to be a good feature because it can't actually get encoded by a linear classifier.  You can address this by inspecting the distribution and creating threshold functions.
+
+**Q: I'm stuck... I can't think of any features! Help!** 
+
+**A:**  If you feel stuck, my usual advice is to take a look at examples (via the eval script) that you're getting wrong.  Do you see any patterns?  Are those patterns things that you could turn into a feature that is either 1 when they happen or a real number that correlates with how much you're seeing that pattern?  If so, code that up!  If it appears only when you're wrong, then that's something that the buzzer can use to get answers right.
+
+And "wrong" could be buzzing when it shouldn't or not buzzing when it should, so if you see patterns that correlate with correct guesses that aren't being captured, that's also something you can add.
+
+Sometimes people stare at the numbers too long an forget the data.
