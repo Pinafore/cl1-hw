@@ -63,7 +63,7 @@ class DanPlotter:
         # Plot the individual voab words
         for word_idx in range(len(vocab)):
             word = vocab.lookup_token(word_idx)
-            embedding = model.embeddings(torch.tensor(word_idx)).detach()
+            embedding = model.embeddings(torch.tensor(word_idx)).clone().detach()
             
             self.observations.append({"text": word,
                                       "dim_0": float(embedding[0]),
@@ -79,8 +79,8 @@ class DanPlotter:
             for doc_idx in range(len(doc_set)):
                 doc, pos, neg = doc_set[doc_idx]
                 embeddings = model.embeddings(doc)
-                average = model.average(embeddings, torch.IntTensor([len(doc)])).detach()
-                final = model.network(average).detach()
+                average = model.average(embeddings, torch.IntTensor([len(doc)])).clone().detach()
+                final = model.network(average).clone().detach()
                 
                 for layer, representation in [("average", average),
                                               ("output", final)]:
@@ -538,7 +538,7 @@ class DanGuesser(Guesser):
 
         model = self.dan_model
         model.train()
-        optimizer = torch.optim.SGD(self.dan_model.parameters())
+        optimizer = torch.optim.SGD(self.dan_model.parameters(), lr=0.1)
         criterion = nn.TripletMarginLoss()
         print_loss_total = 0
         epoch_loss_total = 0
