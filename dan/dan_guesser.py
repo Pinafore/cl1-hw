@@ -47,6 +47,15 @@ class DanPlotter:
     def __init__(self, output_filename="state.pdf"):
         self.output_filename = output_filename
         self.observations = []
+
+        self.gradients = {}
+
+    def accumulate_gradient(self, model_params):
+        for name, parameter in model_params:
+            if name not in self.gradients:
+                self.gradients[name] = torch.FloatTensor(parameter.shape)
+
+            self.gradients[name] += parameter.grad
     
     def add_checkpoint(self, model, train_docs, dev_docs, iteration):
         vocab = train_docs.vocab
@@ -76,7 +85,6 @@ class DanPlotter:
                 for layer, representation in [("average", average),
                                               ("output", final)]:
                     representation = representation[0]
-                    print(representation)
                     self.observations.append({"label": doc_set.answers[doc_idx],
                                               "dim_0": float(representation[0]),
                                               "dim_1": float(representation[1]),
@@ -406,6 +414,11 @@ class DanGuesser(Guesser):
         self.training_data = None
         self.eval_data = None
         self.filename = self.params.dan_guesser_filename
+        self.plotter = None
+        self.plot_every = -1
+        if parameters.dan_guesser_plot_viz != "":
+            self.plotter = DanPlotter(parameters.dan_guesser_plot_viz)
+            self.plot_every = parameters.dan_guesser_plot_every = 10
 
     def set_model(self, model: DanModel):
         """
@@ -423,7 +436,7 @@ class DanGuesser(Guesser):
                                   n_hidden_units=self.params.dan_guesser_hidden_units,
                                   nn_dropout=self.params.dan_guesser_nn_dropout)        
     
-    def train_dan(self, raw_train: Iterable[Dict], raw_eval: Iterable[Dict], plot: str):
+    def train_dan(self, raw_train: Iterable[Dict], raw_eval: Iterable[Dict]):
         self.training_data = QuestionData(self.params)
         self.eval_data = QuestionData(self.params)
 
@@ -439,17 +452,12 @@ class DanGuesser(Guesser):
         dev_loader = DataLoader(self.eval_data, batch_size=self.params.dan_guesser_batch_size,
                                     sampler=dev_sampler, num_workers=self.params.dan_guesser_num_workers,
                                     collate_fn=DanGuesser.batchify)
-
-        if plot:
-            plotter = DanPlotter(plot)
-        else:
-            plotter = None
         
         self.best_accuracy = 0.0
 
         for epoch in range(self.params.dan_guesser_num_epochs):
-            if plotter and epoch % 10 == 0:
-                plotter.add_checkpoint(self.dan_model, self.training_data, self.eval_data, epoch)
+            if self.plotter and epoch % self.plot_every == 0:
+                self.plotter.add_checkpoint(self.dan_model, self.training_data, self.eval_data, epoch)
                 
             # We set the data again to update the positive and negative examples
             # self.training_data.set_data(raw_train)            
@@ -463,8 +471,8 @@ class DanGuesser(Guesser):
             if acc > self.best_accuracy:
                 self.best_accuracy = acc
 
-        if plot:
-            plotter.save_plot()
+        if self.plotter:
+            self.plotter.save_plot()
 
 
     def set_eval_data(self, dev_data):
@@ -553,6 +561,8 @@ class DanGuesser(Guesser):
 
             loss = self.batch_step(optimizer, model, criterion, anchor_text, anchor_length,
                                    pos_text, pos_length, neg_text, neg_length)
+            if self.plotter is not None:
+                self.plotter.accumulate_gradient(model.named_parameters())
 
             clip_grad_norm_(model.parameters(), self.params.dan_guesser_grad_clipping)
             print_loss_total += loss.data.numpy()
@@ -569,7 +579,7 @@ class DanGuesser(Guesser):
                 # TODO: add in the ability to save the model
 
         self.training_data.refresh_index()
-        eval_acc = evaluate(dev_data_loader, self.dan_model, self.training_data, self.params.dan_guesser_device)
+        eval_acc = evaluate(dev_data_loader, model, self.training_data, self.params.dan_guesser_device)
         logging.info('Eval accuracy=%f' % eval_acc)
         return eval_acc    
 
@@ -688,4 +698,4 @@ if __name__ == "__main__":
     logging.info("Example: %s" % str(train_exs[0]))
 
     guesser = instantiate_guesser("Dan", flags, guesser_params, False)
-    guesser.train_dan(train_exs, dev_exs, flags.dan_guesser_plot_viz)
+    guesser.train_dan(train_exs, dev_exs)

@@ -298,11 +298,12 @@ class DanParameters(GuesserParameters):
                           ("hidden_units", int, 100, "Number of dimensions of hidden state"),
                           ("max_classes", int, 1000, "Maximum number of answers"),
                           ("ans_min_freq", int, 1, "Frequency of answer count must be above this to be counted"),
-                          ("plot_viz", str, "", "Where to plot inference progress"),
                           ("nn_dropout", float, 0.5, "How much dropout we use"),
                           ("device", str, "cuda", "Where we run pytorch inference"),
                           ("num_epochs", int, 20, "How many training epochs"),
                           ("neg_samp", int, 5, "Number of negative training examples"),
+                          ("plot_viz", str, "", "Where to plot the state (only works for 2D)"),
+                          ("plot_every", int, 10, "After how many epochs do we plot visualization"),
                           ("unk_drop", bool, True, "Do we drop unknown tokens or use UNK symbol"),
                           ("grad_clipping", float, 5.0, "How much we clip the gradients")]
             self.params += dan_params
