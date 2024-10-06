@@ -305,7 +305,7 @@ class DanParameters(GuesserParameters):
                           ("plot_viz", str, "", "Where to plot the state (only works for 2D)"),
                           ("plot_every", int, 10, "After how many epochs do we plot visualization"),
                           ("unk_drop", bool, True, "Do we drop unknown tokens or use UNK symbol"),
-                          ("grad_clipping", float, 5.0, "How much we clip the gradients")]
+                          ("grad_clipping", float, 0.5, "How much we clip the gradients")]
             self.params += dan_params
 
     # TODO: These should be inherited from base class, remove 
