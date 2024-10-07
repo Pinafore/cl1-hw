@@ -2,7 +2,7 @@ Subject
 ==================
 
 You may either enter a shared project on 
-[question answering](qa.md), a shared project on [social media](https://github.com/Pinafore/cl1-hw/blob/master/project/sw_project.pdf), or
+[question answering](https://sites.google.com/view/qanta/2024-competition/for-computer-teams?authuser=0) or
 choose a project of your own.
 
 If you choose to work on a project of your own choosing, it must:
@@ -25,6 +25,8 @@ You do not have to make a publishable piece of work.  It's fine to:
 * Make a minor modification to existing work
 * Do a thorough analysis of existing work
 * Create a visualization or interface for existing work
+* Do a literature review of an established subarea: but you should
+  still be running some of the experiments, analyzing the data
 
 The bar is considerably lower than for a publication!
 
@@ -36,7 +38,7 @@ You must form a group of 3-6 students enrolled in this course.  If you have a pr
 Proposal
 ==================
 
-The project proposal can be turned in 13. March or 24. March (we're giving two due dates because some people are raring to get started with the project and want to run ideas by us ASAP and other people need more time).  This one page PDF document
+The project proposal can be turned in 14. October.  This one page PDF document
 should describe:
 
 * What project you're working on.  If you're not doing the shared competition, you must describe the task, data, and baselines clearly.
@@ -55,12 +57,13 @@ assignment.  (We'll create a thread for this you can add to as a followup.)
 First Deliverable
 ======================
 
-Your first deliverable is due 1. December.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
+Your first deliverable is due 22. November.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
 * You have your data
 * You've implemented baseline techniques that work
 * You've made some progress on the overall goal of your project
 
-Post your first deliverable report publicly on Piazza.
+Post your first deliverable report publicly on Piazza, we will create
+a thread for you add your deliverable as a followup.
 
 Final Presentation
 ======================
@@ -99,9 +102,9 @@ The final presentation will be a poster session.  Your poster should:
 Project Writeup
 ======================
 
-By 11:59 20. Dec (the final exam time as set by the registrar), have the person in your group whose last name
+By 11:59 19. Dec (the final exam time as set by the registrar), have the person in your group whose last name
 is alphabetically last submit their project writeup explaining what
-you did and what results you achieved on GradeScope.  This document should
+you did and what results you achieved on Gradescope.  This document should
 make it clear:
 
 * Why this is a good idea
@@ -113,9 +116,8 @@ Please do not go over 2500 words unless you have a really good reason.
 Images are a much better use of space than words, usually (there's no
 limit on including images, but use judgement and be selective).
 
-I'd suggest that you use either the ACL or ICML template:
-* https://icml.cc/Conferences/2018/StyleAuthorInstructions
-* https://acl2018.org/downloads/acl18-latex.zip
+I'd suggest that you use either the ACL template:
+* https://github.com/acl-org/acl-style-files
 
 
 Grade
@@ -123,9 +125,8 @@ Grade
 
 The grade will be out of 25 points, broken into five areas:
 
-* _Presentation_: For your oral presentation, do you highlight what
-  you did and make people care?  Did you use time well during the
-  presentation?
+* _Presentation_: For your poster presentation, do you highlight what
+  you did and make people care? 
 
 * _Writeup_: Does the writeup explain what you did in a way that is
   clear and effective?
@@ -140,10 +141,13 @@ The grade will be out of 25 points, broken into five areas:
 
 Computational Resources
 =============================
-Check Piazza for Google Cloud Credits you can use for your project.  In addition, the University of Maryland Center for Machine Learning (CML) provides
+
+Check Piazza for Google Cloud Credits you can use for your project.
+In addition, the University of Maryland Nexus Cluster provides
 computational resources for project-based machine learning projects in
 graduate courses.  To request access, send an e-mail to
- kxnguyen@umd.edu with the subject line "CMSC 723 Project
-Computational Resources" with the contact information for everyone in
+aseth125@umd.edu and ssakshi@umd.edu with the subject line "CMSC 723 Project
+Computational Resources" (regardless of what course you're registered
+in) with the contact information for everyone in
 your group.  Please also direct any technical issues to the TA, who
-can loop in CML staff as needed.
+can loop in Nexus staff as needed.

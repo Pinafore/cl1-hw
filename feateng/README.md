@@ -507,6 +507,12 @@ But that's the exception, usually the only way you would use the real
 guess correct becomes a positive example, is this guess incorrect
 becomes a negative example.
 
+**Q: Is there a limit to how many features I can yield per class?**
+
+Not that I know of.  Students have implemented some with thousands of features (not always a good idea, but it's possible).  You may want to have more granular classes of features to be able to more systematically turn them on and off.
+
+For example, you might want to have a script that tries out combinations of features, runs ``eval.py``, and then plots the results.  If everything is in one class, that kind of analysis is harder to do.
+
 **Q: Is the Length feature complete?  How can I get the length of the
   question being asked so far?**
 
