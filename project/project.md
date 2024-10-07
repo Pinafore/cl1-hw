@@ -2,7 +2,7 @@ Subject
 ==================
 
 You may either enter a shared project on 
-[question answering](https://sites.google.com/view/qanta/2024-competition/for-computer-teams?authuser=0) or
+[question answering](qa.md) or
 choose a project of your own.
 
 If you choose to work on a project of your own choosing, it must:
