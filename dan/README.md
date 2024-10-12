@@ -218,3 +218,9 @@ What to turn in
 
 1. Submit your `dan_guesser.py` file and `parameter.py` file (if you change any defaults)
 2. Submit an analysis document if you did any of the extra credit (be sure to give full command line invocation and example outputs)
+
+
+Grading
+--------------
+
+To get full points on this assignment, you'll need to have an implementation that can get perfect on the `mini-dev` dataset when trained on the `mini-train` dataset.  
