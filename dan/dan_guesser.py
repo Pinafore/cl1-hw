@@ -6,12 +6,12 @@ import time
 from typing import List, Dict, Iterable, Optional, Tuple, NamedTuple, Callable
 from collections import Counter, defaultdict
 from random import random
+from math import copysign
 
 import logging
 
-from guesser import Guesser
-from parameters import Parameters, GuesserParameters, DanParameters
-
+import nltk
+import faiss
 import numpy as np
 
 from tqdm import tqdm
@@ -21,19 +21,20 @@ import torch.nn.functional as ptfunc
 from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils import clip_grad_value_
-from torchtext.vocab import Vocab
+from torch.nn.modules.loss import _Loss
 
-import nltk
-import faiss
+from guesser import Guesser
+from eval import rough_compare
+from parameters import Parameters, GuesserParameters, DanParameters
+from vocab import Vocab
 
 kUNK = '<unk>'
-
 kPAD = '<pad>'
 
-kTOY_VOCAB = [kUNK, "England", "Russia", "capital", "currency"]
-kTOY_ANSWER = ["London", "Moscow", "Pound", "Rouble"]
-
 def ttos(t: torch.tensor):
+    """
+    Helper function to print tensors without too much wasted space
+    """
     return "[" + ",".join("%0.2f" % x for x in t.detach().numpy()) + "]"
 
 
@@ -48,31 +49,57 @@ class DanPlotter:
         self.output_filename = output_filename
         self.observations = []
 
-        self.gradients = {}
+        self.metrics = []
+        self.temp_gradients = defaultdict(list)
+        self.gradients = defaultdict(dict)
         self.parameters = []
-        self.losses = defaultdict(list)
 
-    def accumulate_gradient(self, model_params):
+    def accumulate_gradient(self, model_params, max_grad=1.0):
         for name, parameter in model_params:
-            if name not in self.gradients:
-                self.gradients[name] = torch.FloatTensor(parameter.shape)
+            if parameter.grad is not None:
+                if parameter.grad.max() > max_grad:
+                    logging.warning("Bad gradient", name, parameter.grad)
+                else:
+                    self.temp_gradients[name].append(parameter.grad)
 
-            self.gradients[name] += parameter.grad
-
-    def clear_gradient(self):
-        self.gradients = {}
-
-
-
-
-
+    def accumulate_metrics(self, iteration, accuracy, loss):
+        self.metrics.append({"iteration": iteration, "value": accuracy, "metric": "accuracy"})
+        self.metrics.append({"iteration": iteration, "value": loss, "metric": "loss"})        
+                
+    def clear_gradient(self, epoch):
+        for ii in self.temp_gradients:
+            self.gradients[epoch][ii] = torch.mean(torch.stack(self.temp_gradients[ii]), 0)
 
 
 
+
+
+
+
+
+            if type(self.criterion).__name__ == "MarginRankingLoss":
             
             
 
-          
+    def gradient_vector(self, epoch, name, initial_value, indices, max_gradient=5):
+        if epoch in self.gradients:
+            for name in self.gradients[epoch]:
+                grad = self.gradients[epoch][name]
+
+                # This is a for loop because we don't know how deep we need to go into tensor
+                for idx in indices:
+                    grad = grad[idx]
+
+                if abs(float(grad)) > max_gradient:
+                    logging.warning("Bad gradient print", epoch, name, indices, grad)
+                    grad = copysign(max_gradient, float(grad))
+
+                val = float(initial_value + grad)
+
+            return val
+        else:
+            return float(initial_value)
+        
     def add_checkpoint(self, model, train_docs, dev_docs, iteration):
         vocab = train_docs.vocab
         
@@ -87,6 +114,8 @@ class DanPlotter:
                                        "layer": "Embedding",
                                        "label": "",
                                        "fold": "",
+                                       "grad_0": self.gradient_vector(iteration, "embeddings.weight", embedding[0], (word_idx, 0)),
+                                       "grad_1": self.gradient_vector(iteration, "embeddings.weight", embedding[1], (word_idx, 1)),
                                        "iteration": iteration})
 
         for name, parameter in model.named_parameters():
@@ -94,30 +123,28 @@ class DanPlotter:
                 continue
 
             if "bias" in name:
-                value = value.clone().detach()
-                print(name, row, value)
+                value = parameter.clone().detach()
                 self.parameters.append({"dim_0": float(value[0]),
                                         "dim_1": float(value[1]),
                                         "text": name,
                                         "layer": "bias",
                                         "label": "",
                                         "fold": "",
-                                        "grad_0": float(value[0] + self.gradients[name][0]),
-                                        "grad_1": float(value[1] + self.gradients[name][1]),
+                                        "grad_0": self.gradient_vector(iteration, name, value[0], [0]),
+                                        "grad_1": self.gradient_vector(iteration, name, value[1], [1]),
                                         "iteration": iteration})
 
             else:
                 for row, value in enumerate(parameter):
                     value = value.clone().detach()
-                    print(name, row, value)
                     self.parameters.append({"dim_0": float(value[0]),
                                             "dim_1": float(value[1]),
                                             "text": "%s_%i" % (name, row),
                                             "layer": "param",
                                             "label": "",
                                             "fold": "",
-                                            "grad_0": float(value[0] + self.gradients[name][row][0]),
-                                            "grad_1": float(value[1] + self.gradients[name][row][1]),
+                                            "grad_0": self.gradient_vector(iteration, name, value[0], [row, 0]),
+                                            "grad_1": self.gradient_vector(iteration, name, value[1], [row, 1]),
                                             "iteration": iteration})
 
             
@@ -125,7 +152,7 @@ class DanPlotter:
         for fold, doc_set in [("train", train_docs),
                               ("dev", dev_docs)]:
             for doc_idx in range(len(doc_set)):
-                doc, pos, neg = doc_set[doc_idx]
+                doc, pos, neg, ans = doc_set[doc_idx]
                 embeddings = model.embeddings(doc)
                 average = model.average(embeddings, torch.IntTensor([len(doc)])).clone().detach()
                 final = model.network(average).clone().detach()
@@ -146,25 +173,33 @@ class DanPlotter:
     def save_plot(self):
         from pandas import DataFrame
         import plotnine as p9
+
+        data = DataFrame(self.metrics)
+        data.to_csv(self.output_filename + "_metrics.csv")
+
+        plot = p9.ggplot(data=data, mapping=p9.aes(x='iteration', y='value')) + p9.geom_line() + p9.facet_grid("metric~", scales="free_y")
+        plot.save(filename=self.output_filename + "_metrics.pdf")
         
         data = DataFrame(self.observations)
+        data.to_csv(self.output_filename + "_data.csv")
 
         plot = p9.ggplot(data=data, mapping=p9.aes(x='dim_0', y='dim_1', color='fold', shape='label', label='text')) + p9.geom_point() + p9.facet_grid("iteration ~ layer") + p9.geom_text(size=2, nudge_x=0.25, nudge_y=0.25)
 
         plot.save(filename=self.output_filename + "_data.pdf")
 
         data = DataFrame(self.parameters)
+        data.to_csv(self.output_filename + "_parameters.csv")        
         if data.isnull().any().any():
             logging.warning("NaN values!")
-            print(data)
             data = data.replace({np.nan: None})
-            
+
         plot = p9.ggplot(data=data, mapping=p9.aes(x='dim_0', y='dim_1', label='text')) + p9.geom_point() + p9.facet_grid("iteration ~ layer") + p9.geom_text(size=3, nudge_x=0.25, nudge_y=0.25) + p9.geom_segment(p9.aes(x='dim_0', y='dim_1', xend='grad_0', yend='grad_1'))# , size=2, color="grey", arrow=p9.arrow()) 
 
         plot.save(filename=self.output_filename + "_params.pdf")
 
         return plot
-        
+
+
     
 class DanModel(nn.Module):
 
@@ -175,19 +210,31 @@ class DanModel(nn.Module):
     #### You don't need to change the parameters for the model, but you can change it if you need to.  
 
 
-    def __init__(self, model_filename: str, device: str, vocab_size: int, emb_dim: int=50,
-                 activation=nn.ReLU(), n_hidden_units: int=50, nn_dropout: float=.5):
+    def __init__(self, model_filename: str, device: str, criterion: _Loss, vocab_size: int, n_answers: int,
+                 emb_dim: int=50, activation=nn.ReLU(), n_hidden_units: int=50,
+                 nn_dropout: float=.5, 
+                 initialization=""):
         super(DanModel, self).__init__()
         self.model_filename = model_filename
         self.vocab_size = vocab_size
         self.emb_dim = emb_dim
         self.n_hidden_units = n_hidden_units
         self.nn_dropout = nn_dropout
+        self.criterion = criterion
+        criterion_name = type(self.criterion).__name__
+        
         logging.info("Creating embedding layer for %i vocab size, with %i dimensions (hidden dimension=%i)" % \
                          (self.vocab_size, self.emb_dim, n_hidden_units))
         self.embeddings = nn.Embedding(self.vocab_size, self.emb_dim, padding_idx=0)
         self.linear1 = nn.Linear(emb_dim, n_hidden_units)
-        self.linear2 = nn.Linear(n_hidden_units, n_hidden_units)
+
+        if criterion_name == "MarginRankingLoss":
+              self.linear2 = nn.Linear(n_hidden_units, n_hidden_units)
+        elif criterion_name == "CrossEntropyLoss":
+              self.linear2 = nn.Linear(n_hidden_units, n_answers)
+
+
+                      
 
         # Create the actual prediction framework for the DAN classifier.
 
@@ -206,6 +253,26 @@ class DanModel(nn.Module):
         if self.network:
             self.network = self.network.to(device)
 
+        self.initialize_parameters(initialization)
+
+
+    def initialize_parameters(self, initialization):
+        if initialization=="identity":
+            assert emb_dim==n_hidden_units, "Cannot initialize to identiy matrix if embedding dimension is not hidden dimension"
+            if loss=='cross_entropy':
+                assert n_hidden_units == n_answers, "Cannot initialize to identity matrix if hidden dimension doesn't match the number of answers"            
+            with torch.no_grad():
+                self.linear1.weight.data.copy_(torch.eye(n_hidden_units))
+                self.linear2.weight.data.copy_(torch.eye(n_hidden_units))
+                self.linear1.bias.data.copy_(torch.zeros(n_hidden_units))
+                self.linear2.bias.data.copy_(torch.zeros(n_hidden_units))                
+            
+
+
+
+                         
+
+                         
     def average(self, text_embeddings: Tensor, text_len: Tensor):
         """
         Given a batch of text embeddings and a tensor of the corresponding lengths, compute the average of them.
@@ -240,6 +307,7 @@ class DanModel(nn.Module):
 
         return representation
 
+
    
 class QuestionData(Dataset):
     def __init__(self, parameters: Parameters):
@@ -254,20 +322,21 @@ class QuestionData(Dataset):
         parameters -- The configuration of the Guesser
         """
         
-        from torchtext.data.utils import get_tokenizer
+        from nltk.tokenize import word_tokenize
 
         self.vocab_size = parameters.dan_guesser_vocab_size
         self.answer_max_count = parameters.dan_guesser_max_classes
         self.answer_min_freq = parameters.dan_guesser_ans_min_freq
         self.neg_samples = parameters.dan_guesser_neg_samp
 
-        self.tokenizer = get_tokenizer("basic_english")
+        self.tokenizer = word_tokenize
         self.dimension = parameters.dan_guesser_hidden_units
 
         self.representations = None
 
         self.vocab = None
         self.lookup = None
+        self.answer_indices = None
 
     def get_nearest(self, query_row: np.array, n_nearest: int):
         """
@@ -280,17 +349,30 @@ class QuestionData(Dataset):
         scores, indices = self.lookup.search(np.array([query_row]), k=n_nearest)
 
         return indices[0]
-        
-    def get_batch_nearest(self, query_representation: np.ndarray, n_nearest: int):
+
+    def get_answer_integer(self, item_id: int):
+        """
+        Given the index of an example, return the integer index of the answer.
+        """
+
+        self.answer_indices.index(self.answers[item_id])
+    
+    def get_batch_nearest(self, query_representation: np.ndarray, n_nearest: int,
+                          lookup_answer=True, lookup_answer_id=False):
         """
         Given the current example representations, find the closest one
 
         query_representation -- numpy Vector[Nd, Nh] the representation of this example
         n_nearest -- how many closest vectors to return
         """
-        scores, indices = self.lookup.search(query_representation, k=n_nearest)
+        scores, closest = self.lookup.search(query_representation, k=n_nearest)
 
-        return indices
+        if lookup_answer:
+          closest = [self.answers[x[0]] for x in closest]
+        if lookup_answer_id:
+          closest = [self.answer_indices.index(x) for x in closest]
+
+        return closest
     
     def build_representation(self, model):
         """
@@ -318,10 +400,14 @@ class QuestionData(Dataset):
 
         Because it uses inner product 
         """
-        # ptfunc.normalize(self.representations, p=2, dim=2)
+
+        # This only works if the representation were filled with the correct
+        # values.  (Extra credit)
         training = self.representations.detach().numpy()
 
-        logging.info("Training KD Tree for lookup with dimension %i rows and %i columns" % (training.shape[0], training.shape[1]))  
+        if self.lookup is None:
+            logging.info("Training KD Tree for lookup with dimension %i rows and %i columns" %
+                         (training.shape[0], training.shape[1]))  
         self.lookup = faiss.IndexFlatL2(self.dimension)
         self.lookup.add(training)
         return training
@@ -350,7 +436,10 @@ class QuestionData(Dataset):
         indices -- 
         """
         assert self.representations is not None, "Did you not call initialize_lookup?"
-        
+
+        assert self.dimension == representations[0].shape[0], \
+            "Dimension (%i) doesn't match tensor (%s)" % \
+            (self.dimension, int(representations[0].shape[0]))
         for batch_index, global_index in enumerate(indices):
             self.representations[global_index].copy_(representations[batch_index])
         
@@ -358,15 +447,15 @@ class QuestionData(Dataset):
         self.representations = torch.FloatTensor(len(self.answers), self.dimension).zero_()
         
     def build_vocab(self, questions: Iterable[Dict]):
-        from torchtext.vocab import build_vocab_from_iterator
+        from vocab import Vocab
         
         # TODO (jbg): add in the special noun phrase tokens
-        def yield_tokens(questions):
-            for question in questions:
-                yield self.tokenizer(question["text"])
+        # def yield_tokens(questions):
+        #    for question in questions:
+        #        yield self.tokenizer(question["text"])
 
-        self.vocab = build_vocab_from_iterator([self.tokenizer(x["text"]) for x in questions],
-                                                specials=["<unk>"], max_tokens=self.vocab_size)
+        self.vocab = Vocab.build_vocab_from_iterator([self.tokenizer(x["text"]) for x in questions],
+                                                     specials=["<unk>"], max_tokens=self.vocab_size)
         self.vocab.set_default_index(self.vocab["<unk>"])
 
         return self.vocab
@@ -387,9 +476,13 @@ class QuestionData(Dataset):
         from nltk import FreqDist
         from random import sample
 
-        answer_counts = FreqDist(x[answer_field] for x in questions if x[answer_field])
-        valid_answers = set(x for x, count in answer_counts.most_common(self.answer_max_count)
-                            if count > self.answer_min_freq)
+        # TODO(jbg): Should answers be a Vocab object?
+        answer_counts = Counter(x[answer_field] for x in questions if x[answer_field])
+        valid_answers = list((x, count) for x, count in answer_counts.most_common(self.answer_max_count)
+                             if count > self.answer_min_freq)
+        self.answer_indices = [x[0] for x in sorted(valid_answers, key=lambda x: (-x[1], x[0]))]
+        valid_answers = set(self.answer_indices)
+
         self.questions = [x["text"] for x in questions if x[answer_field] in valid_answers]
         self.answers = [x[answer_field] for x in questions if x[answer_field] in valid_answers]
 
@@ -460,8 +553,10 @@ class QuestionData(Dataset):
         q_vec = self.vectorize(q_text, self.vocab, self.tokenizer)
         pos_vec = self.vectorize(pos_text, self.vocab, self.tokenizer)
         neg_vec = self.vectorize(neg_text, self.vocab, self.tokenizer)
+
+        answer = self.answers[index]
         
-        item = q_vec, pos_vec, neg_vec
+        item = q_vec, pos_vec, neg_vec, answer
         return item
 
 
@@ -473,11 +568,73 @@ class DanGuesser(Guesser):
         self.eval_data = None
         self.filename = self.params.dan_guesser_filename
         self.plotter = None
-        self.plot_every = -1
+        self.plot_every = -1        
         if parameters.dan_guesser_plot_viz != "":
             self.plotter = DanPlotter(parameters.dan_guesser_plot_viz)
-            self.plot_every = parameters.dan_guesser_plot_every = 10
+            self.plot_every = parameters.dan_guesser_plot_every
 
+    def run_epoch(self, epoch, train_data_loader: DataLoader, dev_data_loader: DataLoader,
+                  checkpoint_every: int=50):
+        """
+        Train the current model
+        Keyword arguments:
+        train_data_loader: pytorch build-in data loader output for training examples
+        dev_data_loader: pytorch build-in data loader output for dev examples
+        """
+
+        eval_acc = -1
+        model = self.dan_model
+        model.train()
+
+        # You *are* allowed to change the optimizer
+        optimizer = torch.optim.SGD(self.dan_model.parameters(), self.params.dan_guesser_learning_rate)
+
+        print_loss_total = 0
+        epoch_loss_total = 0
+        start = time.time()
+
+        if type(model.criterion).__name__ == "MarginRankingLoss":
+            self.training_data.build_representation(model)
+            self.training_data.refresh_index()
+                    
+        #### modify the batch_step to complete the update
+        for idx, batch in enumerate(train_data_loader):                
+            anchor_text = batch['question_text'].to(self.params.dan_guesser_device)
+            anchor_length = batch['question_len'].to(self.params.dan_guesser_device)
+
+            pos_text = batch['pos_text'].to(self.params.dan_guesser_device)
+            pos_length = batch['pos_len'].to(self.params.dan_guesser_device)
+
+            neg_text = batch['neg_text'].to(self.params.dan_guesser_device)
+            neg_length = batch['neg_len'].to(self.params.dan_guesser_device)
+
+            loss = self.batch_step(optimizer, model, anchor_text, anchor_length,
+                                   pos_text, pos_length, neg_text, neg_length,
+                                   batch['answers'],
+                                   self.training_data.answer_indices,
+                                   self.params.dan_guesser_grad_clipping)
+            
+            if self.plotter is not None:
+                self.plotter.accumulate_gradient(model.named_parameters())
+
+            print_loss_total += loss.data.numpy()
+            epoch_loss_total += loss.data.numpy()
+
+            if idx % checkpoint_every == 0 and idx > 0:
+                print_loss_avg = print_loss_total / checkpoint_every
+                self.training_data.refresh_index()
+
+                logging.info('Epoch %i: batch: %d, loss: %.5f time: %.5f' % (epoch, idx, print_loss_avg, time.time()- start))
+                print_loss_total = 0
+
+                # TODO: batch_accuracy is not used yet
+                # TODO: add in the ability to save the model
+                
+        eval_acc = evaluate(dev_data_loader, model, self.training_data, self.params.dan_guesser_device, model.criterion)
+
+        return eval_acc, epoch_loss_total    
+
+            
     def set_model(self, model: DanModel):
         """
         Instead of training, set data and model directly.  Useful for unit tests.
@@ -487,13 +644,17 @@ class DanGuesser(Guesser):
 
 
     def initialize_model(self):
+        criterion = getattr(nn, self.params.dan_guesser_criterion)()        
         self.dan_model = DanModel(model_filename=self.params.dan_guesser_filename,
                                   device=self.params.dan_guesser_device,
+                                  criterion=criterion,
                                   vocab_size=self.params.dan_guesser_vocab_size,
+                                  n_answers=self.params.dan_guesser_max_classes,
                                   emb_dim=self.params.dan_guesser_embed_dim,
                                   n_hidden_units=self.params.dan_guesser_hidden_units,
-                                  nn_dropout=self.params.dan_guesser_nn_dropout)        
-    
+                                  nn_dropout=self.params.dan_guesser_nn_dropout,
+                                  initialization=self.params.dan_guesser_initialization)        
+                         
     def train_dan(self, raw_train: Iterable[Dict], raw_eval: Iterable[Dict]):
         self.training_data = QuestionData(self.params)
         self.eval_data = QuestionData(self.params)
@@ -512,7 +673,8 @@ class DanGuesser(Guesser):
                                     collate_fn=DanGuesser.batchify)
         
         self.best_accuracy = 0.0
-
+        self.plotter.add_checkpoint(self.dan_model, self.training_data, self.eval_data, 0)
+        
         for epoch in range(self.params.dan_guesser_num_epochs):               
             # We set the data again to update the positive and negative examples
             # self.training_data.set_data(raw_train)            
@@ -521,15 +683,24 @@ class DanGuesser(Guesser):
                                           sampler=train_sampler,
                                           num_workers=self.params.dan_guesser_num_workers,
                                           collate_fn=DanGuesser.batchify)
-            logging.info('number of epoch: %d' % epoch)
-            acc = self.run_epoch(train_loader, dev_loader)
-
-            if self.plotter and epoch % self.plot_every == 0:
-                self.plotter.add_checkpoint(self.dan_model, self.training_data, self.eval_data, epoch)
             
+            if self.plotter and epoch % self.plot_every == 0 and epoch > 0:
+                logging.info("[Epoch %04i] Dev Accuracy: %0.3f Loss: %f" % (epoch, acc, loss))                
+                self.plotter.add_checkpoint(self.dan_model, self.training_data, self.eval_data, epoch)
+                
+            acc, loss = self.run_epoch(epoch, train_loader, dev_loader)
+
+            if self.plotter:
+                self.plotter.clear_gradient(epoch)                
+                self.plotter.accumulate_metrics(epoch, acc, loss)
             if acc > self.best_accuracy:
                 self.best_accuracy = acc
 
+        self.training_data.refresh_index()
+        eval_acc = evaluate(dev_loader, self.dan_model, self.training_data, self.params.dan_guesser_device,
+                            self.dan_model.criterion)
+        logging.info('Final eval accuracy=%f' % eval_acc)
+                
         if self.plotter:
             self.plotter.save_plot()
 
@@ -577,77 +748,28 @@ class DanGuesser(Guesser):
         
         self.dan_model = torch.load("%s.torch.pkl" % self.filename)
 
-    @staticmethod
-    def batch_step(optimizer, model, criterion, example, example_length,
+    def batch_step(self, optimizer, model, example, example_length,
                    positive, positive_length, negative, negative_length,
-                   grad_clip):
+                   answers, answer_lookup, grad_clip):
+        """
+        This is almost a static function (and used to be) except for the loss function.
+        
+        """
         loss = None
+        criterion = self.dan_model.criterion
 
-          assert(positive.shape == negative.shape), "Sizes don't match %s (pos) vs. %s (neg)" % (str(positive.shape), str(negative.shape))
+        # Prepare the optimizer to ignore gradients and compute predictions
 
-          logging.info("Loss: %f" % loss)
+
+        # Compute the loss
+        if type(criterion).__name__ == "MarginRankingLoss":
+              loss = None
+        elif type(criterion).__name__ == "CrossEntropyLoss":
+              loss = None
+              
         return loss
 
 
-    def run_epoch(self, train_data_loader: DataLoader, dev_data_loader: DataLoader,
-                  checkpoint_every: int=50):
-        """
-        Train the current model
-        Keyword arguments:
-        train_data_loader: pytorch build-in data loader output for training examples
-        dev_data_loader: pytorch build-in data loader output for dev examples
-        """
-
-        model = self.dan_model
-        model.train()
-        optimizer = torch.optim.SGD(self.dan_model.parameters(), lr=0.001)
-        criterion = nn.MarginRankingLoss()
-        print_loss_total = 0
-        epoch_loss_total = 0
-        start = time.time()
-
-        self.training_data.refresh_index()        
-        eval_acc = evaluate(dev_data_loader, self.dan_model, self.training_data, self.params.dan_guesser_device)
-        logging.info('Initial accuracy=%f' % eval_acc)
-        
-        #### modify the batch_step to complete the update
-        for idx, batch in enumerate(train_data_loader):
-            if self.plotter:
-                self.plotter.clear_gradient()
-                
-            anchor_text = batch['question_text'].to(self.params.dan_guesser_device)
-            anchor_length = batch['question_len'].to(self.params.dan_guesser_device)
-
-            pos_text = batch['pos_text'].to(self.params.dan_guesser_device)
-            pos_length = batch['pos_len'].to(self.params.dan_guesser_device)
-
-            neg_text = batch['neg_text'].to(self.params.dan_guesser_device)
-            neg_length = batch['neg_len'].to(self.params.dan_guesser_device)
-
-            loss = self.batch_step(optimizer, model, criterion, anchor_text, anchor_length,
-                                   pos_text, pos_length, neg_text, neg_length,
-                                   self.params.dan_guesser_grad_clipping)
-            
-            if self.plotter is not None:
-                self.plotter.accumulate_gradient(model.named_parameters())
-
-            print_loss_total += loss.data.numpy()
-            epoch_loss_total += loss.data.numpy()
-
-            if idx % checkpoint_every == 0:
-                print_loss_avg = print_loss_total / checkpoint_every
-                self.training_data.refresh_index()
-
-                logging.info('number of steps: %d, loss: %.5f time: %.5f' % (idx, print_loss_avg, time.time()- start))
-                print_loss_total = 0
-
-                # TODO: batch_accuracy is not used yet
-                # TODO: add in the ability to save the model
-
-        self.training_data.refresh_index()
-        eval_acc = evaluate(dev_data_loader, model, self.training_data, self.params.dan_guesser_device)
-        logging.info('Eval accuracy=%f' % eval_acc)
-        return eval_acc    
 
     ###You don't need to change this funtion
     @staticmethod
@@ -661,13 +783,14 @@ class DanGuesser(Guesser):
 
         num_examples = len(batch)
         max_length = 0
-        for question, pos, neg in batch:
+        for question, pos, neg, answer in batch:
             for example in [question[0], pos[0], neg[0]]:
                 max_length = max(max_length, len(example))
 
         question_lengths = torch.LongTensor(len(batch)).zero_()
         pos_lengths = torch.LongTensor(len(batch)).zero_()
         neg_lengths = torch.LongTensor(len(batch)).zero_()
+        answers = []
 
         question_matrix = torch.LongTensor(num_examples, max_length).zero_()
         positive_matrix = torch.LongTensor(num_examples, max_length).zero_()
@@ -683,10 +806,12 @@ class DanGuesser(Guesser):
         
         num_examples = len(batch)
         for idx, ex in enumerate(batch):
-            question, pos, neg = [x[0] for x in ex]
+            question, pos, neg, answer = [x[0] if isinstance(x, Tensor) else x for x in ex]
             question_lengths[idx] = len(question)
             pos_lengths[idx] = len(pos)
             neg_lengths[idx] = len(neg)
+            answers.append(answer)
+            assert answers[idx] == answer
             ex_indices.append(idx)
 
             question_matrix[idx, :len(question)].copy_(torch.LongTensor(question))
@@ -696,11 +821,38 @@ class DanGuesser(Guesser):
         q_batch = {'question_text': question_matrix, 'question_len': question_lengths,
                    'pos_text': positive_matrix, 'pos_len': pos_lengths,
                    'neg_text': negative_matrix, 'neg_len': neg_lengths,
+                   'answers': answers,
                    'ex_indices': ex_indices}
 
         return q_batch
 
-def evaluate(data_loader, model, train_data, device):
+def cross_entropy_errors():
+    """
+    Given a model, compute examples' representation in the model, get the
+    guess for each example, and then give the number of errors.
+    """
+
+def number_errors(question_text: torch.Tensor, question_len: torch.Tensor,
+                  labels: Iterable[str], train_data: QuestionData, model: DanModel):
+    """
+    Helper function called by evaluate that given a batch, generates a
+    representation and computes how many errors it had.
+
+    Labels should be answer strings for margin loss function but integers for CE loss.
+
+    """
+    # Call the model to get the representation
+    # You'll need to update the code here
+    #### Your code here
+    error = -1
+    if type(model.criterion).__name__ == "MarginRankingLoss":
+        None
+    elif type(model.criterion).__name__ == "CrossEntropyLoss":
+        error = len(labels)        
+
+    return error
+    
+def evaluate(data_loader: DataLoader, model: DanModel, train_data: QuestionData, device: str, criterion: _Loss):
     """
     evaluate the current model, get the accuracy for dev/test set
     Keyword arguments:
@@ -714,17 +866,13 @@ def evaluate(data_loader, model, train_data, device):
     error = 0
     for _, batch in enumerate(data_loader):
         question_text = batch['question_text'].to(device)
-        question_len = batch['question_len']
-        labels = batch['ex_indices']
+        question_len = batch['question_len'].to(device)
 
-        # Call the model to get the representation
-        # You'll need to update the code here
-        #### Your code here
-
-        closest = train_data.get_batch_nearest(representation, 1)
-        closest = [x[0] for x in closest]
-        error += sum(1 for guess, answer in zip(closest, labels) if guess != answer)
+        labels = batch['answers']
+        error += number_errors(question_text, question_len,
+                               labels, train_data, model)
         num_examples += question_text.size(0)
+        
     accuracy = 1 - (error / num_examples)
     return accuracy
 

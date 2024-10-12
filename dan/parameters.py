@@ -59,7 +59,6 @@ def add_guesser_params(parser):
     parser.add_argument('--guesser_type', type=str, default="Tfidf")
     # TODO (jbg): This is more general than tfidf, make more general (currently being used by DAN guesser as well)
     parser.add_argument('--guesser_min_length', type=int, help="How long (in characters) must text be before it is indexed?", default=50)
-    parser.add_argument('--guesser_max_vocab', type=int, help="How big features/vocab set to use", default=10000)
     parser.add_argument('--guesser_answer_field', type=str, default="page", help="Where is the cannonical answer")    
     parser.add_argument('--guesser_max_length', type=int, help="How long (in characters) must text be to be removed?", default=500)    
     parser.add_argument('--guesser_split_sentence', type=bool, default=True, help="Index sentences rather than paragraphs")
@@ -297,11 +296,14 @@ class DanParameters(GuesserParameters):
                           ("num_workers", int, 8, "How many workers to serve examples"),
                           ("hidden_units", int, 100, "Number of dimensions of hidden state"),
                           ("max_classes", int, 1000, "Maximum number of answers"),
+                          ("learning_rate", float, 0.1, "SGD Learning Rate"),
+                          ("initialization", str, "", "Initialize the parameters (useful for debugging toy data)"),
                           ("ans_min_freq", int, 1, "Frequency of answer count must be above this to be counted"),
                           ("nn_dropout", float, 0.5, "How much dropout we use"),
                           ("device", str, "cuda", "Where we run pytorch inference"),
                           ("num_epochs", int, 20, "How many training epochs"),
                           ("neg_samp", int, 5, "Number of negative training examples"),
+                          ("criterion", str, "CrossEntropyLoss", "What loss function the model uses"),
                           ("plot_viz", str, "", "Where to plot the state (only works for 2D)"),
                           ("plot_every", int, 10, "After how many epochs do we plot visualization"),
                           ("unk_drop", bool, True, "Do we drop unknown tokens or use UNK symbol"),

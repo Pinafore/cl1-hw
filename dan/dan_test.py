@@ -3,30 +3,51 @@ import unittest
 from guesser import kTOY_DATA
 from dan_guesser import *
 
-def initialize_model():
+def create_model(criterion):
         unit_test_params = [("embed_dim", int, 2, "How many dimensions in embedding layer"),
-                            ("hidden_units", int, 2, "Number of dimensions of hidden state"),
                             ("nn_dropout", float, 0, "How much dropout we use"),
                             ("max_classes", int, 4, "How many classes our dataset can have"),
                             ("ans_min_freq", int, 0, "How many times an answer must appear"),
+                            ("plot_viz", str, "test", "Where to write parameter plots"),
                             ("device", str, "cpu", "Where we run pytorch inference"),
+                            ("criterion", str, criterion, "Loss function"),
+                            ("plot_every", int, 1, "How often we plot"),
+                            ("initialization", str, "", "Initialization"),
                             ("vocab_size", int, 5, "How many words in the vocabulary"),
                             ("neg_samp", int, 1, "Number of negative training examples"),
                             ("batch_size", int, 1, "How many examples per batch"),
                             ("num_workers", int, 1, "How many workers to serve examples"),
                             ("num_epochs", int, 1, "How many training epochs"),
                             ("grad_clipping", float, 5.0, "How much we clip the gradients")]
+        if criterion == "MarginRankingLoss":
+          unit_test_params.append(("hidden_units", int, 2, "Number of dimensions of hidden state"))
+        else:
+          unit_test_params.append(("hidden_units", int, 4, "Number of dimensions of hidden state"))
         parameters = DanParameters(unit_test_params)
         parameters.set_defaults()
         dan = DanGuesser(parameters)
         dan.initialize_model()
 
         with torch.no_grad():
+          if criterion == "MarginRankingLoss":
             dan.dan_model.embeddings.weight.copy_(torch.tensor([[0,0], [0, -1], [0, 1], [1, 0], [-1, 0]]))
             dan.dan_model.linear1.weight.copy_(torch.tensor([[2, 0], [0, 2]]))
             dan.dan_model.linear1.bias.copy_(torch.tensor([0, 0]))
             dan.dan_model.linear2.weight.copy_(torch.tensor([[2, 0], [0, 2]]))
             dan.dan_model.linear2.bias.copy_(torch.tensor([-1, -1]))
+          elif criterion == "CrossEntropyLoss":
+            dan.dan_model.embeddings.weight.copy_(torch.tensor([[0, 0], [0, -1], [0, 1], [1, 0], [-1, 0]]))
+            dan.dan_model.linear1.weight.copy_(torch.tensor([[+1.0, -1.0],        #london
+                                                             [-1.0, -1.0],        #moscow
+                                                             [+1.0, +1.0],        #pound
+                                                             [-1.0, +1.0]         #rouble
+                                                             ]))                  
+            dan.dan_model.linear1.bias.copy_(torch.tensor([0, 0, 0, 0]))
+            
+            dan.dan_model.linear2.weight.data.copy_(torch.eye(4))            
+            dan.dan_model.linear2.bias.copy_(torch.tensor([0, 0, 0, 0]))
+            
+ 
         return dan, parameters
 
 def break_dan(dan: DanModel):
@@ -66,32 +87,52 @@ def initialize_data(parameters, model, raw_questions, max_answers):
 
 class DanTest(unittest.TestCase):
     def setUp(self):
-
         self.documents = torch.LongTensor([[2, 3],    # currency england (these are verified in testVocab)
                                            [2, 4],    # currency russia
                                            [1, 4],    # captial russia
                                            [1, 3]])   # capital england
         self.length = torch.IntTensor([2]* 4)
 
-        self.dan, parameters = initialize_model()        
+        self.mr_dan, mr_parameters = create_model("MarginRankingLoss")
+        self.ce_dan, ce_parameters = create_model("CrossEntropyLoss")
 
-        self.censored_data, self.censored_lookup = initialize_data(parameters,
-                                                                   self.dan.dan_model,
+        self.censored_data, self.censored_lookup = initialize_data(mr_parameters,
+                                                                   self.mr_dan.dan_model,
                                                                    kTOY_DATA["tiny"], 4)
-        self.full_data, self.full_lookup = initialize_data(parameters, self.dan.dan_model,
+        self.full_data, self.full_lookup = initialize_data(mr_parameters, self.mr_dan.dan_model,
                                                            kTOY_DATA["tiny"], 5)
 
         self.vocab = self.full_data.vocab
 
+    def testErrors(self):
+        None
+        
     def testPlotter(self):
         from dan_guesser import DanPlotter
-        new_model = break_dan(self.dan.dan_model)
+        new_model = break_dan(self.mr_dan.dan_model)
         
         plotter = DanPlotter("test_plot.pdf")
 
-        plotter.add_checkpoint(self.dan.dan_model, self.full_data, self.full_data, 0)        
+        plotter.add_checkpoint(self.mr_dan.dan_model, self.full_data, self.full_data, 0)        
         plotter.add_checkpoint(new_model, self.full_data, self.full_data, 10)
 
+        # Fake some accuracy and loss numbers
+        from random import random
+        import math
+        def sigmoid(x):
+          return 1 / (1 + math.exp(-x))
+  
+        accuracy = 3
+        loss = 5.0
+        
+        for ii in range(100):
+          sig = sigmoid(-(ii - 50)*2)
+
+          if random() > 0.5:
+            loss -= random() * 0.1 * (1 - abs(.5 - sig))                  
+            accuracy += round(15 * random() - 6) 
+          plotter.accumulate_metrics(ii, min(100, max(0, accuracy)), loss + sig)
+        
         plotter.save_plot()
         
     def testSettingRepresentation(self):
@@ -128,36 +169,17 @@ class DanTest(unittest.TestCase):
            for target in [batch['pos_len'], batch['neg_len'], batch['question_len']]:
              for example in target:
                self.assertEqual(example, 2)     
-        
-    def testTrain(self):
-      sampler = torch.utils.data.sampler.SequentialSampler(self.censored_data)
-      loader = DataLoader(self.full_data, batch_size=4, sampler=sampler,
-                          collate_fn=DanGuesser.batchify)
-      criterion = nn.TripletMarginLoss(margin=0.0)
-      optimizer = torch.optim.Adamax(self.dan.dan_model.parameters())      
 
-      for idx, batch in enumerate(loader):
-        # Because the model is already "perfect", all of the losses should be
-        # zero on every batch
-        loss = self.dan.batch_step(optimizer, self.dan.dan_model, criterion,
-                                   batch['question_text'], batch['question_len'],
-                                   batch['pos_text'], batch['pos_len'],
-                                   batch['neg_text'], batch['neg_len'])
-        self.assertAlmostEqual(loss.item(), 0.0, 3, "Loss for batch %i" % idx)
-        
+                
     def testNearest(self):
         queries = [([2, 3], "england currency foo", "Pound"),
                    ([4, 2], "russia currency foo", "Rouble"),                   
                    ([4, 1], "russia capital foo", "Moscow"),
                    ([3, 1], "england capital foo", "London")]
 
-        # tokens = torch.IntTensor(list(x[0] for x in queries))
-        # text_length = torch.IntTensor([2, 2, 2, 2])
-        # embeddings = self.dan.dan_model.embeddings(tokens)
-
-        embeddings = self.dan.dan_model.embeddings(self.documents)
-        average = self.dan.dan_model.average(embeddings, self.length)
-        representation = self.dan.dan_model.network(average).detach().numpy()
+        embeddings = self.mr_dan.dan_model.embeddings(self.documents)
+        average = self.mr_dan.dan_model.average(embeddings, self.length)
+        representation = self.mr_dan.dan_model.network(average).detach().numpy()
 
         for idx, query in enumerate(queries):
             _, doc, ans = query
@@ -174,7 +196,9 @@ class DanTest(unittest.TestCase):
                               ans, str(ref), str(annotated_result)))
 
         # Now do it in batch
-        results = self.censored_data.get_batch_nearest(representation, 3)
+        results = self.censored_data.get_batch_nearest(representation, 3,
+                                                       lookup_answer=False,
+                                                       lookup_answer_id=False)
         for idx, query in enumerate(queries):
           _, doc, ans = query                
           result = results[idx]
@@ -186,22 +210,6 @@ class DanTest(unittest.TestCase):
                               self.censored_data.representation_string(representation[idx]),
                               ans, str(ref), str(annotated_result)))
 
-    def testNonZeroLoss(self):
-      sampler = torch.utils.data.sampler.SequentialSampler(self.censored_data)
-      loader = DataLoader(self.full_data, batch_size=4, sampler=sampler,
-                          collate_fn=DanGuesser.batchify)
-      criterion = nn.TripletMarginLoss(margin=5.0)
-      optimizer = torch.optim.Adamax(self.dan.dan_model.parameters())
-      model = self.dan.dan_model
-      model = break_dan(model)
-
-      for idx, batch in enumerate(loader):
-        loss = self.dan.batch_step(optimizer, self.dan.dan_model, criterion,
-                                   batch['question_text'], batch['question_len'],
-                                   batch['pos_text'], batch['pos_len'],
-                                   batch['neg_text'], batch['neg_len'])
-        self.assertGreater(loss.item(), 0.0, "Loss for batch %i" % idx)
-        # All examples with "capital" contribute to loss
                              
     def testDataAnswers(self):
         basic_answers = ["Pound", "Rouble", "Moscow", "London"] * 3
@@ -233,10 +241,10 @@ class DanTest(unittest.TestCase):
                              (doc_index, str(pos), str(neg)))
             self.assertNotEqual(question, neg)
         
-    def testNetwork(self):
-        embeddings = self.dan.dan_model.embeddings(self.documents)
-        average = self.dan.dan_model.average(embeddings, self.length)
-        representation = self.dan.dan_model.network(average)
+    def testEmbeddingNetwork(self):
+        embeddings = self.mr_dan.dan_model.embeddings(self.documents)
+        average = self.mr_dan.dan_model.average(embeddings, self.length)
+        representation = self.mr_dan.dan_model.network(average)
 
         reference = [([+1.0, +1.0], "currency england"),
                      ([-1.0, +1.0], "currency russia"),                     
@@ -258,8 +266,8 @@ class DanTest(unittest.TestCase):
                      ([-0.5, -0.5], "russia capital"),
                      ([+0.5, -0.5], "england capital")]
        
-        embeddings = self.dan.dan_model.embeddings(self.documents)
-        average = self.dan.dan_model.average(embeddings, self.length)
+        embeddings = self.mr_dan.dan_model.embeddings(self.documents)
+        average = self.mr_dan.dan_model.average(embeddings, self.length)
 
         for row, expected in enumerate(reference):
             expected_vector, text = expected
@@ -272,8 +280,8 @@ class DanTest(unittest.TestCase):
 
         length = torch.IntTensor([1, 5, 2])
 
-        embeddings = self.dan.dan_model.embeddings(documents)
-        average = self.dan.dan_model.average(embeddings, length)
+        embeddings = self.mr_dan.dan_model.embeddings(documents)
+        average = self.mr_dan.dan_model.average(embeddings, length)
 
         for row in range(3):
             self.util_tensor_compare(average[0], torch.FloatTensor([0.0, 0.0]), "Zero %i" % row)
@@ -286,6 +294,49 @@ class DanTest(unittest.TestCase):
            self.util_tensor_compare(q_vec[0], torch.LongTensor(reference[idx]),
                                     str(documents[idx]))
 
+    def testSoftmaxRepresentation(self):
+        embeddings = self.ce_dan.dan_model.embeddings(self.documents)
+        average = self.ce_dan.dan_model.average(embeddings, self.length)
+        representation = self.ce_dan.dan_model.network(average)
+
+        reference = [([0, 0, 1, 0], "currency england"),
+                     ([0, 0, 0, 1], "currency russia"),                     
+                     ([0, 1, 0, 0], "capital russia"),
+                     ([1, 0, 0, 0], "capital england")]
+
+        for row, expected in enumerate(reference):
+            expected_vector, text = expected
+            self.util_tensor_compare(representation[row], torch.FloatTensor(expected_vector),
+                                     text + " (Direct)")
+
+    def testMarginErrors(self):
+        # should get zero errors with right labels
+        right_labels = ["pound", "rouble", "moscow", "london"]
+        wrong_labels = ["london", "pound", "rouble", "moscow"]
+        
+        errors = number_errors(self.documents, self.length, right_labels,
+                               self.full_data, self.mr_dan.dan_model)
+        self.assertEqual(errors, 0)
+
+        errors = number_errors(self.documents, self.length, wrong_labels,
+                               self.full_data, self.mr_dan.dan_model)
+        self.assertEqual(errors, 4)
+            
+    def testSoftmaxErrors(self):
+        right_labels = ["Pound", "Rouble", "Moscow", "London"]
+        wrong_labels = ["London", "Pound", "Rouble", "Moscow"]
+        
+        # should get zero errors with right labels
+        errors = number_errors(self.documents, self.length, right_labels,
+                               self.full_data, self.ce_dan.dan_model)
+
+        self.assertEqual(errors, 0)
+
+        errors = number_errors(self.documents, self.length,
+                               wrong_labels,
+                               self.full_data, self.ce_dan.dan_model)
+        self.assertEqual(errors, 4)
+           
     def testVocab(self):
         vocab = self.vocab
 
@@ -294,7 +345,6 @@ class DanTest(unittest.TestCase):
         self.assertEqual(vocab["currency"], 2)
         self.assertEqual(vocab["england"],  3)
         self.assertEqual(vocab["russia"],   4)
-        print("Russia" in vocab)
 
     def testEmbedding(self):
         for word, embedding in [["unk",      [+0, +0]],
@@ -302,7 +352,7 @@ class DanTest(unittest.TestCase):
                                 ["currency", [+0, +1]],
                                 ["england",  [+1, +0]],
                                 ["russia",   [-1, +0]]]:
-            model = self.dan.dan_model.embeddings(torch.tensor(self.vocab[word]))
+            model = self.mr_dan.dan_model.embeddings(torch.tensor(self.vocab[word]))
             reference = torch.FloatTensor(embedding)
             self.util_tensor_compare(model, reference, word)
 
@@ -320,7 +370,7 @@ class DanTest(unittest.TestCase):
             for token_idx, vocab in enumerate(reference["tokens"]):
                 self.assertEqual(vocab, self.documents[idx][token_idx].item(),
                                  "Token %i of Example %i (%s)" % (token_idx, idx, reference["description"]))
-            embed = self.dan.dan_model.embeddings(torch.tensor(doc))
+            embed = self.mr_dan.dan_model.embeddings(torch.tensor(doc))
 
             for word_idx, reference_word in enumerate(reference["embed"]):
                 reference_word = torch.FloatTensor(reference_word)
