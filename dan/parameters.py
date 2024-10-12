@@ -257,7 +257,6 @@ class Parameters:
             
     def load_command_line_params(self, flags):
         for parameter, _, _, _ in self.params:
-            print("Adding param %s" % parameter)
             name =  "%s_%s" % (self.name, parameter)
             value = getattr(flags, name)
             setattr(self, name, value)

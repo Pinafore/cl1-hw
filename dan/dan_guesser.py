@@ -77,7 +77,6 @@ class DanPlotter:
 
 
 
-            if type(self.criterion).__name__ == "MarginRankingLoss":
             
             
 
@@ -259,7 +258,7 @@ class DanModel(nn.Module):
     def initialize_parameters(self, initialization):
         if initialization=="identity":
             assert emb_dim==n_hidden_units, "Cannot initialize to identiy matrix if embedding dimension is not hidden dimension"
-            if loss=='cross_entropy':
+            if loss == 'cross_entropy':
                 assert n_hidden_units == n_answers, "Cannot initialize to identity matrix if hidden dimension doesn't match the number of answers"            
             with torch.no_grad():
                 self.linear1.weight.data.copy_(torch.eye(n_hidden_units))
@@ -622,7 +621,8 @@ class DanGuesser(Guesser):
 
             if idx % checkpoint_every == 0 and idx > 0:
                 print_loss_avg = print_loss_total / checkpoint_every
-                self.training_data.refresh_index()
+                if type(model.criterion).__name__ == "MarginRankingLoss":
+                    self.training_data.refresh_index()
 
                 logging.info('Epoch %i: batch: %d, loss: %.5f time: %.5f' % (epoch, idx, print_loss_avg, time.time()- start))
                 print_loss_total = 0
@@ -825,12 +825,6 @@ class DanGuesser(Guesser):
                    'ex_indices': ex_indices}
 
         return q_batch
-
-def cross_entropy_errors():
-    """
-    Given a model, compute examples' representation in the model, get the
-    guess for each example, and then give the number of errors.
-    """
 
 def number_errors(question_text: torch.Tensor, question_len: torch.Tensor,
                   labels: Iterable[str], train_data: QuestionData, model: DanModel):

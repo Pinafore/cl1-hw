@@ -111,7 +111,7 @@ class DanTest(unittest.TestCase):
         from dan_guesser import DanPlotter
         new_model = break_dan(self.mr_dan.dan_model)
         
-        plotter = DanPlotter("test_plot.pdf")
+        plotter = DanPlotter("test")
 
         plotter.add_checkpoint(self.mr_dan.dan_model, self.full_data, self.full_data, 0)        
         plotter.add_checkpoint(new_model, self.full_data, self.full_data, 10)
