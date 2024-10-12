@@ -150,11 +150,9 @@ In this homework, we use pytorch build-in data loader to do data
 mini-batching, which provides single or multi-process iterators over the
 dataset(https://pytorch.org/docs/stable/data.html).
 
-For data loader, there includes two functions, batichfy and vectorize. For
-each example, we need to vectorize the question text in to a vector using
-vocabuary. In this assignment, you need to write the vectorize function
-yourself. Then we provide the batchify function to split the dataset into
-mini-batches.
+For data loader, there are two important functions: batichfy and
+vectorize. You don't need to implement anything here, but to implement the
+rest of your code, you need to understand what they do.
 
 
 What you have to do
@@ -218,5 +216,5 @@ You get more points if you:
 What to turn in 
 ----------------
 
-1. Submit your dan_guesser.py file and parameter.py file (if you change any defaults)
+1. Submit your `dan_guesser.py` file and `parameter.py` file (if you change any defaults)
 2. Submit an analysis document if you did any of the extra credit (be sure to give full command line invocation and example outputs)
