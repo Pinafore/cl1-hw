@@ -108,7 +108,7 @@ Here is an example run that does this.
     INFO:root:[Epoch 0060] Dev Accuracy: 0.375 Loss: 1.336877
     INFO:root:[Epoch 0070] Dev Accuracy: 0.500 Loss: 1.325287
 
-    		     ... snip ...
+                 ... snip ...
 
     INFO:root:[Epoch 0960] Dev Accuracy: 0.750 Loss: 0.007144
     INFO:root:[Epoch 0970] Dev Accuracy: 0.750 Loss: 0.006988
@@ -127,10 +127,11 @@ Your network needs to use the layers defined in the constructor:
  * `linear1 = nn.Linear`
  * `linear2 = nn.Linear`
 
-Between `linear1` and `linear2` you need to have a non-linear activation (the
-unit tests assume ReLU).  You *may* have a dropout anywhere you like in the
-network, but it must use the `nn_dropout` so we can turn it off for
-deterministic testing.
+Between `linear1` and `linear2` (but not after `linear2`) you need to have a
+non-linear activation (the unit tests assume ReLU).  You *may* have a dropout
+anywhere you like in the network, but it must use the `nn.Dropout` so we can
+turn it off for deterministic testing. Please ensure not to have ReLU after linear2
+
 
 Loss function
 ---------------
@@ -162,7 +163,7 @@ Coding:
 1. Understand the structure of the code.
 2. Understand the vectorize funtion.
 3. Write DAN model initialization `__init__` of `DanModel`: replace `self.network = None` with a real network.
-4. Write model forward function.
+4. Write `DanModel` forward function.
 5. Write the model training/testing function in `batch_step`. We don't have unit tests for this part, but to get reasonable performance, it's necessary to get it correct.
 6. Write the evaluation code `number_errors` that counts up how many examples you got right.
 
@@ -217,8 +218,8 @@ What to turn in
 ----------------
 
 1. Submit your `dan_guesser.py` file and `parameter.py` file (if you change any defaults)
-2. Submit an analysis PDF document if you did any of the extra credit.  This document should contain:
-      * An explanation of what you did
+2. Submit an analysis PDF document as `analysis.pdf` if you did any of the extra credit.  This document should contain:
+      * Provide an explanation of your work, including details on the type of hyper-parameter tuning you performed. Please follow this with a detailed explanation. For example, you may include graphs such as Accuracy vs. Hyper-parameter values to illustrate the results.
       * Your results on the full dataset (should be your accuracy given a given number of answer ... bigger the better)
       * The full command line invocation and example outputs
 
@@ -226,4 +227,4 @@ What to turn in
 Grading
 --------------
 
-To get full points on this assignment, you'll need to have an implementation that can get perfect on the `mini-dev` dataset when trained on the `mini-train` dataset.  
+To get full points on this assignment, you'll need to have an implementation that can get perfect on the `mini-dev` dataset when trained on the `mini-train` dataset.
