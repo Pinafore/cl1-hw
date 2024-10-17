@@ -127,10 +127,10 @@ Your network needs to use the layers defined in the constructor:
  * `linear1 = nn.Linear`
  * `linear2 = nn.Linear`
 
-Between `linear1` and `linear2` you need to have a non-linear activation (the
-unit tests assume ReLU).  You *may* have a dropout anywhere you like in the
-network, but it must use the `nn_dropout` so we can turn it off for
-deterministic testing.
+Between `linear1` and `linear2` (but not after `linear2`) you need to have a
+non-linear activation (the unit tests assume ReLU).  You *may* have a dropout
+anywhere you like in the network, but it must use the `nn_dropout` so we can
+turn it off for deterministic testing.
 
 Loss function
 ---------------
