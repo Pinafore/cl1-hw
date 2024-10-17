@@ -217,7 +217,7 @@ What to turn in
 ----------------
 
 1. Submit your `dan_guesser.py` file and `parameter.py` file (if you change any defaults)
-2. Submit an analysis document if you did any of the extra credit.  This document should contain:
+2. Submit an analysis PDF document if you did any of the extra credit.  This document should contain:
       * An explanation of what you did
       * Your results on the full dataset (should be your accuracy given a given number of answer ... bigger the better)
       * The full command line invocation and example outputs
