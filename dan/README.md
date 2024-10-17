@@ -160,7 +160,7 @@ What you have to do
 
 Coding:
 1. Understand the structure of the code.
-2. Write the data vectorize funtion.
+2. Understand the vectorize funtion.
 3. Write DAN model initialization `__init__` of `DanModel`: replace `self.network = None` with a real network.
 4. Write model forward function.
 5. Write the model training/testing function in `batch_step`. We don't have unit tests for this part, but to get reasonable performance, it's necessary to get it correct.
@@ -217,7 +217,10 @@ What to turn in
 ----------------
 
 1. Submit your `dan_guesser.py` file and `parameter.py` file (if you change any defaults)
-2. Submit an analysis document if you did any of the extra credit (be sure to give full command line invocation and example outputs)
+2. Submit an analysis document if you did any of the extra credit.  This document should contain:
+      * An explanation of what you did
+      * Your results on the full dataset (should be your accuracy given a given number of answer ... bigger the better)
+      * The full command line invocation and example outputs
 
 
 Grading
