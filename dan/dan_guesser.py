@@ -242,7 +242,7 @@ class DanModel(nn.Module):
         # word embeddings into the representation space, and the
         # second linear layer makes the final prediction.  Other
         # layers / functions to consider are Dropout, ReLU.
-        # For test cases, the network we consider is - linear1 -> ReLU() -> Dropout(0.5) -> linear2 -> ReLU()
+        # For test cases, the network we consider is - linear1 -> ReLU() -> Dropout(0.5) -> linear2
 
         self.network = None
         #### Your code here
