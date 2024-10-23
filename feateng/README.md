@@ -444,7 +444,7 @@ How to Turn in Your System
 set of your best features runs by *default*.  In other words, change
 this line so that instead of the empty list, it loads your favorite features:
 
-    parser.add_argument('--features', nargs='+', help='Features to feed into Buzzer', type=str,  default=[])
+     parser.add_argument('--features', nargs='+', help='Features to feed into Buzzer', type=str,  default=[])
 
 * **Custom Training Data** (If you used additional training data beyond the Wikipedia pages, upload that as well
     * (OR) If either any of your files are >100MB, please submit a shell
