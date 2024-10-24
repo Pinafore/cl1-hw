@@ -1,7 +1,6 @@
 
 This homework is about dependency parsing.  We'll create a classifier to create a shift-reduce parser.
 
-
 Data
 ===========
 
@@ -34,7 +33,15 @@ First, we’ll need some dependency parsed sentences.  NLTK has a small dataset 
 What to do
 ============
 
-1. Given a DependencyGraph object, create a method (transition_sequence) that produces a series of shift-reduce moves (instances of the Transition object) that produces the tree.  You’ll also want to generate (or otherwise reconstruct) the buffer and stack.
+0. Implement the stack and buffer operations in the class `ShiftReduceState`.  You will need to implement three functions (one for each action type): `shift`, `right_arc`, and `left_arc`.
+
+1. Given a DependencyGraph object, create a method (transition_sequence) that
+produces a series of shift-reduce moves (instances of the Transition object)
+that produces the tree.
+
+
+
+
 1. Given a series of shift-reduce moves and an input sentence, produce the vector of governing heads (implement the function parse_from_transition).  In practice, this means creating a new dependency parse.
 1. Generate feature vectors for your transitions.  Start with something simple!
 1. Given a set of transitions, train a MaxEnt classifier to produce the same moves using the feature set.  (Use “IIS” first for the algorithm - I had trouble with others.)
