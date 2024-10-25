@@ -193,6 +193,13 @@ class ShiftReduceState:
 
 
 
+def heuristic_transition_sequence(sentence: DependencyGraph) -> Iterable[Transition]:
+    """
+    Implement this for extra credit
+    """
+
+    return []
+
 def classifier_transition_sequence(classifier: MaxentClassifier, sentence: DependencyGraph) -> Iterable[Transition]:
     """
     Unlike transition_sequence, which uses the gold stack and buffer states,
@@ -226,6 +233,7 @@ def transition_sequence(sentence: DependencyGraph) -> Iterable[Transition]:
 
 
     return
+    yield # We write this yield to make the function iterable
 
 def parse_from_transition(word_sequence: Iterable[Tuple[str, str]], transitions: Iterable[Transition]) -> DependencyGraph:
   """
@@ -247,11 +255,8 @@ def parse_from_transition(word_sequence: Iterable[Tuple[str, str]], transitions:
 
   
   # get the head index of each word
-      assert(len(tob)>0), "Popping from empty buffer for shift at step %i.  Buffer is %s, Stack is %s, Sent is: %s" % (step, str(tos), str(tob), str(sent)) 
 
-      assert(len(tos)>0), "Popping from empty stack for left arc at step %i.  Buffer is %s, Stack is %s, Sent is: %s" % (step, str(tos), str(tob), str(sent))
       
-      assert(len(tob)> 0), "Buffer cannot be empty for right arc at step %i.  Buffer is %s, Stack is %s, Sent is: %s" % (step, str(tos), str(tob), str(sent))
 
   # You're allowed to create your DependencyGraph however you like, but this
   # is how I did it.
@@ -326,12 +331,12 @@ if __name__ == "__main__":
     feature_examples = []
     for sentence in train_data:
         feature_examples += sentence["features"]
-    classifier = MaxentClassifier.train(feature_examples, algorithm='IIS', max_iter=2, min_lldelta=0.001)
+    classifier = MaxentClassifier.train(feature_examples, algorithm='IIS', max_iter=25, min_lldelta=0.001)
 
     # Classification accuracy
     classifier_acc = classifier_accuracy(classifier, test_data)
     print('Held-out Classification Accuracy: %6.4f' % classifier_acc)
 
     attachment_acc = attachment_accuracy(classifier, test_data)
-    print('Held-out Attachment Accuracy: %6.4f' % attachment_acc)
+    print('Held-out Attachment Accuracy:     %6.4f' % attachment_acc)
 
