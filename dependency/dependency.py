@@ -263,7 +263,7 @@ def parse_from_transition(word_sequence: Iterable[Tuple[str, str]], transitions:
   reconstructed = '\n'.join(sent)
   return nltk.parse.dependencygraph.DependencyGraph(reconstructed)
 
-def sentence_attachment_accuracy(classifier: ClassifierI, reference: DependencyGraph, sample: DependencyGraph) -> float :
+def sentence_attachment_accuracy(reference: DependencyGraph, sample: DependencyGraph) -> float :
     """
     Given two parse tree transition sequences, compute the number of correct
     attachments (ROOT is always correct)
