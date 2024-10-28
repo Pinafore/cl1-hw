@@ -247,7 +247,7 @@ def parse_from_transition(word_sequence: Iterable[Tuple[str, str]], transitions:
   assert len(transitions) >= len(word_sequence), "Not enough transitions"
 
   # insert root if needed
-  if word_sequence[0] != kROOT:
+  if word_sequence[0][0] != kROOT:
     word_sequence.insert(0, (kROOT, 'TOP'))
 
   sent = ['']*(len(word_sequence))         

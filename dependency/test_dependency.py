@@ -38,9 +38,8 @@ class TestStringMethods(unittest.TestCase):
     def setUp(self):
         self.toy_sent = nltk.parse.dependencygraph.DependencyGraph(kTOY)
         self.sent = nltk.parse.dependencygraph.DependencyGraph(kCORRECT)
-        self.words = [kROOT] + [(x.split('\t')[0], x.split('\t')[1]) for x in kCORRECT.split('\n')]
-        self.toy_words = [kROOT] + [(x.split('\t')[0], x.split('\t')[1]) for x in kTOY.split('\n')]
-        self.toy_pos = [kROOT] + [x.split('\t')[1] for x in kTOY.split('\n')]
+        self.words = [(kROOT, 'TOP')] + [(x.split('\t')[0], x.split('\t')[1]) for x in kCORRECT.split('\n')]
+        self.toy_words = [(kROOT, 'TOP')] + [(x.split('\t')[0], x.split('\t')[1]) for x in kTOY.split('\n')]
         self.right_actions = [Transition('s')] * (len(self.words) - 2) + [Transition('r')] * (len(self.words) - 1) + [Transition('s')]
         self.right_branch = nltk.parse.dependencygraph.DependencyGraph(kRIGHT)
         self.toy_sequence = [Transition('s', None), Transition('l', (2, 1)), Transition('s', None), Transition('l', (3, 2)), Transition('s', None), Transition('r', (3, 4)), Transition('r', (0, 3)), Transition('s', None)]
@@ -48,7 +47,7 @@ class TestStringMethods(unittest.TestCase):
     
     def test_toy_state(self):
 
-        state = ShiftReduceState(self.toy_words, self.toy_pos)
+        state = ShiftReduceState([x[0] for x in self.toy_words], [x[1] for x in self.toy_words])
 
         state_checks = [{"stack": [0], "buffer": [4, 3, 2, 1], "edges": []},                     #1: shift
                         {"stack": [0, 1], "buffer": [4, 3, 2], "edges": [(2,1)]},                #2: left
@@ -105,8 +104,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual([x.type for x in sequence], [x.type for x in self.sequence])
 
     def test_toy_reconstruct(self):
-        sentence = parse_from_transition(self.words, self.sequence)
-        self.compare_trees(sentence, self.sent)
+        sentence = parse_from_transition(self.toy_words, self.toy_sequence)
+        self.compare_trees(sentence, self.toy_sent)
 
     # test that the right branch is correct
     def test_right_sequence_reconstruct(self):
