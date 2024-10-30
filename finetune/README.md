@@ -27,9 +27,9 @@ After understanding the code, you can get down to coding:
 to download the DistillBERT model.
 
 
-     ./venv/bin/python3 lorabert_buzzer.py 
-     config.json: 100%|████████████████████████████████████████████| 483/483 [00:00<00:00, 7.18MB/s]
-     model.safetensors: 100%|████████████████████████████████████| 268M/268M [00:04<00:00, 64.1MB/s]
+      ./venv/bin/python3 lorabert_buzzer.py 
+      config.json: 100%|████████████████████████████████████████████| 483/483 [00:00<00:00, 7.18MB/s]
+      model.safetensors: 100%|████████████████████████████████████| 268M/268M [00:04<00:00, 64.1MB/s]
 
 
 This will go faster afterward.
