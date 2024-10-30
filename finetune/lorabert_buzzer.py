@@ -37,7 +37,6 @@ class LoRALayer(torch.nn.Module):
         self.alpha = 0
 
         # Complete the initialization of the two weight matrices
-        self.B = torch.nn.Parameter(torch.zeros(rank, out_dim))
         self.alpha = alpha
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -82,14 +81,7 @@ def add_lora(model: torch.nn.Module, rank: int, alpha: float,
         modules_to_adapt: The key of the dictionary is the model component to adapt (e.g., "attention" or "ffn"), and the values are specific linear layers in that component to adapt.  Anything in this dictionary will be adapted, but anything else will remain frozen.
     """
     
-    replace_with_lora = partial(LinearLoRA, rank=rank, alpha=alpha)
 
-    for layer in model.layer:
-        for component_name in modules_to_adapt:
-            component = getattr(layer, component_name)
-            for module_name in modules_to_adapt[component_name]:
-                module = getattr(component, module_name)
-                setattr(component, module_name, LinearLoRA(module, rank, alpha))
     return model
                 
 
