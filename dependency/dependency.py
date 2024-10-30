@@ -312,13 +312,6 @@ if __name__ == "__main__":
     words = [x.split('\t')[0] for x in kCORRECT.split('\n')]
     words = [kROOT] + words
 
-    print(type(sent))
-
-    index = 1
-    for ii in sent.to_conll(4).split("\n"):
-        print("%i\t%s" % (index, ii))
-        index += 1
-
     for ii in transition_sequence(sent):
         print(ii.pretty_print(sent))
 
