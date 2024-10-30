@@ -1,5 +1,5 @@
 
-Big Pictuure
+Big Picture
 =====
 
 While we've trained models from scratch, often the best place to start is with
@@ -73,20 +73,12 @@ you did and how you evaluated whether it worked well.
 * [Up to 5 Points] Experiment with what layers are most necessary for the best
   improvements and test values of alpha and rank that work best (you cannot
   use tiny datasets for this, unfortunately, so this requires a GPU, probably
-<<<<<<< HEAD
-  ... not a great one, as any GPU will likely be fine).  Make sure in addition to any accuracy / buzz ratio numbers you provide you also count the number of parameters.
-=======
-  ... not a great one, as any GPU will likely be fine).
->>>>>>> 1d0df98 (first draft of assignment)
+  ... not a great big one, as any GPU will likely be fine).  Make sure in addition to any accuracy / buzz ratio numbers you provide you also count the number of parameters.
 
 * [Up to 3 Points] The training code in `train` are taken directly from the
   Huggingface examples and I didn't think too much about them.  It's not clear
   that they're a good fit for the data.  Can you find something substantially
-<<<<<<< HEAD
   better?  (Keeping the model / adaptation / etc. constant.) 
-=======
-  better?  
->>>>>>> 1d0df98 (first draft of assignment)
 
 
 FAQ
