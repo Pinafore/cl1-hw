@@ -78,7 +78,9 @@ so that would be cheating).
 To implement this, your state function needs to implement the
 ``ShiftReduceState`` function ``feature_extractor``.  The results of
 those should then be stored in the ``Transition`` class using the
-function ``add_feature``.
+function ``add_feature``.  Because the state *changes* while you're
+creating the tree within the `transition_sequence` function, you must
+create the features *while you're deriving the tree*.
 
 4. Given a set of transitions, train a MaxEnt classifier to produce
 the same moves using the feature set.  (Use “IIS” first for the
