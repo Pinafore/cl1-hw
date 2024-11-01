@@ -34,7 +34,7 @@ class TestStringMethods(unittest.TestCase):
 
     def compare_trees(self, reference, test):
         self.assertEqual(reference.nodes, test.nodes)
-        
+
     def setUp(self):
         self.toy_sent = nltk.parse.dependencygraph.DependencyGraph(kTOY)
         self.sent = nltk.parse.dependencygraph.DependencyGraph(kCORRECT)
@@ -44,7 +44,7 @@ class TestStringMethods(unittest.TestCase):
         self.right_branch = nltk.parse.dependencygraph.DependencyGraph(kRIGHT)
         self.toy_sequence = [Transition('s', None), Transition('l', (2, 1)), Transition('s', None), Transition('l', (3, 2)), Transition('s', None), Transition('r', (3, 4)), Transition('r', (0, 3)), Transition('s', None)]
         self.sequence = [Transition('s', None), Transition('l', (2, 1)), Transition('s', None), Transition('l', (3, 2)), Transition('s', None), Transition('s', None), Transition('l', (5, 4)), Transition('s', None), Transition('s', None), Transition('s', None), Transition('l', (8, 7)), Transition('r', (6, 8)), Transition('r', (5, 6)), Transition('r', (3, 5)), Transition('s', None), Transition('r', (3, 9)), Transition('r', (0, 3)), Transition('s', None)]
-    
+
     def test_toy_state(self):
 
         state = ShiftReduceState([x[0] for x in self.toy_words], [x[1] for x in self.toy_words])
@@ -58,8 +58,8 @@ class TestStringMethods(unittest.TestCase):
                         {"stack": [0], "buffer": [3], "edges": [(2,1), (3,2), (3,4), (0,3)]},    #7: right
                         {"stack": [], "buffer": [0], "edges": [(2,1), (3,2), (3,4), (0,3)]},     #8: shift
                         {"stack": [0], "buffer": [], "edges": [(2,1), (3,2), (3,4), (0,3)]}      #9: null
-                        ] 
-        
+                        ]
+
         step = 0
         for action, state_check in zip(self.toy_sequence, state_checks):
             prior_stack = state.stack[:]
@@ -115,7 +115,7 @@ class TestStringMethods(unittest.TestCase):
     def test_reconstruct(self):
         sentence = parse_from_transition(self.words, self.sequence)
         self.compare_trees(sentence, self.sent)
-        
+
     def test_accuracy_ec(self):
         correct_accuracy = sentence_attachment_accuracy(self.sent, self.sent)
         self.assertEqual(len(self.words) - 1, correct_accuracy)

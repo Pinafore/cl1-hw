@@ -1,13 +1,24 @@
 
-This homework is about dependency parsing.  We'll create a classifier to create a shift-reduce parser.
+This homework is about dependency parsing.  We'll create a classifier
+to create a shift-reduce parser.
 
 
 Big Picture
 ===========
 
-The goal of this homework is to create a dependency parser.  This will be in two stages: first to create training data (an oracle sequence of transitions), and then to train a classifier to produce the same sequence of transitions.
+The goal of this homework is to create a dependency parser.  This will
+be in two stages: first to create training data (an oracle sequence of
+transitions), and then to train a classifier to produce the same
+sequence of transitions.
 
-Evaluating the classifier is a bit tricky because the errors are not independent.  If you make a mistake on one word, it will affect the ability to correctly parse the rest of the sentence.  We'll use two metrics: classification accuracy (how often the classifier chooses the correct action given all previous actions were correct, similar to teacher forcing we discussed for LLM decoding) and attachment accuracy (how often the classifier chooses the correct parent for a word, which is extra credit).
+Evaluating the classifier is a bit tricky because the errors are not
+independent.  If you make a mistake on one word, it will affect the
+ability to correctly parse the rest of the sentence.  We'll use two
+metrics: classification accuracy (how often the classifier chooses the
+correct action given all previous actions were correct, similar to
+teacher forcing we discussed for LLM decoding) and attachment accuracy
+(how often the classifier chooses the correct parent for a word, which
+is extra credit).
 
 Data
 ===========
@@ -63,6 +74,11 @@ first step is to generate feature vectors for your transitions.  Start
 with something simple!  *You cannot use the true transitions
 or the true edges as features* (that's what you're trying to predict,
 so that would be cheating).
+
+To implement this, your state function needs to implement the
+``ShiftReduceState`` function ``feature_extractor``.  The results of
+those should then be stored in the ``Transition`` class using the
+function ``add_feature``.
 
 4. Given a set of transitions, train a MaxEnt classifier to produce
 the same moves using the feature set.  (Use “IIS” first for the
