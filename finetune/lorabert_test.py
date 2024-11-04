@@ -45,7 +45,7 @@ class DanTest(unittest.TestCase):
     def test_bert_reparameterize(self):
         
         for ii, module_config in enumerate(self.modules):
-            model = self.bert[ii]
+            model, tokenizer = self.bert[ii]
 
             # Before we adapt layers, check that all modules are Linear layers
             for layer in model.bert.encoder.layer:
