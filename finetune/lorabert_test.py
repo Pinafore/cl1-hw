@@ -4,7 +4,7 @@ from lorabert_buzzer import LoRALayer, LinearLoRA, initialize_base_model, add_lo
 import torch
 from torch import Tensor
 
-class DanTest(unittest.TestCase):
+class LoraBertTest(unittest.TestCase):
     def setUp(self):
         self.in_dim = 3
         self.out_dim = 4
@@ -32,6 +32,19 @@ class DanTest(unittest.TestCase):
     def test_lora_dim(self):
         self.assertEqual(self.lora_layer.A.shape, (self.in_dim, self.rank))
         self.assertEqual(self.lora_layer.B.shape, (self.rank, self.out_dim))
+
+    def test_gradient_flow(self):
+        # Ensure gradients flow correctly through LoRA parameters
+
+        x = torch.FloatTensor([2, 4, 6]).requires_grad_()
+
+        y = self.lora_layer(x)
+
+        y.sum().backward()
+
+        self.assertIsNotNone(x.grad, "Gradients should flow back to input")
+        self.assertTrue(torch.any(self.lora_layer.A.grad == 0), "Gradients should flow to LoRA layer A matrix")
+        self.assertTrue(torch.any(self.lora_layer.B.grad != 0), "Gradients should flow to LoRA layer B matrix")
 
     def test_lora_forward(self):
         with torch.no_grad():
