@@ -36,6 +36,9 @@ class LoRALayer(torch.nn.Module):
         self.B = None
         self.alpha = 0
 
+        self.in_dim = in_dim
+        self.out_dim = out_dim
+
         # Complete the initialization of the two weight matrices
         self.alpha = alpha
 
@@ -43,10 +46,19 @@ class LoRALayer(torch.nn.Module):
         """
         Compute the linear layer's original result, then add the low-rank delta
         """
-        delta = torch.zeros_like(x)
+        assert x.shape[-1] == self.in_dim, "Input dimension %s does not match input dimension %i" % (str(x.shape), self.in_dim)
+
+        if len(x.shape) == 1:
+            delta = torch.zeros(self.out_dim)
+            output_dimension = torch.Size([self.out_dim])
+        else:
+            delta = torch.zeros((x.shape[0], self.in_dim))
+            output_dimension = torch.Size((x.shape[0], self.out_dim))
 
         # Compute the low-rank delta
-        return x + delta
+
+        assert delta.shape == output_dimension, "Delta size %s inconsistent with output dimension %i" % (str(delta.shape), self.out_dim)
+        return delta
 
 
 class LinearLoRA(torch.nn.Module):

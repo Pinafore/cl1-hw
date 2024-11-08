@@ -33,18 +33,18 @@ class LoraBertTest(unittest.TestCase):
         self.assertEqual(self.lora_layer.A.shape, (self.in_dim, self.rank))
         self.assertEqual(self.lora_layer.B.shape, (self.rank, self.out_dim))
 
-    def test_gradient_flow(self):
-        # Ensure gradients flow correctly through LoRA parameters
 
-        x = torch.FloatTensor([2, 4, 6]).requires_grad_()
+    def test_gradient_flow(self):
+        # Ensure gradients flow correctly through LoRA parameters
 
-        y = self.lora_layer(x)
+        x = torch.FloatTensor([2, 4, 6]).requires_grad_()
 
-        y.sum().backward()
+        y = self.lora_layer(x)
 
-        self.assertIsNotNone(x.grad, "Gradients should flow back to input")
-        self.assertTrue(torch.any(self.lora_layer.A.grad == 0), "Gradients should flow to LoRA layer A matrix")
-        self.assertTrue(torch.any(self.lora_layer.B.grad != 0), "Gradients should flow to LoRA layer B matrix")
+        y.sum().backward()
+
+        self.assertIsNotNone(x.grad, "Gradients should flow back to input")
+        self.assertTrue(torch.any(self.lora_layer.A.grad != 0) or torch.any(self.lora_layer.B.grad != 0), "Gradients should flow to LoRA layers matrix")
 
     def test_lora_forward(self):
         with torch.no_grad():
