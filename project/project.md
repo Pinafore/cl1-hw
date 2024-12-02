@@ -57,7 +57,7 @@ assignment.
 First Deliverable
 ======================
 
-Your first deliverable is due 22. November.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
+Your first deliverable is due 22. November 2024.  This is a one page writeup detailing what you've done thus far.  It should prove that your project idea is sound and that you've made progress.  Good indications of this are:
 * You have your data
 * You've implemented baseline techniques that work
 * You've made some progress on the overall goal of your project
@@ -102,7 +102,7 @@ The final presentation will be a poster session.  Your poster should:
 Project Writeup
 ======================
 
-By 11:59 14. Dec 2024 [https://registrar.umd.edu/registration/register-classes/final-exams/fall](the final exam time as set by the registrar), have the person in your group whose last name
+By 11:59 14. Dec 2024 ([the final exam time as set by the registrar](https://registrar.umd.edu/registration/register-classes/final-exams/fall])), have the person in your group whose last name
 is alphabetically last submit their project writeup explaining what
 you did and what results you achieved on Gradescope.  This document should
 make it clear:
