@@ -102,7 +102,7 @@ The final presentation will be a poster session.  Your poster should:
 Project Writeup
 ======================
 
-By 11:59 14. Dec 2024 ([the final exam time as set by the registrar](https://registrar.umd.edu/registration/register-classes/final-exams/fall])), have the person in your group whose last name
+By 11:59 17. Dec 2024 ([the end of the final exam period as set by the registrar](https://registrar.umd.edu/registration/register-classes/final-exams/fall])), have the person in your group whose last name
 is alphabetically last submit the project writeup explaining what
 you did and what results you achieved on Gradescope (but use the group function so that everyone is included).  This document should
 make it clear:
