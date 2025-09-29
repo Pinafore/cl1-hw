@@ -1,6 +1,9 @@
 Deep Learning 
 =
 
+1. Implement the Cross Entropy objective.
+2. Make the Warp objective extra credit.
+
 Overview
 --------
 
