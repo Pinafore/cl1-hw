@@ -16,7 +16,7 @@ practice.
 In this homework, you'll use pytorch to implement a DAN classifier for
 determining the answer to a quizbowl question.
 
-You'll turn in your code on the submit server. This assignment is worth 40
+You'll turn in your code on gradescope. This assignment is worth 20
 points.
 
 Dataset
