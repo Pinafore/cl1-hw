@@ -89,54 +89,54 @@ perfect accuracy on this dataset.
 Here is an example run that does this.
 
     > python dan_guesser.py \
-  --secondary_questions mini-dev \
-  --questions mini-train \
-  --DanGuesser_hidden_units 50 \
-  --DanGuesser_vocab_size 30 \
-  --DanGuesser_num_classes 4 \
-  --DanGuesser_num_workers 0 \
-  --DanGuesser_num_epochs 100 \
-  --DanGuesser_embed_dim 50 \
-  --DanGuesser_nn_dropout 0.3 \
-  --DanGuesser_batch_size 4 \
-  --DanGuesser_device cpu
+      --secondary_questions mini-dev \
+      --questions mini-train \
+      --DanGuesser_hidden_units 50 \
+      --DanGuesser_vocab_size 30 \
+      --DanGuesser_num_classes 4 \
+      --DanGuesser_num_workers 0 \
+      --DanGuesser_num_epochs 100 \
+      --DanGuesser_embed_dim 50 \
+      --DanGuesser_nn_dropout 0.3 \
+      --DanGuesser_batch_size 4 \
+      --DanGuesser_device cpu
   
     Setting up logging
     INFO:root:Loading questions from mini-train
-INFO:root:Read 8 questions
-INFO:root:Loading questions from mini-dev
-INFO:root:Read 8 questions
-INFO:root:Loaded 8 train examples
-INFO:root:Loaded 8 dev examples
-INFO:root:Example: {'page': 'Rouble', 'text': 'What is this currency of russia'}
-INFO:root:Using device 'cpu' (cuda flag=False)
-INFO:root:Initializing guesser of type Dan
-INFO:root:Creating embedding layer for 30 vocab size, 4 classes with 50 dimensions (hidden dimension=50)
-100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 22595.58it/s]
-INFO:root:Loaded 8 questions with 4 unique answers
-100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 58457.20it/s]
-INFO:root:Loaded 8 questions with 4 unique answers
-INFO:root:Evaluated 8 examples, accuracy: 0.1250, loss: 0.9452
-INFO:root:Final accuracy=0.125000
-INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.9155
-INFO:root:Final accuracy=0.375000
-INFO:root:Evaluated 8 examples, accuracy: 0.2500, loss: 0.9182
-INFO:root:Final accuracy=0.250000
-INFO:root:Evaluated 8 examples, accuracy: 0.5000, loss: 0.8889
-INFO:root:Final accuracy=0.500000
-INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.8835
-INFO:root:Final accuracy=0.375000
-INFO:root:Evaluated 8 examples, accuracy: 0.6250, loss: 0.8153
-INFO:root:Final accuracy=0.625000
-INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.7764
-INFO:root:Final accuracy=1.000000
-...
-INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
-INFO:root:Final accuracy=1.000000
-INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0014
-INFO:root:Final accuracy=1.000000
-INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
-INFO:root:Final accuracy=1.000000
+    INFO:root:Read 8 questions
+    INFO:root:Loading questions from mini-dev
+    INFO:root:Read 8 questions
+    INFO:root:Loaded 8 train examples
+    INFO:root:Loaded 8 dev examples
+    INFO:root:Example: {'page': 'Rouble', 'text': 'What is this currency of russia'}
+    INFO:root:Using device 'cpu' (cuda flag=False)
+    INFO:root:Initializing guesser of type Dan
+    INFO:root:Creating embedding layer for 30 vocab size, 4 classes with 50 dimensions (hidden dimension=50)
+    100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 22595.58it/s]
+    INFO:root:Loaded 8 questions with 4 unique answers
+    100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 58457.20it/s]
+    INFO:root:Loaded 8 questions with 4 unique answers
+    INFO:root:Evaluated 8 examples, accuracy: 0.1250, loss: 0.9452
+    INFO:root:Final accuracy=0.125000
+    INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.9155
+    INFO:root:Final accuracy=0.375000
+    INFO:root:Evaluated 8 examples, accuracy: 0.2500, loss: 0.9182
+    INFO:root:Final accuracy=0.250000
+    INFO:root:Evaluated 8 examples, accuracy: 0.5000, loss: 0.8889
+    INFO:root:Final accuracy=0.500000
+    INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.8835
+    INFO:root:Final accuracy=0.375000
+    INFO:root:Evaluated 8 examples, accuracy: 0.6250, loss: 0.8153
+    INFO:root:Final accuracy=0.625000
+    INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.7764
+    INFO:root:Final accuracy=1.000000
+    ...
+    INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
+    INFO:root:Final accuracy=1.000000
+    INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0014
+    INFO:root:Final accuracy=1.000000
+    INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
+    INFO:root:Final accuracy=1.000000
 
 What components does your network need to have
 ----------------
@@ -155,7 +155,7 @@ Loss function
 ---------------
 
 In the code, there's the option to use one of two loss functions:
- * `MarginRankingLoss`
+ * `TripletMarginLoss`
  * `CrossEntropyLoss`
 
 You are only required to implement *cross entropy*.  The other loss function
