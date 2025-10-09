@@ -199,19 +199,6 @@ Here is an example run that does this.
     INFO:root:Final accuracy=1.000000
 
 
-Inspecting Training
---------------------
-
-To help you debug and to inspect how the representations evolve, we provide a
-utility to plot the internal representations.
-
-  ./venv/bin/python3 -i dan_guesser.py --secondary_questions mini-dev --questions mini-train --dan_guesser_plot_viz viz --dan_guesser_hidden_units 2 --dan_guesser_num_workers 1 --dan_guesser_num_epochs 50 --dan_guesser_embed_dim 2 --dan_guesser_ans_min_freq=0 --dan_guesser_nn_dropout 0 --dan_guesser_vocab_size 20
-
-Will show you the evolution in pdf files that start with ``train``.  For the data and
-parameter plots, however, it will only show you the first two dimensions.  If
-you're doing everything in two dimensions, you'll get the whole picture.  If
-you're using more than two dimensions, you'll miss out!
-
 Pytorch install
 ----------------
 For more information, check
