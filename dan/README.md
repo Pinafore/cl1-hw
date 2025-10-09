@@ -86,6 +86,65 @@ The data are defined in guesser.py:
 The learned representations won't be as clean, but you should be able to get
 perfect accuracy on this dataset.
 
+
+What components does your network need to have
+----------------
+
+Your network needs to use the layers defined in the constructor:
+ * `embeddings = nn.Embedding`
+ * `linear1 = nn.Linear`
+ * `linear2 = nn.Linear`
+
+Between `linear1` and `linear2` (but not after `linear2`) you need to have a
+non-linear activation (the unit tests assume ReLU).  You *may* have a dropout
+anywhere you like in the network, but it must use the `nn_dropout` so we can
+turn it off for deterministic testing.
+
+Loss function
+---------------
+
+In the code, there's the option to use one of two loss functions:
+ * `TripletMarginLoss`
+ * `CrossEntropyLoss`
+
+You are only required to implement *cross entropy*.  The other loss function
+is too fiddly to require for a homework.  It is okay to leave the
+implementation of the `MarginRankingLoss` blank.
+
+Pytorch data loader
+----------------
+
+In this homework, we use pytorch build-in data loader to do data
+mini-batching, which provides single or multi-process iterators over the
+dataset(https://pytorch.org/docs/stable/data.html).
+
+For data loader, there are two important functions: batichfy and
+vectorize. You don't need to implement anything here, but to implement the
+rest of your code, you need to understand what they do.
+
+
+What you have to do
+----------------
+
+Coding:
+1. Understand the structure of the code and the vectorize funtion.
+2. Write DAN model initialization `__init__` of `DanModel`: replace `self.network = None` with a real network.
+3. Implement `def average()` function.
+4. Implement `def forward()` function.
+5. In `run_epoch()`, implement the cross entropy loss function.
+6. In `evaluate()` function, compute the loss; generate predicted answers and compute the accuracy.
+
+
+Optional things that might help
+--------------------
+
+1. Change the initialization.  Don't cheat to hand-set parameters to the "right" answer, but you might want to use something like an identity initialization (provided, but only works for specific network configurations).  Your initialization can't depend on knowing the identity of words (in other words, the embedding initialization must always be random).
+2. Swap out the optimizer
+3. Play around with network widths
+
+
+Training
+--------------------
 Here is an example run that does this.
 
     > python dan_guesser.py \
@@ -138,59 +197,6 @@ Here is an example run that does this.
     INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
     INFO:root:Final accuracy=1.000000
 
-What components does your network need to have
-----------------
-
-Your network needs to use the layers defined in the constructor:
- * `embeddings = nn.Embedding`
- * `linear1 = nn.Linear`
- * `linear2 = nn.Linear`
-
-Between `linear1` and `linear2` (but not after `linear2`) you need to have a
-non-linear activation (the unit tests assume ReLU).  You *may* have a dropout
-anywhere you like in the network, but it must use the `nn_dropout` so we can
-turn it off for deterministic testing.
-
-Loss function
----------------
-
-In the code, there's the option to use one of two loss functions:
- * `TripletMarginLoss`
- * `CrossEntropyLoss`
-
-You are only required to implement *cross entropy*.  The other loss function
-is too fiddly to require for a homework.  It is okay to leave the
-implementation of the `MarginRankingLoss` blank.
-
-Pytorch data loader
-----------------
-
-In this homework, we use pytorch build-in data loader to do data
-mini-batching, which provides single or multi-process iterators over the
-dataset(https://pytorch.org/docs/stable/data.html).
-
-For data loader, there are two important functions: batichfy and
-vectorize. You don't need to implement anything here, but to implement the
-rest of your code, you need to understand what they do.
-
-
-What you have to do
-----------------
-
-Coding:
-1. Understand the structure of the code.
-2. Understand the vectorize funtion.
-3. Write DAN model initialization `__init__` of `DanModel`: replace `self.network = None` with a real network.
-4. Write model forward function.
-5. Write the model training/testing function in `batch_step`. We don't have unit tests for this part, but to get reasonable performance, it's necessary to get it correct.
-6. Write the evaluation code `number_errors` that counts up how many examples you got right.
-
-Optional things that might help
---------------------
-
-1. Change the initialization.  Don't cheat to hand-set parameters to the "right" answer, but you might want to use something like an identity initialization (provided, but only works for specific network configurations).  Your initialization can't depend on knowing the identity of words (in other words, the embedding initialization must always be random).
-2. Swap out the optimizer
-3. Play around with network widths
 
 Inspecting Training
 --------------------
