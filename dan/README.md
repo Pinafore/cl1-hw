@@ -224,7 +224,7 @@ You get more points if you:
 
  * Use the MarginRankingLoss
  * Do not use precomputed embeddings
- * Have a higher accuracy
+ * Have a higher accuracy than using the default parameters you implemented 
 
 What to turn in 
 ----------------
