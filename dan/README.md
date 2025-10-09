@@ -22,7 +22,7 @@ Dataset
 The data are meant to resemble the question answering dataset we used in a
 previous homework, but much simpler.
 
-Toy Data in Unit Tests
+Example Test Data in Unit Tests (Not the actual test)
 -----------------
 
 The toy data are designed (and the unit tests use this) so that the words when
@@ -57,7 +57,7 @@ The provided network for testing for the final layer just stretches things out a
                      ([-1.0, -1.0], "capital russia"),
                      ([+1.0, -1.0], "capital england")]
 
-Slightly More Realistic Data
+ The Actual Test Data
 -------------------
 
 For the training, the problem looks much the same, but you'll start from
@@ -88,36 +88,55 @@ perfect accuracy on this dataset.
 
 Here is an example run that does this.
 
-    > ./venv/bin/python3 -i dan_guesser.py --secondary_questions mini-dev --questions mini-train --dan_guesser_plot_viz viz --dan_guesser_hidden_units 4 --dan_guesser_vocab_size=10 --dan_guesser_max_classes=4 --dan_guesser_num_workers 1 --dan_guesser_num_epochs 1000 --dan_guesser_embed_dim 4 --dan_guesser_ans_min_freq=0 --dan_guesser_nn_dropout 0 --dan_guesser_batch_size=8 --dan_guesser_plot_every 10 --dan_guesser_criterion=CrossEntropyLoss --dan_guesser_initialization='' --dan_guesser_device=gpu --dan_guesser_learning_rate=0.1
+    > python dan_guesser.py \
+  --secondary_questions mini-dev \
+  --questions mini-train \
+  --DanGuesser_hidden_units 50 \
+  --DanGuesser_vocab_size 30 \
+  --DanGuesser_num_classes 4 \
+  --DanGuesser_num_workers 0 \
+  --DanGuesser_num_epochs 100 \
+  --DanGuesser_embed_dim 50 \
+  --DanGuesser_nn_dropout 0.3 \
+  --DanGuesser_batch_size 4 \
+  --DanGuesser_device cpu
+  
     Setting up logging
-    INFO:root:Loaded 8 train examples
-    INFO:root:Loaded 8 dev examples
-    INFO:root:Example: {'page': 'Rouble', 'text': 'What is this currency of russia'}
-    INFO:root:Using device 'cpu' (cuda flag=False)
-    INFO:root:Initializing guesser of type Dan
-    INFO:root:Creating embedding layer for 10 vocab size, with 4 dimensions (hidden dimension=4)
-    100%|███████████████████████████████████████████| 8/8 [00:00<00:00, 162098.71it/s]
-    INFO:root:Loaded 8 questions with 4 unique answers
-    100%|███████████████████████████████████████████| 8/8 [00:00<00:00, 231409.88it/s]
-    INFO:root:Loaded 8 questions with 4 unique answers
-    INFO:root:[Epoch 0010] Dev Accuracy: 0.250 Loss: 1.377816
-    INFO:root:[Epoch 0020] Dev Accuracy: 0.375 Loss: 1.369576
-    INFO:root:[Epoch 0030] Dev Accuracy: 0.250 Loss: 1.362568
-    INFO:root:[Epoch 0040] Dev Accuracy: 0.250 Loss: 1.355264
-    INFO:root:[Epoch 0050] Dev Accuracy: 0.375 Loss: 1.346404
-    INFO:root:[Epoch 0060] Dev Accuracy: 0.375 Loss: 1.336877
-    INFO:root:[Epoch 0070] Dev Accuracy: 0.500 Loss: 1.325287
-
-    		     ... snip ...
-
-    INFO:root:[Epoch 0960] Dev Accuracy: 0.750 Loss: 0.007144
-    INFO:root:[Epoch 0970] Dev Accuracy: 0.750 Loss: 0.006988
-    INFO:root:[Epoch 0980] Dev Accuracy: 0.875 Loss: 0.006836
-    INFO:root:[Epoch 0990] Dev Accuracy: 1.000 Loss: 0.006690
-    INFO:root:Training KD Tree for lookup with dimension 8 rows and 4 columns
-    INFO:root:Final eval accuracy=1.000000
-    
-This will create a training plot that looks like [viz_metrics.pdf](viz_metrics.pdf).
+    INFO:root:Loading questions from mini-train
+INFO:root:Read 8 questions
+INFO:root:Loading questions from mini-dev
+INFO:root:Read 8 questions
+INFO:root:Loaded 8 train examples
+INFO:root:Loaded 8 dev examples
+INFO:root:Example: {'page': 'Rouble', 'text': 'What is this currency of russia'}
+INFO:root:Using device 'cpu' (cuda flag=False)
+INFO:root:Initializing guesser of type Dan
+INFO:root:Creating embedding layer for 30 vocab size, 4 classes with 50 dimensions (hidden dimension=50)
+100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 22595.58it/s]
+INFO:root:Loaded 8 questions with 4 unique answers
+100%|██████████████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 58457.20it/s]
+INFO:root:Loaded 8 questions with 4 unique answers
+INFO:root:Evaluated 8 examples, accuracy: 0.1250, loss: 0.9452
+INFO:root:Final accuracy=0.125000
+INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.9155
+INFO:root:Final accuracy=0.375000
+INFO:root:Evaluated 8 examples, accuracy: 0.2500, loss: 0.9182
+INFO:root:Final accuracy=0.250000
+INFO:root:Evaluated 8 examples, accuracy: 0.5000, loss: 0.8889
+INFO:root:Final accuracy=0.500000
+INFO:root:Evaluated 8 examples, accuracy: 0.3750, loss: 0.8835
+INFO:root:Final accuracy=0.375000
+INFO:root:Evaluated 8 examples, accuracy: 0.6250, loss: 0.8153
+INFO:root:Final accuracy=0.625000
+INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.7764
+INFO:root:Final accuracy=1.000000
+...
+INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
+INFO:root:Final accuracy=1.000000
+INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0014
+INFO:root:Final accuracy=1.000000
+INFO:root:Evaluated 8 examples, accuracy: 1.0000, loss: 0.0000
+INFO:root:Final accuracy=1.000000
 
 What components does your network need to have
 ----------------
