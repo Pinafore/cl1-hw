@@ -81,13 +81,21 @@ class DanModel(nn.Module):
         # TODOs: Implement the averaging function for the embeddings. Sum along the sequence dimension and divide by length
 
         for i in range(text_embeddings.size()[0]):
-            pass # Replace with your code
+            # Sum along the sequence dimension and divide by length
+            average[i] = None
         
         return average
 
     def forward(self, input_text: Iterable[int], text_len: int):
         # TODOs: Implement the forward function. Get the embeddings -> compute average -> pass through network
-
+        # Look up embeddings
+        embeddings = None
+        
+        # Average the embeddings
+        averaged = None
+        
+        # Pass through network
+        logits = None
         
         return logits
 
@@ -316,7 +324,9 @@ class DanParameters(GuesserParameters):
               ("neg_samp", int, 5, "Number of negative training examples"),
               ("unk_drop", bool, True, "Do we drop unknown tokens or use UNK symbol"),
               ("grad_clipping", float, 5.0, "How much we clip the gradients"),
-              ("loss_type", str, "triplet", "Loss function: 'triplet' or 'crossentropy'")]
+              ("loss_type", str, "triplet", "Loss function: 'triplet' or 'crossentropy'"),
+              ("plot_viz", str, "", "Directory to save visualization plots"),  
+              ("plot_every", int, 10, "Plot every N epochs")]
     
     def __init__(self):
         GuesserParameters.__init__(self)
@@ -498,6 +508,7 @@ class DanGuesser(Guesser):
 
         
 
+
     def run_epoch(self, train_data_loader: DataLoader, dev_data_loader: DataLoader,
               checkpoint_every: int=50):
         """
@@ -505,7 +516,7 @@ class DanGuesser(Guesser):
         """
         model = self.dan_model
         model.train()
-        optimizer = torch.optim.Adamax(self.dan_model.parameters())
+        optimizer = torch.optim.Adamax(self.dan_model.parameters(), lr=0.001)
         
         # TODOs: Implement Cross Entropy Loss
         if self.params.DanGuesser_loss_type == "crossentropy":
@@ -588,6 +599,7 @@ class DanGuesser(Guesser):
 
         logging.info('Final accuracy=%f' % best_accuracy)
         return best_accuracy
+
 
 
     @staticmethod
@@ -679,7 +691,7 @@ def evaluate(data_loader, model, train_data, device, use_triplet=True):
                 # Cross-entropy loss 
                 labels = torch.LongTensor([train_data.int_to_answer.index(train_data.answers[idx]) 
                                           for idx in ex_indices]).to(device)
-                loss = None
+                loss = criterion(representation, labels)
             else:
                 # This is the the TripletMarginLoss
                 pass
@@ -693,6 +705,7 @@ def evaluate(data_loader, model, train_data, device, use_triplet=True):
                 true_answer = train_data.answers[ex_indices[i]]
                 
                 # TODOs: Calculate accuracy using nearest neighbor. First compute the predicted answer.
+                nearest = None
                 predicted_answer = None
                 
                 if predicted_answer == true_answer:
