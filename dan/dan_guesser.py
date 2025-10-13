@@ -689,9 +689,9 @@ def evaluate(data_loader, model, train_data, device, use_triplet=True):
             ## TODOs: compute the loss to print out in evaluate function
             if use_triplet == False:
                 # Cross-entropy loss 
-                labels = torch.LongTensor([train_data.int_to_answer.index(train_data.answers[idx]) 
-                                          for idx in ex_indices]).to(device)
-                loss = criterion(representation, labels)
+                labels = None
+
+                loss = None
             else:
                 # This is the the TripletMarginLoss
                 pass
