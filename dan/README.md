@@ -224,7 +224,7 @@ You get more points if you:
 
  * Use the MarginRankingLoss (1 point)
  * Do not use precomputed embeddings (1 point)
- * Have a higher accuracy than using the default parameters you implemented (0.5 point)
+ * Have a higher accuracy than using the default parameters you implemented on mini-dev-hard (0.5 point)
 
 What to turn in 
 ----------------
