@@ -158,7 +158,7 @@ Here is an example run that does this.
       --DanGuesser_embed_dim 50 \
       --DanGuesser_nn_dropout 0.3 \
       --DanGuesser_batch_size 4 \
-      -- DanGuesser_loss_type crossentropy \
+      --DanGuesser_loss_type crossentropy \
       --DanGuesser_device cpu 
   
     Setting up logging
