@@ -15,29 +15,13 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 alphanum = re.compile('[^a-zA-Z0-9]')
 
-from parameters import load_guesser, load_questions, setup_logging
-from parameters import add_general_params, add_guesser_params, add_general_params, add_question_params
+from params import load_guesser, load_questions, setup_logging, Parameters
+from params import add_general_params, add_guesser_params, add_general_params, add_question_params
 
-kTOY_DATA = {"tiny": [{"text": "currency england", "page": "Pound"},
-                      {"text": "currency russia", "page": "Rouble"},
-                      {"text": "capital russia", "page": "Moscow"},                      
-                      {"text": "capital england", "page": "London"}],
-             "mini-train": [{"page": "Rouble", "text": "What is this currency of russia"},
-                            {"page": "Pound", "text": "What is this currency of england"},
-                            {"page": "Moscow", "text": "What is this capital of russia"},
-                            {"page": "London", "text": "What is this capital of england"},
-                            {"page": "Rouble", "text": "What 's russia 's currency"},
-                            {"page": "Pound", "text": "What 's england 's currency"},
-                            {"page": "Moscow", "text": "What 's russia 's capital"},
-                            {"page": "London", "text": "What 's england 's capital"}],
-             "mini-dev": [{"page": "Rouble", "text": "What currency is used in russia"},
-                          {"page": "Pound", "text": "What currency is used in england"},
-                          {"page": "Moscow", "text": "What is the capital and largest city of russia"},
-                          {"page": "London", "text": "What is the capital and largest city of england"},
-                          {"page": "Rouble", "text": "What 's the currency in russia"},
-                          {"page": "Pound", "text": "What 's the currency in england"},
-                          {"page": "Moscow", "text": "What 's the capital of russia"},
-                          {"page": "London", "text": "What 's the capital of england"}],
+kTOY_DATA = {"tiny": [{"text": "capital England", "page": "London"},
+                      {"text": "capital Russia", "page": "Moscow"},
+                      {"text": "currency England", "page": "Pound"},
+                      {"text": "currency Russia", "page": "Rouble"}],
              "train": [{'page': 'Maine', 'text': 'For 10 points, name this New England state with capital at Augusta.'},
                        {'page': 'Massachusetts', 'text': 'For ten points, identify this New England state with capital at Boston.'},
                        {'page': 'Boston', 'text': 'For 10 points, name this city in New England, the capital of Massachusetts.'},
@@ -90,6 +74,17 @@ def print_guess(guess, max_char=20):
             output += "%s:%s\t" % (ii, short)
             
     return output
+
+class GuesserParameters(Parameters):
+    guesser_params = [("filename", str, "models/guesser",
+                       "Where we save guesser"),
+                      ("vocab_size", int, 20000,
+                       "Maximum number of words in vocabulary"),
+                      ]
+    
+    def __init__(self):
+        Parameters.__init__(self)
+        self.params += self.guesser_params
     
 class Guesser:
     """
@@ -275,13 +270,13 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     add_general_params(parser)    
-    guesser_params = add_guesser_params(parser)
-    question_params = add_question_params(parser)
+    add_guesser_params(parser)
+    add_question_params(parser)
 
     flags = parser.parse_args()
 
     setup_logging(flags)    
-    guesser = load_guesser(flags, guesser_params)
+    guesser = load_guesser(flags)
     questions = load_questions(flags)
     # TODO(jbg): Change to use huggingface data, as declared in flags
 
